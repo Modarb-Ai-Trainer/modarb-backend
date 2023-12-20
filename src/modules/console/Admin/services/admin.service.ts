@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import {adminModel, saltrounds} from '../models/admin.model'
+import { adminModel, saltrounds } from '../models/admin.model'
 
 
 export class AdminService {
