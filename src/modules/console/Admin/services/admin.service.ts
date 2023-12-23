@@ -31,7 +31,7 @@ export class AdminService {
 
   static async get(filterObject) {
     try {
-      const resultObject = await adminModel.findOne(filterObject).lean();
+      const resultObject = await adminModel.findOne(filterObject).lean().select("-password");
       if (!resultObject)
         return {
           success: false,
