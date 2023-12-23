@@ -2,25 +2,95 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 export const saltrounds = 5;
 const { Schema } = mongoose;
+enum Gender {
+    MALE= "male",
+    FEMALE= "female"
+}
+enum FitnessLevel {
+    BEGINNER= "beginner",
+    INTERMEDIATE= "intermediate",
+    ADVANCED= "advanced"
+}
+enum FitnessGoal {
+    LOSE_WEIGHT= "lose weight",
+    GAIN_MUSCLE= "gain muscle",
+    GET_FITTER= "get fitter"
+}
+enum WorkoutPlace {
+    GYM= "gym",
+    HOME= "home",
+    BOTH= "both"
+}
+enum PreferredDay {
+    SATURDAY= "saturday",
+    SUNDAY= "sunday",
+    MONDAY= "monday",
+    TUESDAY= "tuesday",
+    WEDNESDAY= "wednesday",
+    THURSDAY= "thursday",
+    FRIDAY= "friday"
+}
+enum PreferredEquipment {
+    BARBELLS= "barbells",
+    DUMBBELLS= "dumbbells",
+    GYM_MACHINES= "gym machines",
+    RESISTANCE_BAND= "resistance band",
+    BODYWEIGHT= "bodyweight"
+}
+enum Injurie {
+    NECK= "neck",
+    SHOULDERS= "shoulders",
+    BACK= "back",
+    ARMS= "arms",
+    KNEES= "knees"
+}
 
 const userSchema = new Schema({
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true, dropDups: true },
     password: { type: String, required: true },
-    image: { type: Object, default: {} },
-    gender: { type: String, required: true },
+    image: { type: String },
+    gender: {
+        type: String,
+        enum: Gender,
+        required: true
+    },
     height: { type: Number, required: true },
     weight: { type: Number, required: true },
-    fitness_level: { type: Number, required: true },
-    preferences: { 
-        fitness_goal: { type: Number, required: true },
+    fitness_level: {
+        type: String,
+        enum: FitnessLevel,
+        required: true
+    },
+    preferences: {
+        fitness_goal: {
+            type: String,
+            enum: FitnessGoal,
+            required: true
+        },
         target_weight: { type: Number, required: true },
         workout_frequency: { type: Number, required: true },
-        preferred_days: [{ type: String, required: true }],
-        workout_place: { type: String, required: true },
-        preferred_equipments: { type: String, required: true }
+        preferred_days: [{
+            type: String,
+            enum: PreferredDay,
+            required: true
+        }],
+        workout_place: {
+            type: String,
+            enum: WorkoutPlace,
+            required: true
+        },
+        preferred_equipment: [{
+            type: String,
+            enum: PreferredEquipment,
+            required: true
+        }]
     },
-    injuries: [{ type: String, required: true }],
+    injuries: [{
+        type: String,
+        enum: Injurie,
+        required: true
+    }],
     dob: { type: Date }
 });
 
