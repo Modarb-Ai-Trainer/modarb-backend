@@ -149,7 +149,7 @@ export class AdminService {
       return {
         success: true,
         code: 200,
-        result: resultObject,
+        record: resultObject,
       };
     } catch (err) {
       console.log(`err.message`, err.message);
@@ -210,7 +210,7 @@ export class AdminService {
 
       return {
         success: true,
-        result: existingObject.record,
+        record: existingObject.record,
         code: 200,
       };
     } catch (err) {
