@@ -2,54 +2,57 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 export const saltrounds = 5;
 const { Schema } = mongoose;
+enum Role {
+    USER = "user"
+}
 enum Gender {
-    MALE= "male",
-    FEMALE= "female"
+    MALE = "male",
+    FEMALE = "female"
 }
 enum FitnessLevel {
-    BEGINNER= "beginner",
-    INTERMEDIATE= "intermediate",
-    ADVANCED= "advanced"
+    BEGINNER = "beginner",
+    INTERMEDIATE = "intermediate",
+    ADVANCED = "advanced"
 }
 enum FitnessGoal {
-    LOSE_WEIGHT= "lose weight",
-    GAIN_MUSCLE= "gain muscle",
-    GET_FITTER= "get fitter"
+    LOSE_WEIGHT = "lose weight",
+    GAIN_MUSCLE = "gain muscle",
+    GET_FITTER = "get fitter"
 }
 enum WorkoutPlace {
-    GYM= "gym",
-    HOME= "home",
-    BOTH= "both"
+    GYM = "gym",
+    HOME = "home",
+    BOTH = "both"
 }
 enum PreferredDay {
-    SATURDAY= "saturday",
-    SUNDAY= "sunday",
-    MONDAY= "monday",
-    TUESDAY= "tuesday",
-    WEDNESDAY= "wednesday",
-    THURSDAY= "thursday",
-    FRIDAY= "friday"
+    SATURDAY = "saturday",
+    SUNDAY = "sunday",
+    MONDAY = "monday",
+    TUESDAY = "tuesday",
+    WEDNESDAY = "wednesday",
+    THURSDAY = "thursday",
+    FRIDAY = "friday"
 }
 enum PreferredEquipment {
-    BARBELLS= "barbells",
-    DUMBBELLS= "dumbbells",
-    GYM_MACHINES= "gym machines",
-    RESISTANCE_BAND= "resistance band",
-    BODYWEIGHT= "bodyweight"
+    BARBELLS = "barbells",
+    DUMBBELLS = "dumbbells",
+    GYM_MACHINES = "gym machines",
+    RESISTANCE_BAND = "resistance band",
+    BODYWEIGHT = "bodyweight"
 }
 enum Injurie {
-    NECK= "neck",
-    SHOULDERS= "shoulders",
-    BACK= "back",
-    ARMS= "arms",
-    KNEES= "knees"
+    NECK = "neck",
+    SHOULDERS = "shoulders",
+    BACK = "back",
+    ARMS = "arms",
+    KNEES = "knees"
 }
 
 const userSchema = new Schema({
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true, dropDups: true },
     password: { type: String, required: true },
-    image: { type: String },
+    image: { type: Object },
     gender: {
         type: String,
         enum: Gender,
@@ -91,7 +94,12 @@ const userSchema = new Schema({
         enum: Injurie,
         required: true
     }],
-    dob: { type: Date }
+    dob: { type: Date },
+    role: {
+        type: String,
+        enum: Role,
+        required: true
+    }
 });
 
 userSchema.pre("save", async function (next) {
