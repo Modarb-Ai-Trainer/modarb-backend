@@ -17,7 +17,7 @@ export class AdminService {
       return {
         success: true,
         code: 200,
-        result: resultObject,
+        record: resultObject,
       };
     } catch (err) {
       console.log(`err.message`, err.message);
@@ -41,7 +41,7 @@ export class AdminService {
       return {
         success: true,
         code: 200,
-        result: resultObject,
+        record: resultObject,
       };
     } catch (err) {
       console.log(`err.message`, err.message);
@@ -70,7 +70,7 @@ export class AdminService {
       return {
         success: true,
         code: 200,
-        result: resultArray,
+        record: resultArray,
         count,
       };
     } catch (err) {
@@ -99,7 +99,7 @@ export class AdminService {
       return {
         success: true,
         code: 201,
-        result: resultObject,
+        record: resultObject,
       };
     } catch (err) {
       console.log(`err.message`, err.message);
@@ -125,7 +125,7 @@ export class AdminService {
         const duplicate = await this.find({ email: formObject.email });
         if (
           duplicate.success &&
-          duplicate.result._id.toString() != existingObject.result._id.toString()
+          duplicate.record._id.toString() != existingObject.record._id.toString()
         )
           return {
             success: false,
@@ -173,8 +173,7 @@ export class AdminService {
 
       return {
         success: true,
-        code: 200,
-        result: "Deleted Successfully.",
+        code: 200
       };
     } catch (err) {
       console.log(`err.message`, err.message);
@@ -200,7 +199,7 @@ export class AdminService {
 
       const matchingPasswords = await bcrypt.compare(
         passwordString,
-        existingObject.result.password
+        existingObject.record.password
       );
       if (!matchingPasswords)
         return {
@@ -211,7 +210,7 @@ export class AdminService {
 
       return {
         success: true,
-        result: existingObject.result,
+        result: existingObject.record,
         code: 200,
       };
     } catch (err) {
