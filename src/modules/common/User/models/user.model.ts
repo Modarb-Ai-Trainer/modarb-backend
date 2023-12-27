@@ -98,7 +98,7 @@ const userSchema = new Schema({
     role: {
         type: String,
         enum: Role,
-        required: true
+        default: Role.USER
     }
 });
 
