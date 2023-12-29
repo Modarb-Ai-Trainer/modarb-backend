@@ -1,15 +1,15 @@
-import { UserBaseService } from "../../../common/User/services/user.base.service";
-import { userModel, } from "../../../common/User/models/user.model";
+import { UsersBaseService } from "../../../common/users/services/users.base.service";
+import { userModel, } from "../../../common/users/models/user.model";
 import bcrypt from "bcrypt";
 
-export class userService extends UserBaseService {
+export class usersService extends UsersBaseService {
 
     static async comparePassword(email: string, password: string) {
         try {
             if (email != undefined) {
                 email = email.toLowerCase();
             }
-            let result = await UserBaseService.find({ email })
+            let result = await UsersBaseService.find({ email })
             if (!result.success) return result;
 
             let match = await bcrypt.compare(password, result.record.password)

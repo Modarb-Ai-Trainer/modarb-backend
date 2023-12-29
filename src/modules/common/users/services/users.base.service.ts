@@ -1,7 +1,7 @@
 import { userModel, } from '../models/user.model'
 
 
-export class UserBaseService {
+export class UsersBaseService {
   static async find(filterObject) {
     try {
       const resultObject = await userModel.findOne(filterObject).lean();
