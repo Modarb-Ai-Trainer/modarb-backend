@@ -1,10 +1,5 @@
-import { app } from "./configs/app"
-import http from 'http';
+import { app } from "./configs/app";
 
-const server = http.createServer(app);
-
-server.listen(process.env.PORT || 4000, () => {
-    console.log(`Server is up and runing on port ${process.env.PORT}!`)
-})
-
-
+app.listen(process.env.PORT || 4000, () => {
+  console.log(`Server is up and runing on port ${process.env.PORT}!`);
+});
