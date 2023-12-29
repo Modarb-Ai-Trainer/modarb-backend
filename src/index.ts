@@ -6,7 +6,7 @@ import { config } from "./configs/config";
 
 const main = async () => {
   // set up database connection
-  connectDatabase();
+  await connectDatabase();
 
   // set up express server
   const app = express();
