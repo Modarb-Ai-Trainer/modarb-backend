@@ -1,11 +1,11 @@
-import express from 'express';
-const app = express();
+import express from "express";
+const adminRouter = express.Router();
 
-import { jwtHelper } from '../../helpers/jwt.helper';
+import { jwtHelper } from "../../helpers/jwt.helper";
 const allowedRoles = ["superAdmin", "admin"];
 
-import { adminUserRoutes } from './User/routes/admin.userRoute';
+import { adminUserRoutes } from "./users/routes/admin-users.route";
 
-app.use("/users", jwtHelper.verifyToken(allowedRoles), adminUserRoutes);
+adminRouter.use("/users", jwtHelper.verifyToken(allowedRoles), adminUserRoutes);
 
-export { app as adminRoutes };
+export { adminRouter };

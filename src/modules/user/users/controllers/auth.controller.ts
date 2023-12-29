@@ -1,11 +1,11 @@
-import { userService } from "../services/user.service";
+import { usersService } from "../services/users.service";
 import { jwtHelper } from "../../../../helpers/jwt.helper";
 
 export class authController {
 
     static async register(req, res) {
         try {
-            let result = await userService.create(req.body);
+            let result = await usersService.create(req.body);
             return res.status(result.code).json(result);
         } catch (err) {
             console.log(`err.message`, err.message);
@@ -20,7 +20,7 @@ export class authController {
     static async login(req, res) {
         try {
             const { email, password } = req.body;
-            let result: { success: boolean; code: number; record?: any; message?: string } = await userService.comparePassword(email, password);
+            let result: { success: boolean; code: number; record?: any; message?: string } = await usersService.comparePassword(email, password);
             if (!result.success) return res.status(result.code).json(result);
             let payload = {
                 _id: result.record?._id, name: result.record?.name,
