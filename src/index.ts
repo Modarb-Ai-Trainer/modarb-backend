@@ -1,8 +1,8 @@
 import express from "express";
 import cors from "cors";
-import { routes } from "./index.route";
 import { connectDatabase } from "./configs/database";
 import { config } from "./configs/config";
+import { mainRouter } from "./index.route";
 
 const main = async () => {
   // set up database connection
@@ -17,7 +17,7 @@ const main = async () => {
   app.use(express.json());
 
   // set up routes
-  app.use(routes);
+  app.use(mainRouter);
 
   // start server
   app.listen(config.port, () => {
