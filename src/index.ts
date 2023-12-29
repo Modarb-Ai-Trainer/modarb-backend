@@ -17,7 +17,7 @@ const main = async () => {
   app.use(express.json());
 
   // set up routes
-  app.use(mainRouter);
+  app.use("/api/v1", mainRouter);
 
   // start server
   app.listen(config.port, () => {
