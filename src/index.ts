@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import { connectDatabase } from "./configs/database";
 import { config } from "./configs/config";
-import { mainRouter } from "./index.route";
+import { setAppRoutes } from "./routes";
 
 const main = async () => {
   // set up database connection
@@ -17,7 +17,7 @@ const main = async () => {
   app.use(express.json());
 
   // set up routes
-  app.use("/api/v1", mainRouter);
+  await setAppRoutes(app);
 
   // start server
   app.listen(config.port, () => {
