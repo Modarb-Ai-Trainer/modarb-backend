@@ -1,5 +1,5 @@
 import joi from 'joi';
-import { userBaseValidation } from '../../../common/User/validation/user.baseValidation';
+import { userBaseValidation } from '../../../common/users/validation/user.baseValidation';
 
 export class userValidation extends userBaseValidation {
     static loginValidation = {

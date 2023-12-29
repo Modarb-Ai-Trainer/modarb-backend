@@ -1,10 +1,10 @@
-import { userService } from "../services/user.service";
+import { usersService } from "../services/users.service";
 
-export class adminUserController {
+export class adminUsersController {
 
     static async create(req, res) {
         try {
-            let result = await userService.create(req.body);
+            let result = await usersService.create(req.body);
             return res.status(result.code).json(result);
         } catch (err) {
             console.log(`err.message`, err.message);
