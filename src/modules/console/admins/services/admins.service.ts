@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import { adminModel, saltrounds } from '../models/admin.model'
 
 
-export class AdminService {
+export class AdminsService {
   static async find(filterObject) {
     try {
       const resultObject = await adminModel.findOne(filterObject).lean();
