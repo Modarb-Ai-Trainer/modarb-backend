@@ -5,6 +5,7 @@ import { validator } from "../../../../helpers/validation.helper";
 import { userValidation } from "../validation/user.Validation";
 import { Router } from "express";
 import { Prefix } from "../../../common/decorators/prefix.decorator";
+import { Env } from "../../../../configs/env";
 
 @Prefix("/user")
 export class AuthController extends BaseController {
