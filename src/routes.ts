@@ -1,8 +1,5 @@
 import { Router, Express } from "express";
 
-import { userRoutes } from "./modules/user/index.route";
-import { adminRouter } from "./modules/console/index.route";
-
 import * as glob from "glob";
 import path from "path";
 import { BaseController } from "./lib/controllers/controller.base";
@@ -19,8 +16,6 @@ export const setAppRoutes = async (app: Express) => {
 /* custom routes */
 
 const setCustomRoutes = (router: Router) => {
-  router.use("/admin", adminRouter);
-
   router.get("/health", (_req: any, res: any) => {
     res
       .status(200)
