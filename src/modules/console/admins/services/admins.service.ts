@@ -1,11 +1,12 @@
 import bcrypt from "bcrypt";
-import { adminModel, saltrounds } from '../models/admin.model'
-
+import { Admin, IAdmin } from "../models/admin.model";
+import { config } from "../../../../configs/config";
+import { FilterQuery } from "mongoose";
 
 export class AdminsService {
   static async find(filterObject) {
     try {
-      const resultObject = await adminModel.findOne(filterObject).lean();
+      const resultObject = await Admin.findOne(filterObject).lean();
 
       if (!resultObject)
         return {
@@ -29,9 +30,11 @@ export class AdminsService {
     }
   }
 
-  static async get(filterObject) {
+  static async get(filterObject: FilterQuery<IAdmin>) {
     try {
-      const resultObject = await adminModel.findOne(filterObject).lean().select("-password");
+      const resultObject = await Admin.findOne(filterObject)
+        .lean()
+        .select("-password");
       if (!resultObject)
         return {
           success: false,
@@ -55,8 +58,7 @@ export class AdminsService {
 
   static async list(filterObject) {
     try {
-      const resultArray = await adminModel
-        .find(filterObject)
+      const resultArray = await Admin.find(filterObject)
         .lean()
         .select("-password");
 
@@ -66,7 +68,7 @@ export class AdminsService {
           code: 404,
           error: "No Matching Result Found.",
         };
-      const count = await adminModel.countDocuments(filterObject);
+      const count = await Admin.countDocuments(filterObject);
       return {
         success: true,
         code: 200,
@@ -86,7 +88,7 @@ export class AdminsService {
   static async create(formObject) {
     try {
       if (formObject.email) formObject.email = formObject.email.toLowerCase();
-      const resultObject = new adminModel(formObject);
+      const resultObject = new Admin(formObject);
       await resultObject.save();
 
       if (!resultObject)
@@ -125,7 +127,8 @@ export class AdminsService {
         const duplicate = await this.find({ email: formObject.email });
         if (
           duplicate.success &&
-          duplicate.record._id.toString() != existingObject.record._id.toString()
+          duplicate.record._id.toString() !=
+            existingObject.record._id.toString()
         )
           return {
             success: false,
@@ -134,10 +137,7 @@ export class AdminsService {
           };
       }
 
-      const resultObject = await adminModel.findByIdAndUpdate(
-        { _id },
-        formObject
-      );
+      const resultObject = await Admin.findByIdAndUpdate({ _id }, formObject);
 
       if (!resultObject)
         return {
@@ -163,7 +163,7 @@ export class AdminsService {
 
   static async remove(_id) {
     try {
-      const resultObject = await adminModel.findByIdAndDelete({ _id });
+      const resultObject = await Admin.findByIdAndDelete({ _id });
       if (!resultObject)
         return {
           success: false,
@@ -173,7 +173,7 @@ export class AdminsService {
 
       return {
         success: true,
-        code: 200
+        code: 200,
       };
     } catch (err) {
       console.log(`err.message`, err.message);
@@ -235,8 +235,11 @@ export class AdminsService {
           error: "No Matching Result Found.",
         };
 
-      const hashedPassword = await bcrypt.hash(newPasswordString, saltrounds);
-      const resultObject = await adminModel.findOneAndUpdate(
+      const hashedPassword = await bcrypt.hash(
+        newPasswordString,
+        config.saltRounds
+      );
+      const resultObject = await Admin.findOneAndUpdate(
         { email: emailString },
         { password: hashedPassword }
       );
@@ -262,6 +265,3 @@ export class AdminsService {
     }
   }
 }
-
-
-
