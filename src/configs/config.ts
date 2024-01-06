@@ -11,6 +11,7 @@ export interface Config {
     secret: string;
     expiresIn: string;
   };
+  saltRounds: number;
 }
 
 export const config: Config = {
@@ -22,4 +23,5 @@ export const config: Config = {
     secret: Env.get("JWT_SECRET").toString(),
     expiresIn: Env.get("JWT_EXPIRES_IN").toString(),
   },
+  saltRounds: Env.get("SALT_ROUNDS", 5).toNumber(),
 };

@@ -3,6 +3,7 @@ import { Router, Express } from "express";
 import * as glob from "glob";
 import path from "path";
 import { BaseController } from "./lib/controllers/controller.base";
+import { validationErrorHandler } from "./helpers/validation.helper";
 
 export const setAppRoutes = async (app: Express) => {
   const mainRouter = Router();
@@ -21,6 +22,8 @@ const setCustomRoutes = (router: Router) => {
       .status(200)
       .json({ success: true, message: "Server is up!", code: 200 });
   });
+
+  router.use(validationErrorHandler);
 
   router.all("*", (_req: any, res: any) => {
     res
