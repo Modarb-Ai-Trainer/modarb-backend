@@ -1,9 +1,9 @@
 import { jwtHelper } from "../../../../helpers/jwt.helper";
-import { validator } from "../../../../helpers/validation.helper";
+import { bodyValidator } from "../../../../helpers/validation.helper";
 import { BaseController } from "../../../../lib/controllers/controller.base";
 import { Prefix } from "../../../common/decorators/prefix.decorator";
+import { userRegisterValidation } from "../../../common/users/validation/user.baseValidation";
 import { usersService } from "../services/users.service";
-import { adminUserValidation } from "../validation/admin.userValidation";
 
 const allowedRoles = ["superAdmin", "admin"];
 
@@ -13,7 +13,7 @@ export class adminUsersController extends BaseController {
     router.post(
       "/create",
       jwtHelper.verifyToken(allowedRoles),
-      validator(adminUserValidation.createValidation),
+      bodyValidator(userRegisterValidation),
       adminUsersController.create
     );
   }

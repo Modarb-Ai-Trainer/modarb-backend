@@ -1,9 +1,15 @@
-import joi from "joi";
+import * as joi from "joi";
+import { Role } from "../enums/roles.enum";
 
-export const loginValidation = joi
+export const createAdminSchema = joi
   .object()
   .required()
   .keys({
+    name: joi.string().empty().required().messages({
+      "string.base": "please enter a valid name",
+      "any.required": "name is required",
+      "string.empty": "name can not be empty",
+    }),
     email: joi
       .string()
       .required()
@@ -23,4 +29,12 @@ export const loginValidation = joi
       "string.empty": "password cannot be empty",
       "string.min": "password must be at least 8 characters",
     }),
+    dob: joi.date().empty().optional().messages({
+      "date.base": "please enter a valid date",
+    }),
+    role: joi
+      .string()
+      .valid(...Object.values(Role))
+      .required(),
+    gender: joi.string().empty().required(),
   });

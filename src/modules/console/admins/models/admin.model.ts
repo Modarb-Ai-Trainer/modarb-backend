@@ -1,28 +1,35 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
-export const saltrounds = 5;
+import { Role } from "../enums/roles.enum";
+import { config } from "../../../../configs/config";
 const { Schema } = mongoose;
-enum Role {
-    SUPER_ADMIN= "superAdmin",
-    ADMIN= "admin"
+
+export interface IAdmin {
+  name: string;
+  email: string;
+  password: string;
+  image: object;
+  role: Role;
+  gender: string;
+  dob: Date;
 }
-const adminSchema = new Schema({
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true, dropDups: true },
-    password: { type: String, required: true },
-    image: { type: Object, default: {} },
-    permission: { type: Object, required: true },
-    role: {
-        type: String,
-        enum: Role
-    },
-    gender: { type: String, required: true },
-    dob: { type: Date }
+
+const AdminSchema = new Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true, unique: true, dropDups: true },
+  password: { type: String, required: true },
+  image: { type: Object, default: {} },
+  role: {
+    type: String,
+    enum: Role,
+  },
+  gender: { type: String, required: true },
+  dob: { type: Date },
 });
 
-adminSchema.pre("save", async function (next) {
-    this.password = await bcrypt.hash(this.password, saltrounds);
-    next();
+AdminSchema.pre("save", async function (next) {
+  this.password = await bcrypt.hash(this.password, config.saltRounds);
+  next();
 });
 
-export const adminModel = mongoose.model("admins", adminSchema);
+export const Admin = mongoose.model<IAdmin>("admins", AdminSchema);

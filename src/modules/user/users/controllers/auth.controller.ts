@@ -1,25 +1,22 @@
 import { usersService } from "../services/users.service";
 import { jwtHelper } from "../../../../helpers/jwt.helper";
 import { BaseController } from "../../../../lib/controllers/controller.base";
-import { validator } from "../../../../helpers/validation.helper";
-import { userValidation } from "../validation/user.Validation";
 import { Router } from "express";
 import { Prefix } from "../../../common/decorators/prefix.decorator";
 import { Env } from "../../../../configs/env";
+import { bodyValidator } from "../../../../helpers/validation.helper";
+import { userRegisterValidation } from "../../../common/users/validation/user.baseValidation";
+import { loginValidation } from "../validation/user.Validation";
 
 @Prefix("/user")
 export class AuthController extends BaseController {
   static setRoutes(router: Router): void {
     router.post(
       "/register",
-      validator(userValidation.createValidation),
+      bodyValidator(userRegisterValidation),
       AuthController.register
     );
-    router.post(
-      "/login",
-      validator(userValidation.loginValidation),
-      AuthController.login
-    );
+    router.post("/login", bodyValidator(loginValidation), AuthController.login);
   }
 
   static async register(req, res) {
