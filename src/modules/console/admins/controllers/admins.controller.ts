@@ -10,6 +10,8 @@ import {
 
 @Prefix("/console/admins")
 export class AdminsController extends BaseController {
+  private adminsService = new AdminsService();
+
   setRoutes() {
     this.router.get("/", this.list);
     this.router.get("/:id", paramsValidator("id"), this.get);
@@ -23,35 +25,36 @@ export class AdminsController extends BaseController {
     this.router.delete("/:id", paramsValidator("id"), this.delete);
   }
 
-  list(_, res: Response) {
-    AdminsService.list({})
+  list = (_, res: Response) => {
+    this.adminsService
+      .list({})
       .then((result) => {
         res.status(result.code).json(result);
       })
       .catch((err) => {
         res.status(500).json(err);
       });
-  }
+  };
 
-  async get(req: Request, res: Response) {
-    const data = await AdminsService.get({
+  get = async (req: Request, res: Response) => {
+    const data = await this.adminsService.get({
       _id: req.params.id,
     });
     res.json(data);
-  }
+  };
 
-  async create(req: Request, res: Response) {
-    const data = await AdminsService.create(req.body);
+  create = async (req: Request, res: Response) => {
+    const data = await this.adminsService.create(req.body);
     res.json(data);
-  }
+  };
 
-  async update(req: Request, res: Response) {
-    const data = await AdminsService.update(req.params.id, req.body);
+  update = async (req: Request, res: Response) => {
+    const data = await this.adminsService.update(req.params.id, req.body);
     res.json(data);
-  }
+  };
 
-  async delete(req: Request, res: Response) {
-    const data = await AdminsService.remove(req.params.id);
+  delete = async (req: Request, res: Response) => {
+    const data = await this.adminsService.remove(req.params.id);
     res.json(data);
-  }
+  };
 }
