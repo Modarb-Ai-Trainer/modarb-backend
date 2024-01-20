@@ -2,7 +2,7 @@ import { jwtHelper } from "../../../../helpers/jwt.helper";
 import { bodyValidator } from "../../../../helpers/validation.helper";
 import { BaseController } from "../../../../lib/controllers/controller.base";
 import { Prefix } from "../../../common/decorators/prefix.decorator";
-import { userRegisterValidation } from "../../../common/users/validation/user.baseValidation";
+import { userRegisterValidation } from "../../../common/users/validation/user-register.validation";
 import { UsersService } from "../services/users.service";
 
 const allowedRoles = ["superAdmin", "admin"];
