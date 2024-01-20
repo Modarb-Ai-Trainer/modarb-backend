@@ -1,53 +1,31 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 export const saltrounds = 5;
+import { Role, Gender, FitnessLevel, FitnessGoal, WorkoutPlace, PreferredDay, PreferredEquipment, Injurie } from "../enums/roles.enum";
 const { Schema } = mongoose;
-enum Role {
-    USER = "user"
-}
-enum Gender {
-    MALE = "male",
-    FEMALE = "female"
-}
-enum FitnessLevel {
-    BEGINNER = "beginner",
-    INTERMEDIATE = "intermediate",
-    ADVANCED = "advanced"
-}
-enum FitnessGoal {
-    LOSE_WEIGHT = "lose weight",
-    GAIN_MUSCLE = "gain muscle",
-    GET_FITTER = "get fitter"
-}
-enum WorkoutPlace {
-    GYM = "gym",
-    HOME = "home",
-    BOTH = "both"
-}
-enum PreferredDay {
-    SATURDAY = "saturday",
-    SUNDAY = "sunday",
-    MONDAY = "monday",
-    TUESDAY = "tuesday",
-    WEDNESDAY = "wednesday",
-    THURSDAY = "thursday",
-    FRIDAY = "friday"
-}
-enum PreferredEquipment {
-    BARBELLS = "barbells",
-    DUMBBELLS = "dumbbells",
-    GYM_MACHINES = "gym machines",
-    RESISTANCE_BAND = "resistance band",
-    BODYWEIGHT = "bodyweight"
-}
-enum Injurie {
-    NECK = "neck",
-    SHOULDERS = "shoulders",
-    BACK = "back",
-    ARMS = "arms",
-    KNEES = "knees"
-}
 
+export interface IUser {
+    name: string;
+    email: string;
+    password: string;
+    image: object;
+    role: Role;
+    gender: string;
+    dob: Date;
+    height: number;
+    weight: number;
+    fitness_level: string;
+    preferences: {
+        fitness_goal: FitnessGoal;
+        target_weight: number;
+        workout_frequency: number;
+        preferred_days: [PreferredDay];
+        workout_place: WorkoutPlace;
+        preferred_equipment: [PreferredEquipment];
+    };
+    injuries: [Injurie];
+  }
+  
 const userSchema = new Schema({
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true, dropDups: true },
@@ -107,4 +85,4 @@ userSchema.pre("save", async function (next) {
     next();
 });
 
-export const userModel = mongoose.model("users", userSchema);
+export const userModel = mongoose.model<IUser>("users", userSchema);

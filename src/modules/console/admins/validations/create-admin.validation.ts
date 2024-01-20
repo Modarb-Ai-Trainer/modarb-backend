@@ -35,6 +35,13 @@ export const createAdminSchema = joi
     role: joi
       .string()
       .valid(...Object.values(Role))
-      .required(),
-    gender: joi.string().empty().required(),
+      .optional().messages({
+        "string.base": "please enter a valid role",
+        "string.empty": "role cannot be empty"
+      }),
+    gender: joi.string().empty().required().messages({
+      "string.base": "please enter a valid gender",
+      "any.required": "gender must be entered",
+      "string.empty": "gender cannot be empty"
+    })
   });
