@@ -8,7 +8,7 @@ import {
   paramsValidator,
 } from "../../../../helpers/validation.helper";
 
-@Prefix("/admins")
+@Prefix("/console/admins")
 export class AdminsController extends BaseController {
   static setRoutes(router: Router) {
     router.get("/", AdminsController.list);
