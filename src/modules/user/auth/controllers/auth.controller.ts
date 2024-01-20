@@ -8,7 +8,7 @@ import { bodyValidator } from "../../../../helpers/validation.helper";
 import { userRegisterValidation } from "../../../common/users/validation/user.baseValidation";
 import { loginValidation } from "../validation/user.Validation";
 
-@Prefix("/user")
+@Prefix("/user/auth")
 export class AuthController extends BaseController {
   static setRoutes(router: Router): void {
     router.post(
