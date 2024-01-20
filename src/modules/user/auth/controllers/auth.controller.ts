@@ -1,27 +1,27 @@
-import { usersService } from "../services/users.service";
+import { UsersService } from "../services/users.service";
 import { jwtHelper } from "../../../../helpers/jwt.helper";
 import { BaseController } from "../../../../lib/controllers/controller.base";
-import { Router } from "express";
 import { Prefix } from "../../../common/decorators/prefix.decorator";
-import { Env } from "../../../../configs/env";
 import { bodyValidator } from "../../../../helpers/validation.helper";
 import { userRegisterValidation } from "../../../common/users/validation/user.baseValidation";
 import { loginValidation } from "../validation/user.Validation";
 
 @Prefix("/user/auth")
 export class AuthController extends BaseController {
-  static setRoutes(router: Router): void {
-    router.post(
+  private usersService = new UsersService();
+
+  setRoutes(): void {
+    this.router.post(
       "/register",
       bodyValidator(userRegisterValidation),
-      AuthController.register
+      this.register
     );
-    router.post("/login", bodyValidator(loginValidation), AuthController.login);
+    this.router.post("/login", bodyValidator(loginValidation), this.login);
   }
 
-  static async register(req, res) {
+  register = async (req, res) => {
     try {
-      let result = await usersService.create(req.body);
+      let result = await this.usersService.create(req.body);
       return res.status(result.code).json(result);
     } catch (err) {
       console.log(`err.message`, err.message);
@@ -31,9 +31,9 @@ export class AuthController extends BaseController {
         error: err.message,
       });
     }
-  }
+  };
 
-  static async login(req, res) {
+  login = async (req, res) => {
     try {
       const { email, password } = req.body;
       let result: {
@@ -41,7 +41,7 @@ export class AuthController extends BaseController {
         code: number;
         record?: any;
         message?: string;
-      } = await usersService.comparePassword(email, password);
+      } = await this.usersService.comparePassword(email, password);
       if (!result.success) return res.status(result.code).json(result);
       let payload = {
         _id: result.record?._id,
@@ -64,5 +64,5 @@ export class AuthController extends BaseController {
         message: err.message,
       });
     }
-  }
+  };
 }
