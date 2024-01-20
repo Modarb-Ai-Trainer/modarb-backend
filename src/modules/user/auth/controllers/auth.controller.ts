@@ -1,25 +1,23 @@
 import { usersService } from "../services/users.service";
 import { jwtHelper } from "../../../../helpers/jwt.helper";
 import { BaseController } from "../../../../lib/controllers/controller.base";
-import { Router } from "express";
 import { Prefix } from "../../../common/decorators/prefix.decorator";
-import { Env } from "../../../../configs/env";
 import { bodyValidator } from "../../../../helpers/validation.helper";
 import { userRegisterValidation } from "../../../common/users/validation/user.baseValidation";
 import { loginValidation } from "../validation/user.Validation";
 
 @Prefix("/user/auth")
 export class AuthController extends BaseController {
-  static setRoutes(router: Router): void {
-    router.post(
+  setRoutes(): void {
+    this.router.post(
       "/register",
       bodyValidator(userRegisterValidation),
-      AuthController.register
+      this.register
     );
-    router.post("/login", bodyValidator(loginValidation), AuthController.login);
+    this.router.post("/login", bodyValidator(loginValidation), this.login);
   }
 
-  static async register(req, res) {
+  async register(req, res) {
     try {
       let result = await usersService.create(req.body);
       return res.status(result.code).json(result);
@@ -33,7 +31,7 @@ export class AuthController extends BaseController {
     }
   }
 
-  static async login(req, res) {
+  async login(req, res) {
     try {
       const { email, password } = req.body;
       let result: {

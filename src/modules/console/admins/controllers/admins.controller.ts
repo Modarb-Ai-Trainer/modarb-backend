@@ -10,20 +10,20 @@ import {
 
 @Prefix("/console/admins")
 export class AdminsController extends BaseController {
-  static setRoutes(router: Router) {
-    router.get("/", AdminsController.list);
-    router.get("/:id", paramsValidator("id"), AdminsController.get);
-    router.post("/", bodyValidator(createAdminSchema), AdminsController.create);
-    router.patch(
+  setRoutes() {
+    this.router.get("/", this.list);
+    this.router.get("/:id", paramsValidator("id"), this.get);
+    this.router.post("/", bodyValidator(createAdminSchema), this.create);
+    this.router.patch(
       "/:id",
       paramsValidator("id"),
       bodyValidator(createAdminSchema),
-      AdminsController.update
+      this.update
     );
-    router.delete("/:id", paramsValidator("id"), AdminsController.delete);
+    this.router.delete("/:id", paramsValidator("id"), this.delete);
   }
 
-  static list(_, res: Response) {
+  list(_, res: Response) {
     AdminsService.list({})
       .then((result) => {
         res.status(result.code).json(result);
@@ -33,24 +33,24 @@ export class AdminsController extends BaseController {
       });
   }
 
-  static async get(req: Request, res: Response) {
+  async get(req: Request, res: Response) {
     const data = await AdminsService.get({
       _id: req.params.id,
     });
     res.json(data);
   }
 
-  static async create(req: Request, res: Response) {
+  async create(req: Request, res: Response) {
     const data = await AdminsService.create(req.body);
     res.json(data);
   }
 
-  static async update(req: Request, res: Response) {
+  async update(req: Request, res: Response) {
     const data = await AdminsService.update(req.params.id, req.body);
     res.json(data);
   }
 
-  static async delete(req: Request, res: Response) {
+  async delete(req: Request, res: Response) {
     const data = await AdminsService.remove(req.params.id);
     res.json(data);
   }

@@ -43,9 +43,10 @@ const importControllers = async (router: Router) => {
 
   await Promise.all(
     files.map(async (file) => {
-      const controller = await importController(file);
-      if (!controller) return;
-      controller.setRoutes(controller.router);
+      const controllerClass = await importController(file);
+      if (!controllerClass) return;
+      const controller: BaseController = new (controllerClass as any)();
+      controller.setRoutes();
       router.use(controller.prefix, controller.router);
     })
   );
@@ -54,6 +55,7 @@ const importControllers = async (router: Router) => {
 const importController = async (file: string) => {
   const controllers = Object.values(await import(file));
   return controllers.find(
-    (controller: { router?: Router }) => controller.router
+    (controller: { prototype: typeof BaseController }) =>
+      controller.prototype instanceof BaseController
   ) as typeof BaseController;
 };
