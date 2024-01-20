@@ -1,8 +1,7 @@
-import { userModel, } from '../models/user.model'
+import { userModel } from "../models/user.model";
 
-
-export class UsersBaseService {
-  static async find(filterObject) {
+export abstract class UsersBaseService {
+  async find(filterObject) {
     try {
       const resultObject = await userModel.findOne(filterObject).lean();
 
@@ -28,33 +27,40 @@ export class UsersBaseService {
     }
   }
 
-  static async create(form: any) {
+  async create(form: any) {
     try {
-        if (form.email) {
-            form.email = form.email.toLowerCase()
-            let user = await this.find({ email: form.email });
-            if (user.success) return { success: false, error: "This email already exists", code: 409 };
-        }
-        let newUser = new userModel(form);
-        await newUser.save();
-        return {
-            success: true,
-            code: 201
-        };
-
-    } catch (err) {
-        console.log(`err.message`, err.message);
-        return {
+      if (form.email) {
+        form.email = form.email.toLowerCase();
+        let user = await this.find({ email: form.email });
+        if (user.success)
+          return {
             success: false,
-            code: 500,
-            error: err.message
-        };
+            error: "This email already exists",
+            code: 409,
+          };
+      }
+      let newUser = new userModel(form);
+      await newUser.save();
+      return {
+        success: true,
+        code: 201,
+      };
+    } catch (err) {
+      console.log(`err.message`, err.message);
+      return {
+        success: false,
+        code: 500,
+        error: err.message,
+      };
     }
-}
+  }
 
-  static async get(filterObject) {
+  async get(filterObject) {
     try {
-      const resultObject = await userModel.findOne(filterObject).lean().select("-password");
+      const resultObject = await userModel
+        .findOne(filterObject)
+        .lean()
+        .select("-password");
       if (!resultObject)
         return {
           success: false,
@@ -76,7 +82,7 @@ export class UsersBaseService {
     }
   }
 
-  static async list(filterObject) {
+  async list(filterObject) {
     try {
       const resultArray = await userModel
         .find(filterObject)
@@ -105,8 +111,4 @@ export class UsersBaseService {
       };
     }
   }
-
 }
-
-
-
