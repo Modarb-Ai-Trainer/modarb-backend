@@ -7,7 +7,7 @@ import { usersService } from "../services/users.service";
 
 const allowedRoles = ["superAdmin", "admin"];
 
-@Prefix("/admin/users")
+@Prefix("/console/users")
 export class adminUsersController extends BaseController {
   static setRoutes(router) {
     router.post(
