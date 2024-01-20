@@ -4,7 +4,7 @@ import { config } from "../../../../configs/config";
 import { FilterQuery } from "mongoose";
 
 export class AdminsService {
-  static async find(filterObject) {
+  async find(filterObject) {
     try {
       const resultObject = await Admin.findOne(filterObject).lean();
 
@@ -30,7 +30,7 @@ export class AdminsService {
     }
   }
 
-  static async get(filterObject: FilterQuery<IAdmin>) {
+  async get(filterObject: FilterQuery<IAdmin>) {
     try {
       const resultObject = await Admin.findOne(filterObject)
         .lean()
@@ -56,7 +56,7 @@ export class AdminsService {
     }
   }
 
-  static async list(filterObject) {
+  async list(filterObject) {
     try {
       const resultArray = await Admin.find(filterObject)
         .lean()
@@ -85,7 +85,7 @@ export class AdminsService {
     }
   }
 
-  static async create(formObject) {
+  async create(formObject) {
     try {
       if (formObject.email) formObject.email = formObject.email.toLowerCase();
       const resultObject = new Admin(formObject);
@@ -113,7 +113,7 @@ export class AdminsService {
     }
   }
 
-  static async update(_id, formObject) {
+  async update(_id, formObject) {
     try {
       const existingObject = await this.find({ _id });
       if (!existingObject.success)
@@ -161,7 +161,7 @@ export class AdminsService {
     }
   }
 
-  static async remove(_id) {
+  async remove(_id) {
     try {
       const resultObject = await Admin.findByIdAndDelete({ _id });
       if (!resultObject)
@@ -185,7 +185,7 @@ export class AdminsService {
     }
   }
 
-  static async comparePassword(emailString, passwordString) {
+  async comparePassword(emailString, passwordString) {
     try {
       emailString = emailString.toLowerCase();
       const existingObject = await this.find({ email: emailString });
@@ -223,7 +223,7 @@ export class AdminsService {
     }
   }
 
-  static async resetPassword(emailString, newPasswordString) {
+  async resetPassword(emailString, newPasswordString) {
     try {
       emailString = emailString.toLowerCase();
       const existingObject = await this.find({ email: emailString });
