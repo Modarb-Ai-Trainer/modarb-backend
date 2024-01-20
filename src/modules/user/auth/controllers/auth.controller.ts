@@ -3,7 +3,7 @@ import { jwtHelper } from "../../../../helpers/jwt.helper";
 import { BaseController } from "../../../../lib/controllers/controller.base";
 import { Prefix } from "../../../common/decorators/prefix.decorator";
 import { bodyValidator } from "../../../../helpers/validation.helper";
-import { userRegisterValidation } from "../../../common/users/validation/user.baseValidation";
+import { userRegisterValidation } from "../../../common/users/validation/user-register.validation";
 import { loginValidation } from "../validation/user.Validation";
 
 @Prefix("/user/auth")

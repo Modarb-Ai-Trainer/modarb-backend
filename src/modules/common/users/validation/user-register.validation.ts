@@ -1,4 +1,5 @@
-import joi from "joi";
+import * as joi from "joi";
+import { Role, Gender, FitnessLevel, FitnessGoal, WorkoutPlace, PreferredDay, PreferredEquipment, Injurie } from "../enums/roles.enum";
 
 export const userRegisterValidation = joi
   .object()
@@ -45,7 +46,7 @@ export const userRegisterValidation = joi
           "string.base": "please enter a valid public_id",
         }),
       }),
-    gender: joi.string().empty().required().messages({
+    gender: joi.string().valid(...Object.values(Gender)).empty().required().messages({
       "string.base": "please enter a valid gender",
       "any.required": "gender must be entered",
       "string.empty": "gender cannot be empty",
@@ -60,7 +61,7 @@ export const userRegisterValidation = joi
       "any.required": "weight must be entered",
       "number.empty": "weight cannot be empty",
     }),
-    fitness_level: joi.string().empty().required().messages({
+    fitness_level: joi.string().valid(...Object.values(FitnessLevel)).empty().required().messages({
       "string.base": "please enter a valid fitness_level",
       "any.required": "fitness_level must be entered",
       "string.empty": "fitness_level cannot be empty",
@@ -69,7 +70,7 @@ export const userRegisterValidation = joi
       .object()
       .optional()
       .keys({
-        fitness_goal: joi.string().empty().required().messages({
+        fitness_goal: joi.string().valid(...Object.values(FitnessGoal)).empty().required().messages({
           "string.base": "please enter a valid fitness_goal",
           "any.required": "fitness_goal must be entered",
           "string.empty": "fitness_goal cannot be empty",
@@ -86,6 +87,7 @@ export const userRegisterValidation = joi
         }),
         preferred_days: joi
           .array()
+          .valid(...Object.values(PreferredDay))
           .empty()
           .required()
           .items(
@@ -95,13 +97,14 @@ export const userRegisterValidation = joi
               "string.empty": "preferred_days cannot be empty",
             })
           ),
-        workout_place: joi.string().empty().required().messages({
+        workout_place: joi.string().valid(...Object.values(WorkoutPlace)).empty().required().messages({
           "string.base": "please enter a valid workout_place",
           "any.required": "workout_place must be entered",
           "string.empty": "workout_place cannot be empty",
         }),
         preferred_equipment: joi
           .array()
+          .valid(...Object.values(PreferredEquipment))
           .empty()
           .required()
           .items(
@@ -114,6 +117,7 @@ export const userRegisterValidation = joi
       }),
     injuries: joi
       .array()
+      .valid(...Object.values(Injurie))
       .empty()
       .required()
       .items(
@@ -126,4 +130,11 @@ export const userRegisterValidation = joi
     dob: joi.date().empty().optional().messages({
       "date.base": "please enter a valid date",
     }),
+    role: joi
+      .string()
+      .valid(...Object.values(Role))
+      .optional().messages({
+        "string.base": "please enter a valid role",
+        "string.empty": "role cannot be empty"
+      }),
   });
