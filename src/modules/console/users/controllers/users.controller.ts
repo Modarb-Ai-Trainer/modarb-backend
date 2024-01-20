@@ -8,17 +8,17 @@ import { usersService } from "../services/users.service";
 const allowedRoles = ["superAdmin", "admin"];
 
 @Prefix("/console/users")
-export class adminUsersController extends BaseController {
-  static setRoutes(router) {
-    router.post(
+export class AdminUsersController extends BaseController {
+  setRoutes() {
+    this.router.post(
       "/create",
       jwtHelper.verifyToken(allowedRoles),
       bodyValidator(userRegisterValidation),
-      adminUsersController.create
+      this.create
     );
   }
 
-  static async create(req, res) {
+  async create(req, res) {
     try {
       let result = await usersService.create(req.body);
       return res.status(result.code).json(result);
