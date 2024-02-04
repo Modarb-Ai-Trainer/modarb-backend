@@ -35,14 +35,18 @@ const setCustomRoutes = (router: Router) => {
 /* importing all controllers */
 
 const findControllerFiles = (): string[] => {
-  return glob.sync("**/*.controller.ts", {}).map((file) => {
+  const controllersPath = path.relative(process.cwd(), path.join(__dirname, "**/*.controller.{ts,js}")).replace(/\\/g, "/")
+  
+  return glob.sync(controllersPath, {}).map((file) => {
     return path.resolve(file);
-  });
+  });"**/*.controller.ts"
 };
+
 
 const importControllers = async (router: Router) => {
   const files = findControllerFiles();
-
+  console.log(files);
+  
 
   await Promise.all(
     files.map(async (file) => {
