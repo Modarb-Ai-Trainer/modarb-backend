@@ -39,7 +39,7 @@ const findControllerFiles = (): string[] => {
   
   return glob.sync(controllersPath, {}).map((file) => {
     return path.resolve(file);
-  });"**/*.controller.ts"
+  });
 };
 
 
