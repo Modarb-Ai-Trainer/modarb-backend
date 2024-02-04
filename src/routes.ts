@@ -45,8 +45,6 @@ const findControllerFiles = (): string[] => {
 
 const importControllers = async (router: Router) => {
   const files = findControllerFiles();
-  console.log(files);
-  
 
   await Promise.all(
     files.map(async (file) => {
