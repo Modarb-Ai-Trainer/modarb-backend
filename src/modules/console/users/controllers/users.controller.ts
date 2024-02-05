@@ -1,7 +1,8 @@
+import { asyncHandler } from "../../../../helpers/async-handler";
 import { jwtHelper } from "../../../../helpers/jwt.helper";
 import { bodyValidator } from "../../../../helpers/validation.helper";
 import { BaseController } from "../../../../lib/controllers/controller.base";
-import { Prefix } from "../../../common/decorators/prefix.decorator";
+import { Prefix } from "../../../../lib/decorators/prefix.decorator";
 import { userRegisterValidation } from "../../../common/users/validation/user-register.validation";
 import { UsersService } from "../services/users.service";
 
@@ -16,7 +17,7 @@ export class AdminUsersController extends BaseController {
       "/create",
       jwtHelper.verifyToken(allowedRoles),
       bodyValidator(userRegisterValidation),
-      this.create
+      asyncHandler(this.create)
     );
   }
 
