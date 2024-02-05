@@ -7,22 +7,31 @@ import {
   bodyValidator,
   paramsValidator,
 } from "../../../../helpers/validation.helper";
+import { asyncHandler } from "../../../../helpers/async-handler";
 
 @Prefix("/console/admins")
 export class AdminsController extends BaseController {
   private adminsService = new AdminsService();
 
   setRoutes() {
-    this.router.get("/", this.list);
-    this.router.get("/:id", paramsValidator("id"), this.get);
-    this.router.post("/", bodyValidator(createAdminSchema), this.create);
+    this.router.get("/", asyncHandler(this.list));
+    this.router.get("/:id", paramsValidator("id"), asyncHandler(this.get));
+    this.router.post(
+      "/",
+      bodyValidator(createAdminSchema),
+      asyncHandler(this.create)
+    );
     this.router.patch(
       "/:id",
       paramsValidator("id"),
       bodyValidator(createAdminSchema),
-      this.update
+      asyncHandler(this.update)
     );
-    this.router.delete("/:id", paramsValidator("id"), this.delete);
+    this.router.delete(
+      "/:id",
+      paramsValidator("id"),
+      asyncHandler(this.delete)
+    );
   }
 
   list = (_, res: Response) => {
