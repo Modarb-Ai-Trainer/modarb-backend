@@ -1,10 +1,11 @@
 import { UsersService } from "../services/users.service";
 import { jwtHelper } from "../../../../helpers/jwt.helper";
 import { BaseController } from "../../../../lib/controllers/controller.base";
-import { Prefix } from "../../../common/decorators/prefix.decorator";
 import { bodyValidator } from "../../../../helpers/validation.helper";
 import { userRegisterValidation } from "../../../common/users/validation/user-register.validation";
 import { loginValidation } from "../validation/user.Validation";
+import { asyncHandler } from "../../../../helpers/async-handler";
+import { Prefix } from "../../../../lib/decorators/prefix.decorator";
 
 @Prefix("/user/auth")
 export class AuthController extends BaseController {
@@ -14,9 +15,13 @@ export class AuthController extends BaseController {
     this.router.post(
       "/register",
       bodyValidator(userRegisterValidation),
-      this.register
+      asyncHandler(this.register)
     );
-    this.router.post("/login", bodyValidator(loginValidation), this.login);
+    this.router.post(
+      "/login",
+      bodyValidator(loginValidation),
+      asyncHandler(this.login)
+    );
   }
 
   register = async (req, res) => {
