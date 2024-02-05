@@ -1,6 +1,5 @@
 import { Request, Response, Router } from "express";
 import { BaseController } from "../../../../lib/controllers/controller.base";
-import { Prefix } from "../../../common/decorators/prefix.decorator";
 import { AdminsService } from "../services/admins.service";
 import { createAdminSchema } from "../validations/create-admin.validation";
 import {
@@ -8,6 +7,7 @@ import {
   paramsValidator,
 } from "../../../../helpers/validation.helper";
 import { asyncHandler } from "../../../../helpers/async-handler";
+import { Prefix } from "../../../../lib/decorators/prefix.decorator";
 
 @Prefix("/console/admins")
 export class AdminsController extends BaseController {

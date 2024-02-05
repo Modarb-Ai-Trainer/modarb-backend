@@ -1,4 +1,4 @@
-import { BaseController } from "../../../lib/controllers/controller.base";
+import { BaseController } from "../controllers/controller.base";
 
 export const Prefix = (prefix: string) => {
   return (target: typeof BaseController) => {
