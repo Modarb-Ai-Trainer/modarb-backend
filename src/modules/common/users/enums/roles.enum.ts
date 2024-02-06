@@ -36,7 +36,7 @@ export enum PreferredEquipment {
   RESISTANCE_BAND = "resistance band",
   BODYWEIGHT = "bodyweight"
 }
-export enum Injurie {
+export enum Injury {
   NECK = "neck",
   SHOULDERS = "shoulders",
   BACK = "back",

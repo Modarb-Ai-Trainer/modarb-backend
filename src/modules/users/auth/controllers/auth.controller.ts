@@ -1,25 +1,25 @@
-import { UsersService } from "../services/users.service";
+import { UsersAuthService } from "../services/users.service";
 import { jwtHelper } from "../../../../helpers/jwt.helper";
 import { BaseController } from "../../../../lib/controllers/controller.base";
 import { bodyValidator } from "../../../../helpers/validation.helper";
-import { userRegisterValidation } from "../../../common/users/validation/user-register.validation";
-import { loginValidation } from "../validation/user.Validation";
 import { asyncHandler } from "../../../../helpers/async-handler";
 import { Prefix } from "../../../../lib/decorators/prefix.decorator";
+import { loginValidationSchema } from "../validation/user.Validation";
+import { userRegisterSchema } from "src/modules/common/users/validation/user-register.validation";
 
-@Prefix("/user/auth")
-export class AuthController extends BaseController {
-  private usersService = new UsersService();
+@Prefix("/users/auth")
+export class UsersAuthController extends BaseController {
+  private usersService = new UsersAuthService();
 
   setRoutes(): void {
     this.router.post(
       "/register",
-      bodyValidator(userRegisterValidation),
+      bodyValidator(userRegisterSchema),
       asyncHandler(this.register)
     );
     this.router.post(
       "/login",
-      bodyValidator(loginValidation),
+      bodyValidator(loginValidationSchema),
       asyncHandler(this.login)
     );
   }
