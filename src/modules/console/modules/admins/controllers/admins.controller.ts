@@ -2,13 +2,17 @@ import { asyncHandler } from "@helpers/async-handler";
 import { paramsValidator, bodyValidator } from "@helpers/validation.helper";
 import { BaseController } from "@lib/controllers/controller.base";
 import { Prefix } from "@lib/decorators/prefix.decorator";
-import { Request, Response, Router } from "express";
+import { Request, Response } from "express";
 import { AdminsService } from "../services/admins.service";
 import { createAdminSchema } from "../validations/create-admin.validation";
 import { parsePaginationQuery } from "@helpers/pagination";
 import { JsonResponse } from "@lib/responses/json-response";
+import { ControllerMiddleware } from "@lib/decorators/controller-middleware.decorator";
+import { AdminGuardMiddleware } from "src/modules/console/common/guards/admins.guard";
+import { Role } from "@common/enums/role.enum";
 
 @Prefix("/console/admins")
+@ControllerMiddleware(AdminGuardMiddleware({ roles: [Role.SUPER_ADMIN] }))
 export class AdminsController extends BaseController {
   private adminsService = new AdminsService();
 

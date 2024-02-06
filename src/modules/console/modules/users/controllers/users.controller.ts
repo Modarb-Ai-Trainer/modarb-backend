@@ -1,14 +1,11 @@
 import { userRegisterSchema } from "src/common/validations/user-register.validation";
-import { asyncHandler } from "../../../../helpers/async-handler";
-import { JwtHelper } from "../../../../helpers/jwt.helper";
-import { bodyValidator } from "../../../../helpers/validation.helper";
-import { BaseController } from "../../../../lib/controllers/controller.base";
-import { Prefix } from "../../../../lib/decorators/prefix.decorator";
 import { UsersService } from "../services/users.service";
 import { JsonResponse } from "src/lib/responses/json-response";
 import { Request, Response } from "express";
-
-const allowedRoles = ["superAdmin", "admin"];
+import { asyncHandler } from "@helpers/async-handler";
+import { bodyValidator } from "@helpers/validation.helper";
+import { BaseController } from "@lib/controllers/controller.base";
+import { Prefix } from "@lib/decorators/prefix.decorator";
 
 @Prefix("/console/users")
 export class AdminUsersController extends BaseController {
@@ -17,7 +14,6 @@ export class AdminUsersController extends BaseController {
   setRoutes() {
     this.router.post(
       "/create",
-      JwtHelper.verifyToken(allowedRoles),
       bodyValidator(userRegisterSchema),
       asyncHandler(this.create)
     );
