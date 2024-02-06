@@ -1,6 +1,6 @@
-import { FilterQuery, QueryWithHelpers } from "mongoose";
-import { IUser, UserDocument, userModel } from "../models/user.model";
+import { FilterQuery } from "mongoose";
 import { HttpError } from "src/lib/error-handling/http-error";
+import { UserDocument, userModel, IUser } from "../models/user.model";
 
 export abstract class BaseUsersService {
   async findOne(filterObject: FilterQuery<UserDocument>) {

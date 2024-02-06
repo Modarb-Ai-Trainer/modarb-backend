@@ -1,13 +1,12 @@
+import { asyncHandler } from "@helpers/async-handler";
+import { paramsValidator, bodyValidator } from "@helpers/validation.helper";
+import { BaseController } from "@lib/controllers/controller.base";
+import { Prefix } from "@lib/decorators/prefix.decorator";
 import { Request, Response, Router } from "express";
-import { BaseController } from "../../../../lib/controllers/controller.base";
 import { AdminsService } from "../services/admins.service";
 import { createAdminSchema } from "../validations/create-admin.validation";
-import {
-  bodyValidator,
-  paramsValidator,
-} from "../../../../helpers/validation.helper";
-import { asyncHandler } from "../../../../helpers/async-handler";
-import { Prefix } from "../../../../lib/decorators/prefix.decorator";
+import { parsePaginationQuery } from "@helpers/pagination";
+import { JsonResponse } from "@lib/responses/json-response";
 
 @Prefix("/console/admins")
 export class AdminsController extends BaseController {
@@ -34,36 +33,61 @@ export class AdminsController extends BaseController {
     );
   }
 
-  list = (_, res: Response) => {
-    this.adminsService
-      .list({})
-      .then((result) => {
-        res.status(result.code).json(result);
-      })
-      .catch((err) => {
-        res.status(500).json(err);
-      });
+  list = async (req: Request, res: Response) => {
+    const paginationQuery = parsePaginationQuery(req.query);
+    const { docs, paginationData } = await this.adminsService.list(
+      {},
+      paginationQuery
+    );
+    const response = new JsonResponse({
+      data: docs,
+      meta: paginationData,
+    });
+    return res.json(response);
   };
 
   get = async (req: Request, res: Response) => {
-    const data = await this.adminsService.get({
+    const data = await this.adminsService.findOneOrFail({
       _id: req.params.id,
     });
-    res.json(data);
+    const response = new JsonResponse({
+      data,
+    });
+    res.json(response);
   };
 
   create = async (req: Request, res: Response) => {
-    const data = await this.adminsService.create(req.body);
-    res.json(data);
+    const admin = await this.adminsService.create(req.body);
+    const response = new JsonResponse({
+      data: admin,
+    });
+    res.json(response);
   };
 
   update = async (req: Request, res: Response) => {
-    const data = await this.adminsService.update(req.params.id, req.body);
-    res.json(data);
+    const admin = await this.adminsService.update(
+      {
+        _id: req.params.id,
+      },
+      req.body
+    );
+
+    const response = new JsonResponse({
+      data: admin,
+    });
+
+    res.json(response);
   };
 
   delete = async (req: Request, res: Response) => {
-    const data = await this.adminsService.remove(req.params.id);
-    res.json(data);
+    const admin = await this.adminsService.delete({
+      _id: req.params.id,
+    });
+
+    const response = new JsonResponse({
+      data: admin,
+    });
+
+    res.json(response);
   };
 }

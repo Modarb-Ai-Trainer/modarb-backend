@@ -1,5 +1,5 @@
+import { Role } from "@common/enums/role.enum";
 import * as joi from "joi";
-import { Role } from "../enums/roles.enum";
 import { createSchema } from "src/helpers/create-schema";
 
 export interface ICreateAdmin {

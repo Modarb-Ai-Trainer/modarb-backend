@@ -1,14 +1,12 @@
+import { AuthenticatableType } from "@common/enums/authenticatable-type.enum";
+import { FitnessGoal } from "@common/enums/fitness-goal.enum";
+import { FitnessLevel } from "@common/enums/fitness-level.enum";
+import { Gender } from "@common/enums/gender.enum";
+import { Injury } from "@common/enums/injury.enum";
+import { PreferredDay } from "@common/enums/preferred-day.enum";
+import { PreferredEquipment } from "@common/enums/preferred-equipment.enum";
+import { WorkoutPlace } from "@common/enums/workout-place.enum";
 import * as joi from "joi";
-import {
-  Role,
-  Gender,
-  FitnessLevel,
-  FitnessGoal,
-  WorkoutPlace,
-  PreferredDay,
-  PreferredEquipment,
-  Injury,
-} from "../enums/roles.enum";
 import { createSchema } from "src/helpers/create-schema";
 
 export interface IUserRegister {
@@ -34,7 +32,6 @@ export interface IUserRegister {
   };
   injuries: string[];
   dob?: Date;
-  role?: Role;
 }
 
 export const userRegisterKeys = {
@@ -185,7 +182,7 @@ export const userRegisterKeys = {
   }),
   role: joi
     .string()
-    .valid(...Object.values(Role))
+    .valid(...Object.values(AuthenticatableType))
     .optional()
     .messages({
       "string.base": "please enter a valid role",
