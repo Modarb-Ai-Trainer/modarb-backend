@@ -1,3 +1,3 @@
-import { UsersBaseService } from "../../../common/users/services/users.base.service";
+import { BaseUsersService } from "../../../common/users/services/users.base.service";
 
-export class UsersService extends UsersBaseService {}
+export class UsersService extends BaseUsersService {}

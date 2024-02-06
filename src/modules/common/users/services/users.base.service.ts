@@ -1,114 +1,54 @@
-import { userModel } from "../models/user.model";
+import { FilterQuery, QueryWithHelpers } from "mongoose";
+import { IUser, UserDocument, userModel } from "../models/user.model";
+import { HttpError } from "src/lib/error-handling/http-error";
 
-export abstract class UsersBaseService {
-  async find(filterObject) {
+export abstract class BaseUsersService {
+  async findOne(filterObject: FilterQuery<UserDocument>) {
+    return userModel.findOne(filterObject);
+  }
+
+  async findOneOrFail(
+    filterObject: FilterQuery<UserDocument>
+  ): Promise<UserDocument> {
     try {
-      const resultObject = await userModel.findOne(filterObject).lean();
+      const document = await this.findOne(filterObject);
+      if (!document) throw new HttpError(404, "No Matching Result Found.");
 
-      if (!resultObject)
-        return {
-          success: false,
-          code: 404,
-          error: "No Matching Result Found.",
-        };
-
-      return {
-        success: true,
-        code: 200,
-        record: resultObject,
-      };
+      return document;
     } catch (err) {
-      console.log(`err.message`, err.message);
-      return {
-        success: false,
-        code: 500,
-        error: err.message,
-      };
+      console.error(err);
+      throw new HttpError(500, "Unexpected Error Happened.");
     }
   }
 
-  async create(form: any) {
-    try {
-      if (form.email) {
-        form.email = form.email.toLowerCase();
-        let user = await this.find({ email: form.email });
-        if (user.success)
-          return {
-            success: false,
-            error: "This email already exists",
-            code: 409,
-          };
-      }
-      let newUser = new userModel(form);
-      await newUser.save();
-      return {
-        success: true,
-        code: 201,
-      };
-    } catch (err) {
-      console.log(`err.message`, err.message);
-      return {
-        success: false,
-        code: 500,
-        error: err.message,
-      };
-    }
+  async userExists(filterObject: FilterQuery<UserDocument>): Promise<boolean> {
+    return (await this.findOne(filterObject)) !== null;
   }
 
-  async get(filterObject) {
-    try {
-      const resultObject = await userModel
-        .findOne(filterObject)
-        .lean()
-        .select("-password");
-      if (!resultObject)
-        return {
-          success: false,
-          code: 404,
-          error: "No Matching Result Found.",
-        };
-      return {
-        success: true,
-        code: 200,
-        record: resultObject,
-      };
-    } catch (err) {
-      console.log(`err.message`, err.message);
-      return {
-        success: false,
-        code: 500,
-        error: err.message,
-      };
-    }
+  async create(createParams: IUser): Promise<UserDocument> {
+    if (await this.userExists({ email: createParams.email }))
+      throw new HttpError(409, "Email Already Exists.");
+
+    const newUser = new userModel(createParams) as UserDocument;
+    return newUser.save();
   }
 
-  async list(filterObject) {
-    try {
-      const resultArray = await userModel
-        .find(filterObject)
-        .lean()
-        .select("-password");
+  async get(filterObject: FilterQuery<UserDocument>): Promise<UserDocument> {
+    const user: UserDocument = await userModel
+      .findOne(filterObject)
+      .select("-password");
+    if (!user) throw new HttpError(404, "No Matching Result Found.");
+    return user;
+  }
 
-      if (!resultArray)
-        return {
-          success: false,
-          code: 404,
-          error: "No Matching Result Found.",
-        };
-      const count = await userModel.countDocuments(filterObject);
-      return {
-        success: true,
-        code: 200,
-        record: resultArray,
-        count,
-      };
-    } catch (err) {
-      console.log(`err.message`, err.message);
-      return {
-        success: false,
-        code: 500,
-        error: "Unexpected Error Happened.",
-      };
-    }
+  async list(filterObject: FilterQuery<UserDocument>): Promise<{
+    docs: UserDocument[];
+    count: number;
+  }> {
+    const users = (await userModel
+      .find(filterObject)
+      .select("-password")) as UserDocument[];
+    const count = await userModel.countDocuments(filterObject);
+    return { docs: users, count };
   }
 }
