@@ -1,12 +1,12 @@
 import { UsersAuthService } from "../services/users.service";
-import { BaseController } from "../../../../lib/controllers/controller.base";
-import { bodyValidator } from "../../../../helpers/validation.helper";
-import { asyncHandler } from "../../../../helpers/async-handler";
-import { Prefix } from "../../../../lib/decorators/prefix.decorator";
 import { loginValidationSchema } from "../validation/login.validation";
 import { Request, Response } from "express";
 import { JsonResponse } from "src/lib/responses/json-response";
 import { userRegisterSchema, IUserRegister } from "src/common/validations/user-register.validation";
+import { asyncHandler } from "@helpers/async-handler";
+import { bodyValidator } from "@helpers/validation.helper";
+import { BaseController } from "@lib/controllers/controller.base";
+import { Prefix } from "@lib/decorators/prefix.decorator";
 
 @Prefix("/users/auth")
 export class UsersAuthController extends BaseController {
