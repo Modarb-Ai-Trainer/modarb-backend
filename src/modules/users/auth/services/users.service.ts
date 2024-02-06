@@ -1,37 +1,18 @@
-import { UsersBaseService } from "../../../common/users/services/users.base.service";
+import { BaseUsersService } from "../../../common/users/services/users.base.service";
 import bcrypt from "bcrypt";
+import { ILogin } from "../validation/login.validation";
+import { HttpError } from "src/lib/error-handling/http-error";
+import { JwtHelper } from "src/helpers/jwt.helper";
 
-export class UsersAuthService extends UsersBaseService {
-  async comparePassword(email: string, password: string) {
-    try {
-      if (email != undefined) {
-        email = email.toLowerCase();
-      }
-      let result = await this.find({ email });
-      if (!result.success) return result;
-
-      let match = await bcrypt.compare(password, result.record.password);
-      delete result.record.password;
-
-      if (!match)
-        return {
-          success: false,
-          code: 409,
-          message: "password isn't correct",
-        };
-
-      return {
-        success: true,
-        code: 200,
-        record: result.record,
-      };
-    } catch (err) {
-      console.log(`err.message`, err.message);
-      return {
-        success: false,
-        code: 500,
-        error: err.message,
-      };
-    }
+export class UsersAuthService extends BaseUsersService {
+  async login(loginRequest: ILogin) {
+    const user = await this.findOneOrFail({ email: loginRequest.email });
+    const isPasswordCorrect = await bcrypt.compare(
+      loginRequest.password,
+      user.password
+    );
+    if (!isPasswordCorrect) throw new HttpError(401, "Incorrect Password");
+    const token = JwtHelper.generateToken({ id: user._id, role: user.role });
+    return { user, token };
   }
 }

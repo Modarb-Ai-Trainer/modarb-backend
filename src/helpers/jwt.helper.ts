@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { config } from "../configs/config";
 
-export class jwtHelper {
+export class JwtHelper {
   static generateToken(payload: any) {
     return jwt.sign(payload, config.jwt.secret, {
       expiresIn: config.jwt.expiresIn,

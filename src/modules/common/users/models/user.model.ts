@@ -85,4 +85,6 @@ userSchema.pre("save", async function (next) {
     next();
 });
 
+export type UserDocument = IUser & mongoose.Document;
+
 export const userModel = mongoose.model<IUser>("users", userSchema);
