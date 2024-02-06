@@ -4,10 +4,9 @@ import { bodyValidator } from "../../../../helpers/validation.helper";
 import { asyncHandler } from "../../../../helpers/async-handler";
 import { Prefix } from "../../../../lib/decorators/prefix.decorator";
 import { loginValidationSchema } from "../validation/login.validation";
-import { userRegisterSchema } from "src/modules/common/users/validation/user-register.validation";
 import { Request, Response } from "express";
-import { IUser } from "src/modules/common/users/models/user.model";
 import { JsonResponse } from "src/lib/responses/json-response";
+import { userRegisterSchema, IUserRegister } from "src/common/validations/user-register.validation";
 
 @Prefix("/users/auth")
 export class UsersAuthController extends BaseController {
@@ -27,16 +26,18 @@ export class UsersAuthController extends BaseController {
   }
 
   register = async (req: Request, res: Response) => {
-    let user = await this.authService.create(req.body as IUser);
-    return new JsonResponse({
+    const user = await this.authService.register(req.body as IUserRegister);
+    const response = new JsonResponse({
       data: user,
     });
+    return res.json(response);
   };
 
-  login = async (req, res) => {
+  login = async (req: Request, res: Response) => {
     const { user, token } = await this.authService.login(req.body);
-    return new JsonResponse({
+    const response = new JsonResponse({
       data: { user, token },
     });
+    return res.json(response);
   };
 }
