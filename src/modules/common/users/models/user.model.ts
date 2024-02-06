@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 export const saltrounds = 5;
-import { Role, Gender, FitnessLevel, FitnessGoal, WorkoutPlace, PreferredDay, PreferredEquipment, Injurie } from "../enums/roles.enum";
+import { Role, Gender, FitnessLevel, FitnessGoal, WorkoutPlace, PreferredDay, PreferredEquipment, Injury } from "../enums/roles.enum";
 const { Schema } = mongoose;
 
 export interface IUser {
@@ -23,7 +23,7 @@ export interface IUser {
         workout_place: WorkoutPlace;
         preferred_equipment: [PreferredEquipment];
     };
-    injuries: [Injurie];
+    injuries: [Injury];
   }
   
 const userSchema = new Schema({
@@ -69,7 +69,7 @@ const userSchema = new Schema({
     },
     injuries: [{
         type: String,
-        enum: Injurie,
+        enum: Injury,
         required: true
     }],
     dob: { type: Date },
