@@ -7,6 +7,8 @@ import { asyncHandler } from "@helpers/async-handler";
 import { bodyValidator } from "@helpers/validation.helper";
 import { BaseController } from "@lib/controllers/controller.base";
 import { Prefix } from "@lib/decorators/prefix.decorator";
+import { serialize } from "@helpers/serialize";
+import { UserSerialization } from "@common/serializers/user.serializtion";
 
 @Prefix("/users/auth")
 export class UsersAuthController extends BaseController {
@@ -28,7 +30,7 @@ export class UsersAuthController extends BaseController {
   register = async (req: Request, res: Response) => {
     const user = await this.authService.register(req.body as IUserRegister);
     const response = new JsonResponse({
-      data: user,
+      data: serialize(user, UserSerialization),
     });
     return res.json(response);
   };
@@ -36,7 +38,7 @@ export class UsersAuthController extends BaseController {
   login = async (req: Request, res: Response) => {
     const { user, token } = await this.authService.login(req.body);
     const response = new JsonResponse({
-      data: { user, token },
+      data: { user: serialize(user, UserSerialization), token },
     });
     return res.json(response);
   };
