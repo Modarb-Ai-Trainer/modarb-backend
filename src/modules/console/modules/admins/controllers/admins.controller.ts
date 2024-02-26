@@ -10,6 +10,8 @@ import { JsonResponse } from "@lib/responses/json-response";
 import { ControllerMiddleware } from "@lib/decorators/controller-middleware.decorator";
 import { AdminGuardMiddleware } from "src/modules/console/common/guards/admins.guard";
 import { Role } from "@common/enums/role.enum";
+import { serialize } from "@helpers/serialize";
+import { AdminSerialization } from "src/modules/console/common/serializers/admin.serializtion";
 
 @Prefix("/console/admins")
 @ControllerMiddleware(AdminGuardMiddleware({ roles: [Role.SUPER_ADMIN] }))
@@ -43,8 +45,9 @@ export class AdminsController extends BaseController {
       {},
       paginationQuery
     );
+
     const response = new JsonResponse({
-      data: docs,
+      data: serialize(docs, AdminSerialization),
       meta: paginationData,
     });
     return res.json(response);
@@ -55,7 +58,7 @@ export class AdminsController extends BaseController {
       _id: req.params.id,
     });
     const response = new JsonResponse({
-      data,
+      data: serialize(data, AdminSerialization),
     });
     res.json(response);
   };
@@ -77,7 +80,7 @@ export class AdminsController extends BaseController {
     );
 
     const response = new JsonResponse({
-      data: admin,
+      data: serialize(admin, AdminSerialization),
     });
 
     res.json(response);
@@ -89,7 +92,7 @@ export class AdminsController extends BaseController {
     });
 
     const response = new JsonResponse({
-      data: admin,
+      data: serialize(admin, AdminSerialization),
     });
 
     res.json(response);

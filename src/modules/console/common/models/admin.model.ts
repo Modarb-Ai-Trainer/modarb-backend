@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import { config } from "../../../../configs/config";
+import { Role } from "@common/enums/role.enum";
+
 const { Schema } = mongoose;
 
 export interface IAdmin {
@@ -10,6 +12,7 @@ export interface IAdmin {
   image: object;
   gender: string;
   dob: Date;
+  role: Role;
 }
 
 const AdminSchema = new Schema({
@@ -19,6 +22,10 @@ const AdminSchema = new Schema({
   image: { type: Object, default: {} },
   gender: { type: String, required: true },
   dob: { type: Date },
+  role: {
+    type: String,
+    enum: Role
+  },
 });
 
 AdminSchema.pre("save", async function (next) {
