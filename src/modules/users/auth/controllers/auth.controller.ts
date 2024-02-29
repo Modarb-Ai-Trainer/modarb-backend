@@ -29,8 +29,9 @@ export class UsersAuthController extends BaseController {
 
   register = async (req: Request, res: Response) => {
     const user = await this.authService.register(req.body as IUserRegister);
+
     const response = new JsonResponse({
-      data: serialize(user, UserSerialization),
+      data: serialize(user.toJSON(),UserSerialization),
     });
     return res.json(response);
   };
@@ -38,7 +39,7 @@ export class UsersAuthController extends BaseController {
   login = async (req: Request, res: Response) => {
     const { user, token } = await this.authService.login(req.body);
     const response = new JsonResponse({
-      data: { user: serialize(user, UserSerialization), token },
+      data: { user, token },
     });
     return res.json(response);
   };

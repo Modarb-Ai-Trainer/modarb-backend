@@ -17,7 +17,6 @@ export class AdminUsersController extends BaseController {
   setRoutes() {
     this.router.post(
       "/create",
-      bodyValidator(userRegisterSchema),
       asyncHandler(this.create)
     );
   }

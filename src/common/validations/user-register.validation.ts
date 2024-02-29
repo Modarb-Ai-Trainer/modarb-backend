@@ -132,15 +132,15 @@ export const userRegisterKeys = {
       }),
       preferred_days: joi
         .array()
-        .valid(...Object.values(PreferredDay))
         .empty()
         .required()
         .items(
-          joi.string().empty().required().messages({
-            "string.base": "please enter a valid preferred_days",
-            "any.required": "preferred_days must be entered",
-            "string.empty": "preferred_days cannot be empty",
-          })
+          joi.string().valid(...Object.values(PreferredDay))
+            .empty().required().messages({
+              "string.base": "please enter a valid preferred_days",
+              "any.required": "preferred_days must be entered",
+              "string.empty": "preferred_days cannot be empty",
+            })
         ),
       workout_place: joi
         .string()
@@ -154,28 +154,28 @@ export const userRegisterKeys = {
         }),
       preferred_equipment: joi
         .array()
-        .valid(...Object.values(PreferredEquipment))
         .empty()
         .required()
         .items(
-          joi.string().empty().required().messages({
-            "string.base": "please enter a valid preferred_equipment",
-            "any.required": "preferred_equipment must be entered",
-            "string.empty": "preferred_equipment cannot be empty",
-          })
+          joi.string().valid(...Object.values(PreferredEquipment))
+            .empty().required().messages({
+              "string.base": "please enter a valid preferred_equipment",
+              "any.required": "preferred_equipment must be entered",
+              "string.empty": "preferred_equipment cannot be empty",
+            })
         ),
     }),
   injuries: joi
     .array()
-    .valid(...Object.values(Injury))
     .empty()
     .required()
     .items(
-      joi.string().empty().required().messages({
-        "string.base": "please enter a valid injuries",
-        "any.required": "injuries must be entered",
-        "string.empty": "injuries cannot be empty",
-      })
+      joi.string().valid(...Object.values(Injury))
+        .empty().required().messages({
+          "string.base": "please enter a valid injuries",
+          "any.required": "injuries must be entered",
+          "string.empty": "injuries cannot be empty",
+        })
     ),
   dob: joi.date().empty().optional().messages({
     "date.base": "please enter a valid date",
