@@ -1,6 +1,6 @@
-import { userRegisterSchema } from "src/common/validations/user-register.validation";
+import { userRegisterSchema } from "@common/validations/user-register.validation";
 import { UsersService } from "../services/users.service";
-import { JsonResponse } from "src/lib/responses/json-response";
+import { JsonResponse } from "@lib/responses/json-response";
 import { Request, Response } from "express";
 import { asyncHandler } from "@helpers/async-handler";
 import { bodyValidator } from "@helpers/validation.helper";

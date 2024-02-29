@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import { Env } from "src/lib/env/env";
+import { Env } from "@lib/env/env";
 dotenv.config();
 
 export interface Config {
