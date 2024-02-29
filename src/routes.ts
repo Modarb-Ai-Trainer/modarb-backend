@@ -30,13 +30,26 @@ const setCustomRoutes = (router: Router) => {
       .status(404)
       .json({ success: false, message: "Invalid URL!", code: 404 });
   });
+  router.use((err, req, res, next) => {
+    try {
+      err.message = JSON.parse(err.message);
+    } catch (error) { }
+
+    res.status(err.status || 500).json({
+      status: err.status || 500,
+      message: err.message || "Internal Server Error",
+    });
+
+    console.error(err.message, err.stack);
+  });
+
 };
 
 /* importing all controllers */
 
 const findControllerFiles = (): string[] => {
   const controllersPath = path.relative(process.cwd(), path.join(__dirname, "**/*.controller.{ts,js}")).replace(/\\/g, "/")
-  
+
   return glob.sync(controllersPath, {}).map((file) => {
     return path.resolve(file);
   });
