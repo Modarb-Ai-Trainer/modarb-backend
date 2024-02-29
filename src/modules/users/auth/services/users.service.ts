@@ -1,9 +1,9 @@
 import bcrypt from "bcrypt";
 import { ILogin } from "../validation/login.validation";
-import { HttpError } from "src/lib/error-handling/http-error";
-import { JwtHelper } from "src/helpers/jwt.helper";
-import { userModel } from "src/common/models/user.model";
-import { IUserRegister } from "src/common/validations/user-register.validation";
+import { HttpError } from "@lib/error-handling/http-error";
+import { JwtHelper } from "@helpers/jwt.helper";
+import { userModel } from "@common/models/user.model";
+import { IUserRegister } from "@common/validations/user-register.validation";
 import { CrudService } from "@lib/services/crud.service";
 
 export class UsersAuthService extends CrudService(userModel) {

@@ -14,10 +14,10 @@ RUN npm install
 COPY . .
 
 # Build the TypeScript code
-RUN npm run build
+# RUN npm run build
 
 # Expose the port on which your application will run
 EXPOSE 4000
 
 # Command to run the application
-CMD ["npm", "start"]
+CMD ["npm", "start:dev"]
