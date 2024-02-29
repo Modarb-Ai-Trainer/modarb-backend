@@ -1,5 +1,5 @@
 import joi from "joi";
-import { createSchema } from "src/helpers/create-schema";
+import { createSchema } from "@helpers/create-schema";
 
 export interface ILogin {
   email: string;
