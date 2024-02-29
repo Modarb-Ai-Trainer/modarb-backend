@@ -14,7 +14,7 @@ import { serialize } from "@helpers/serialize";
 import { AdminSerialization } from "src/modules/console/common/serializers/admin.serializtion";
 
 @Prefix("/console/admins")
-@ControllerMiddleware(AdminGuardMiddleware({ roles: [Role.SUPER_ADMIN] }))
+// @ControllerMiddleware(AdminGuardMiddleware({ roles: [Role.SUPER_ADMIN] }))
 export class AdminsController extends BaseController {
   private adminsService = new AdminsService();
 
@@ -23,8 +23,8 @@ export class AdminsController extends BaseController {
     this.router.get("/:id", paramsValidator("id"), asyncHandler(this.get));
     this.router.post(
       "/",
-      bodyValidator(createAdminSchema),
-      asyncHandler(this.create)
+
+      this.create
     );
     this.router.patch(
       "/:id",
