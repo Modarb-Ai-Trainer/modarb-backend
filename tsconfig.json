@@ -8,12 +8,12 @@
     "sourceMap": true,
     "outDir": "dist",
     "experimentalDecorators": true,
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "paths": {
-      "@lib/*": ["src/lib/*"],
-      "@common/*": ["src/common/*"],
-      "@configs/*": ["src/configs/*"],
-      "@helpers/*": ["src/helpers/*"]
+      "@lib/*": ["lib/*"],
+      "@common/*": ["common/*"],
+      "@configs/*": ["configs/*"],
+      "@helpers/*": ["helpers/*"]
     }
   },
   "lib": ["es2015"]
