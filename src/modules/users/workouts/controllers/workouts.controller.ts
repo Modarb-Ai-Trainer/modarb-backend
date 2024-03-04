@@ -8,8 +8,11 @@ import { BaseController } from "@lib/controllers/controller.base";
 import { Prefix } from "@lib/decorators/prefix.decorator";
 import { serialize } from "@helpers/serialize";
 import { WorkoutSerialization } from "@common/serializers/workout.serializtion";
+import { ControllerMiddleware } from "@lib/decorators/controller-middleware.decorator";
+import { UsersGuardMiddleware } from "modules/users/common/guards/users.guard";
 
 @Prefix("/users/workouts")
+@ControllerMiddleware(UsersGuardMiddleware())
 export class WorkoutController extends BaseController {
   private workoutsService = new WorkoutService();
 
