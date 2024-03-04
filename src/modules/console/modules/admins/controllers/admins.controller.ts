@@ -14,7 +14,7 @@ import { serialize } from "@helpers/serialize";
 import { AdminSerialization } from "src/modules/console/common/serializers/admin.serializtion";
 
 @Prefix("/console/admins")
-// @ControllerMiddleware(AdminGuardMiddleware({ roles: [Role.SUPER_ADMIN] }))
+@ControllerMiddleware(AdminGuardMiddleware({ roles: [Role.SUPER_ADMIN] }))
 export class AdminsController extends BaseController {
   private adminsService = new AdminsService();
 
@@ -58,7 +58,7 @@ export class AdminsController extends BaseController {
       _id: req.params.id,
     });
     const response = new JsonResponse({
-      data: serialize(data, AdminSerialization),
+      data: serialize(data.toJSON(), AdminSerialization),
     });
     res.json(response);
   };
@@ -66,7 +66,7 @@ export class AdminsController extends BaseController {
   create = async (req: Request, res: Response) => {
     const admin = await this.adminsService.create(req.body);
     const response = new JsonResponse({
-      data: admin,
+      data: serialize(admin.toJSON(), AdminSerialization),
     });
     res.json(response);
   };
@@ -80,7 +80,7 @@ export class AdminsController extends BaseController {
     );
 
     const response = new JsonResponse({
-      data: serialize(admin, AdminSerialization),
+      data: serialize(admin.toJSON(), AdminSerialization),
     });
 
     res.json(response);
@@ -92,7 +92,7 @@ export class AdminsController extends BaseController {
     });
 
     const response = new JsonResponse({
-      data: serialize(admin, AdminSerialization),
+      data: serialize(admin.toJSON(), AdminSerialization),
     });
 
     res.json(response);
