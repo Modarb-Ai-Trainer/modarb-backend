@@ -24,7 +24,7 @@ export class AdminUsersController extends BaseController {
   create = async (req: Request, res: Response) => {
     let user = await this.usersService.create(req.body);
     const response = new JsonResponse({
-      data: serialize(user, UserSerialization),
+      data: serialize(user.toJSON(), UserSerialization),
     });
     return res.json(response);
   };
