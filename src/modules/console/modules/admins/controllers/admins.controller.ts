@@ -8,10 +8,10 @@ import { createAdminSchema } from "../validations/create-admin.validation";
 import { parsePaginationQuery } from "@helpers/pagination";
 import { JsonResponse } from "@lib/responses/json-response";
 import { ControllerMiddleware } from "@lib/decorators/controller-middleware.decorator";
-import { AdminGuardMiddleware } from "src/modules/console/common/guards/admins.guard";
+import { AdminGuardMiddleware } from "modules/console/common/guards/admins.guard";
 import { Role } from "@common/enums/role.enum";
 import { serialize } from "@helpers/serialize";
-import { AdminSerialization } from "src/modules/console/common/serializers/admin.serializtion";
+import { AdminSerialization } from "modules/console/common/serializers/admin.serializtion";
 
 @Prefix("/console/admins")
 @ControllerMiddleware(AdminGuardMiddleware({ roles: [Role.SUPER_ADMIN] }))
