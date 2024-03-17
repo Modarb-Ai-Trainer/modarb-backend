@@ -1,31 +1,29 @@
-import { userRegisterSchema } from "@common/validations/user-register.validation";
 import { UsersService } from "../services/users.service";
 import { JsonResponse } from "@lib/responses/json-response";
 import { Request, Response } from "express";
 import { asyncHandler } from "@helpers/async-handler";
-import { bodyValidator } from "@helpers/validation.helper";
 import { BaseController } from "@lib/controllers/controller.base";
 import { Prefix } from "@lib/decorators/prefix.decorator";
 import { serialize } from "@helpers/serialize";
-import { UserSerialization } from "@common/serializers/user.serializtion";
-
+import { UserSerialization } from "@common/serializers/user.serialization";
 
 @Prefix("/console/users")
 export class AdminUsersController extends BaseController {
   private usersService: UsersService = new UsersService();
 
   setRoutes() {
-    this.router.post(
-      "/create",
-      asyncHandler(this.create)
-    );
+    this.router.post("/create", asyncHandler(this.create));
   }
 
-  create = async (req: Request, res: Response) => {
+  create = async (req: Request, res: Response): Promise<Response> => {
     let user = await this.usersService.create(req.body);
-    const response = new JsonResponse({
-      data: serialize(user.toJSON(), UserSerialization),
-    });
-    return res.json(response);
+
+    return JsonResponse.success(
+      {
+        status: 201,
+        data: serialize(user, UserSerialization),
+      },
+      res
+    );
   };
 }

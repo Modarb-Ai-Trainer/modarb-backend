@@ -1,3 +1,4 @@
+import { JsonResponse } from "@lib/responses/json-response";
 import { NextFunction, Request, Response } from "express";
 import { createValidator } from "express-joi-validation";
 import Joi from "joi";
@@ -21,11 +22,12 @@ export const validationErrorHandler = (
     console.log(`err`, err.error);
 
     const errors = err.error.details.map((detail) => detail.message);
-    return res.status(422).json({
-      success: false,
-      errors: errors,
-      code: 422,
-    });
+    return JsonResponse.validationError(
+      {
+        errors,
+      },
+      res
+    );
   } else {
     // pass on to another error handler
     next(err);

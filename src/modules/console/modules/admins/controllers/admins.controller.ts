@@ -11,7 +11,7 @@ import { ControllerMiddleware } from "@lib/decorators/controller-middleware.deco
 import { AdminGuardMiddleware } from "modules/console/common/guards/admins.guard";
 import { Role } from "@common/enums/role.enum";
 import { serialize } from "@helpers/serialize";
-import { AdminSerialization } from "modules/console/common/serializers/admin.serializtion";
+import { AdminSerialization } from "modules/console/common/serializers/admin.serialization";
 
 @Prefix("/console/admins")
 @ControllerMiddleware(AdminGuardMiddleware({ roles: [Role.SUPER_ADMIN] }))
@@ -39,39 +39,48 @@ export class AdminsController extends BaseController {
     );
   }
 
-  list = async (req: Request, res: Response) => {
+  list = async (req: Request, res: Response): Promise<Response> => {
     const paginationQuery = parsePaginationQuery(req.query);
     const { docs, paginationData } = await this.adminsService.list(
       {},
       paginationQuery
     );
 
-    const response = new JsonResponse({
-      data: serialize(docs, AdminSerialization),
-      meta: paginationData,
-    });
-    return res.json(response);
+    return JsonResponse.success(
+      {
+        data: serialize(docs, AdminSerialization),
+        meta: paginationData,
+      },
+      res
+    );
   };
 
-  get = async (req: Request, res: Response) => {
+  get = async (req: Request, res: Response): Promise<Response> => {
     const data = await this.adminsService.findOneOrFail({
       _id: req.params.id,
     });
-    const response = new JsonResponse({
-      data: serialize(data.toJSON(), AdminSerialization),
-    });
-    res.json(response);
+
+    return JsonResponse.success(
+      {
+        data: serialize(data, AdminSerialization),
+      },
+      res
+    );
   };
 
-  create = async (req: Request, res: Response) => {
+  create = async (req: Request, res: Response): Promise<Response> => {
     const admin = await this.adminsService.create(req.body);
-    const response = new JsonResponse({
-      data: serialize(admin.toJSON(), AdminSerialization),
-    });
-    res.json(response);
+
+    return JsonResponse.success(
+      {
+        status: 201,
+        data: serialize(admin, AdminSerialization),
+      },
+      res
+    );
   };
 
-  update = async (req: Request, res: Response) => {
+  update = async (req: Request, res: Response): Promise<Response> => {
     const admin = await this.adminsService.update(
       {
         _id: req.params.id,
@@ -79,22 +88,24 @@ export class AdminsController extends BaseController {
       req.body
     );
 
-    const response = new JsonResponse({
-      data: serialize(admin.toJSON(), AdminSerialization),
-    });
-
-    res.json(response);
+    return JsonResponse.success(
+      {
+        data: serialize(admin, AdminSerialization),
+      },
+      res
+    );
   };
 
-  delete = async (req: Request, res: Response) => {
+  delete = async (req: Request, res: Response): Promise<Response> => {
     const admin = await this.adminsService.delete({
       _id: req.params.id,
     });
 
-    const response = new JsonResponse({
-      data: serialize(admin.toJSON(), AdminSerialization),
-    });
-
-    res.json(response);
+    return JsonResponse.success(
+      {
+        data: serialize(admin, AdminSerialization),
+      },
+      res
+    );
   };
 }
