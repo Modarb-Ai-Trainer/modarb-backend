@@ -18,7 +18,12 @@ export class UsersAuthService extends CrudService(userModel) {
       user.password
     );
     if (!isPasswordCorrect) throw new HttpError(401, "Incorrect Password");
-    const token = JwtHelper.generateToken({ id: user._id, role: user.role });
+    const token = JwtHelper.generateToken({
+      id: user._id,
+      email: user.email,
+      name: user.name,
+      type: "user",
+    });
     return { user, token };
   }
 }
