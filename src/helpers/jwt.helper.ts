@@ -1,8 +1,9 @@
 import jwt from "jsonwebtoken";
 import { config } from "../configs/config";
+import { IJwtLoginPayload } from "@common/interfaces/jwt-payload.interface";
 
 export class JwtHelper {
-  static generateToken(payload: any) {
+  static generateToken(payload: IJwtLoginPayload) {
     return jwt.sign(payload, config.jwt.secret, {
       expiresIn: config.jwt.expiresIn,
     });
