@@ -1,4 +1,4 @@
-import { WorkoutService } from "../services/workouts.service";
+import { ExerciseService } from "../services/exercises.service";
 import { Request, Response } from "express";
 import { JsonResponse } from "@lib/responses/json-response";
 import { parsePaginationQuery } from "@helpers/pagination";
@@ -7,41 +7,46 @@ import { paramsValidator } from "@helpers/validation.helper";
 import { BaseController } from "@lib/controllers/controller.base";
 import { Prefix } from "@lib/decorators/prefix.decorator";
 import { serialize } from "@helpers/serialize";
-import { WorkoutSerialization } from "@common/serializers/workout.serializtion";
+import { ExerciseSerialization } from "@common/serializers/exercise.serializtion";
 import { ControllerMiddleware } from "@lib/decorators/controller-middleware.decorator";
 import { UsersGuardMiddleware } from "modules/users/common/guards/users.guard";
 
-@Prefix("/users/workouts")
+@Prefix("/users/exercises")
 @ControllerMiddleware(UsersGuardMiddleware())
-export class WorkoutController extends BaseController {
-  private workoutsService = new WorkoutService();
+export class ExerciseController extends BaseController {
+  private exercisesService = new ExerciseService();
 
   setRoutes(): void {
     this.router.get("/", asyncHandler(this.list));
     this.router.get("/:id", paramsValidator("id"), asyncHandler(this.get));
   }
 
-  list = async (req: Request, res: Response) => {
+  list = async (req: Request, res: Response): Promise<Response> => {
     const paginationQuery = parsePaginationQuery(req.query);
-    const { docs, paginationData } = await this.workoutsService.list(
+    const { docs, paginationData } = await this.exercisesService.list(
       {},
       paginationQuery
     );
 
-    const response = new JsonResponse({
-      data: serialize(docs, WorkoutSerialization),
-      meta: paginationData,
-    });
-    return res.json(response);
+    return JsonResponse.success(
+      {
+        data: serialize(docs, ExerciseSerialization),
+        meta: paginationData,
+      },
+      res
+    );
   };
 
-  get = async (req: Request, res: Response) => {
-    const data = await this.workoutsService.findOneOrFail({
+  get = async (req: Request, res: Response): Promise<Response> => {
+    const data = await this.exercisesService.findOneOrFail({
       _id: req.params.id,
     });
-    const response = new JsonResponse({
-      data: serialize(data.toJSON(), WorkoutSerialization),
-    });
-    res.json(response);
+
+    return JsonResponse.success(
+      {
+        data: serialize(data, ExerciseSerialization),
+      },
+      res
+    );
   };
 }
