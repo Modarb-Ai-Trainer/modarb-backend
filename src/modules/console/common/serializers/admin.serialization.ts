@@ -21,7 +21,7 @@ export class AdminSerialization {
 
   @Expose({ name: "dob" })
   @Transform(
-    ({ value }) => new Date().getFullYear() - (value as Date).getFullYear()
+    ({ value }) => new Date().getFullYear() - new Date(value).getFullYear()
   )
   age: number;
 }
