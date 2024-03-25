@@ -43,7 +43,7 @@ export class UserSerialization {
 
   @Expose({ name: "dob" })
   @Transform(
-    ({ value }) => new Date().getFullYear() - (value as Date).getFullYear()
+    ({ value }) => new Date().getFullYear() - (new Date(value).getFullYear())
   )
   age: number;
 
