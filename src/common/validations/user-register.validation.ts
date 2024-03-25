@@ -124,6 +124,23 @@ export const userRegisterKeys = {
         "any.required": "target_weight must be entered",
         "number.empty": "target_weight cannot be empty",
       }),
+      workout_frequency: joi.number().empty().required().messages({
+        "number.base": "please enter a valid workout_frequency number",
+        "any.required": "workout_frequency must be entered",
+        "number.empty": "workout_frequency cannot be empty",
+      }),
+      preferred_days: joi
+        .array()
+        .empty()
+        .optional()
+        .items(
+          joi.string().valid(...Object.values(PreferredDay))
+            .empty().required().messages({
+              "string.base": "please enter a valid preferred_days",
+              "any.required": "preferred_days must be entered",
+              "string.empty": "preferred_days cannot be empty",
+            })
+        ),
       workout_place: joi
         .string()
         .valid(...Object.values(WorkoutPlace))
