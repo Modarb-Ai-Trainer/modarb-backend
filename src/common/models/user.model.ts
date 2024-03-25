@@ -5,7 +5,6 @@ import { FitnessGoal } from "@common/enums/fitness-goal.enum";
 import { FitnessLevel } from "@common/enums/fitness-level.enum";
 import { Gender } from "@common/enums/gender.enum";
 import { Injury } from "@common/enums/injury.enum";
-import { PreferredDay } from "@common/enums/preferred-day.enum";
 import { PreferredEquipment } from "@common/enums/preferred-equipment.enum";
 import { WorkoutPlace } from "@common/enums/workout-place.enum";
 export const saltrounds = 5;
@@ -25,8 +24,6 @@ export interface IUser {
   preferences: {
     fitness_goal: FitnessGoal;
     target_weight: number;
-    workout_frequency: number;
-    preferred_days: [PreferredDay];
     workout_place: WorkoutPlace;
     preferred_equipment: [PreferredEquipment];
   };
@@ -57,14 +54,6 @@ const userSchema = new Schema({
       required: true,
     },
     target_weight: { type: Number, required: true },
-    workout_frequency: { type: Number, required: true },
-    preferred_days: [
-      {
-        type: String,
-        enum: PreferredDay,
-        required: true,
-      },
-    ],
     workout_place: {
       type: String,
       enum: WorkoutPlace,
