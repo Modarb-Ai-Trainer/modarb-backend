@@ -57,12 +57,11 @@ const userSchema = new Schema({
       required: true,
     },
     target_weight: { type: Number, required: true },
-    workout_frequency: { type: Number, required: true },
+    workout_frequency: { type: Number },
     preferred_days: [
       {
         type: String,
         enum: PreferredDay,
-        required: true,
       },
     ],
     workout_place: {
