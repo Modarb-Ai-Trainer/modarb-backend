@@ -125,9 +125,8 @@ export const userRegisterKeys = {
         "any.required": "target_weight must be entered",
         "number.empty": "target_weight cannot be empty",
       }),
-      workout_frequency: joi.number().empty().required().messages({
+      workout_frequency: joi.number().empty().optional().messages({
         "number.base": "please enter a valid workout_frequency number",
-        "any.required": "workout_frequency must be entered",
         "number.empty": "workout_frequency cannot be empty",
       }),
       preferred_days: joi
