@@ -17,33 +17,33 @@ export const genGuard =
       res: Response
     ) => boolean | Promise<boolean>
   ): OptionalIfUndefined<T> =>
-  (args: T) =>
-  async (req: Request, res: Response, next: NextFunction) => {
-    // get token from cookie
-    const token = req.headers.authorization?.split(" ")[1];
-    let payload: IJwtLoginPayload;
+    (args: T) =>
+      async (req: Request, res: Response, next: NextFunction) => {
+        // get token from cookie
+        const token = req.headers.authorization?.split(" ")[1];
+        let payload: IJwtLoginPayload;
 
-    // validate token
-    if (!token) {
-      throw new HttpError(401, "Unauthorized");
-    }
+        // validate token
+        if (!token) {
+          return next(new HttpError(401, "Unauthorized"));
+        }
 
-    try {
-      payload = verify(token, config.jwt.secret);
-    } catch (err) {
-      throw new HttpError(401, "Unauthorized");
-    }
+        try {
+          payload = verify(token, config.jwt.secret);
+        } catch (err) {
+          return next(new HttpError(401, "Unauthorized"));
+        }
 
-    if (
-      validationMethod &&
-      !(await validationMethod(args, payload, req, res))
-    ) {
-      throw new HttpError(401, "Unauthorized");
-    }
+        if (
+          validationMethod &&
+          !(await validationMethod(args, payload, req, res))
+        ) {
+          return next(new HttpError(401, "Unauthorized"));
+        }
 
-    // inject payload in request
-    (req as unknown as { jwtPayload: JwtPayload }).jwtPayload = payload;
+        // inject payload in request
+        (req as unknown as { jwtPayload: JwtPayload }).jwtPayload = payload;
 
-    // go on
-    next();
-  };
+        // go on
+        next();
+      };
