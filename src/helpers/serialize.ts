@@ -17,9 +17,13 @@ export const serialize = <T>(
     | Document[],
   serializer: new () => T
 ): T | T[] => {
+  if (!serializable) return serializable as T | T[];
+
   // If the serializable object is a Document, convert it to a JSON object.
   if (serializable.hasOwnProperty("toJSON"))
     serializable = (serializable as Document).toJSON();
+
+  serializable = JSON.parse(JSON.stringify(serializable));
 
   // If the serializable object is an array, serialize each item in the array.
   if (Array.isArray(serializable)) {
