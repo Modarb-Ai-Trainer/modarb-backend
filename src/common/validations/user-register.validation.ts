@@ -133,7 +133,7 @@ export const userRegisterKeys = {
       preferred_days: joi
         .array()
         .empty()
-        .required()
+        .optional()
         .items(
           joi.string().valid(...Object.values(PreferredDay))
             .empty().required().messages({
