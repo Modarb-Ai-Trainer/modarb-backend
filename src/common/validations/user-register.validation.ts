@@ -3,6 +3,7 @@ import { FitnessGoal } from "@common/enums/fitness-goal.enum";
 import { FitnessLevel } from "@common/enums/fitness-level.enum";
 import { Gender } from "@common/enums/gender.enum";
 import { Injury } from "@common/enums/injury.enum";
+import { PreferredDay } from "@common/enums/preferred-day.enum";
 import { PreferredEquipment } from "@common/enums/preferred-equipment.enum";
 import { WorkoutPlace } from "@common/enums/workout-place.enum";
 import * as joi from "joi";
