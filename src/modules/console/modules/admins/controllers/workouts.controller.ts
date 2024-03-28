@@ -9,10 +9,10 @@ import { Prefix } from "@lib/decorators/prefix.decorator";
 import { serialize } from "@helpers/serialize";
 import { WorkoutSerialization } from "@common/serializers/workout.serializtion";
 import { ControllerMiddleware } from "@lib/decorators/controller-middleware.decorator";
-import { UsersGuardMiddleware } from "modules/users/common/guards/users.guard";
+import { AdminGuardMiddleware } from "modules/console/common/guards/admins.guard";
 
-@Prefix("/admins/workouts")
-@ControllerMiddleware(UsersGuardMiddleware())
+@Prefix("/console/workouts")
+@ControllerMiddleware(AdminGuardMiddleware({}))
 
 export class WorkoutController extends BaseController {
     private workoutsService = new WorkoutService();
