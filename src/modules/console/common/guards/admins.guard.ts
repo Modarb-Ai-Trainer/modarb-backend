@@ -7,7 +7,7 @@ type AdminGuardMiddlewareProps = {
 };
 
 export const AdminGuardMiddleware = genGuard(
-  async (args: AdminGuardMiddlewareProps, payload: IJwtLoginPayload) => {
+  async (args: AdminGuardMiddlewareProps = {}, payload: IJwtLoginPayload) => {
     if (payload.type !== "admin") {
       return false;
     }
