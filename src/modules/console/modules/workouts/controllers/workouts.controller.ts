@@ -78,7 +78,7 @@ export class WorkoutController extends BaseController {
     };
 
     update = async (req: Request, res: Response) => {
-        const data = await this.workoutsService.update(
+        const data = await this.workoutsService.updateOne(
             { _id: req.params.id },
             req.body
         );
@@ -91,7 +91,7 @@ export class WorkoutController extends BaseController {
     };
 
     delete = async (req: Request, res: Response) => {
-        const data = await this.workoutsService.delete({ _id: req.params.id });
+        const data = await this.workoutsService.deleteOne({ _id: req.params.id });
         return JsonResponse.success(
             {
                 data: serialize(data.toJSON(), WorkoutSerialization),
