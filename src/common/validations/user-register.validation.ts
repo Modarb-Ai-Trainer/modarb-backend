@@ -170,7 +170,7 @@ export const userRegisterKeys = {
     .required()
     .items(
       joi.string().valid(...Object.values(Injury))
-        .empty().required().messages({
+        .empty().optional().messages({
           "string.base": "please enter a valid injuries",
           "any.required": "injuries must be entered",
           "string.empty": "injuries cannot be empty",
