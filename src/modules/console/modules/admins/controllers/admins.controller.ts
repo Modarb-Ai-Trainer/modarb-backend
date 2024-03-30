@@ -81,7 +81,7 @@ export class AdminsController extends BaseController {
   };
 
   update = async (req: Request, res: Response): Promise<Response> => {
-    const admin = await this.adminsService.update(
+    const admin = await this.adminsService.updateOne(
       {
         _id: req.params.id,
       },
@@ -97,7 +97,7 @@ export class AdminsController extends BaseController {
   };
 
   delete = async (req: Request, res: Response): Promise<Response> => {
-    const admin = await this.adminsService.delete({
+    const admin = await this.adminsService.deleteOne({
       _id: req.params.id,
     });
 
