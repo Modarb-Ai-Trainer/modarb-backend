@@ -1,4 +1,3 @@
-import { UsersAuthService } from "../services/users.service";
 import { loginValidationSchema } from "../validation/login.validation";
 import { Request, Response } from "express";
 import { JsonResponse } from "@lib/responses/json-response";
@@ -12,6 +11,7 @@ import { BaseController } from "@lib/controllers/controller.base";
 import { Prefix } from "@lib/decorators/prefix.decorator";
 import { serialize } from "@helpers/serialize";
 import { UserSerialization } from "@common/serializers/user.serialization";
+import { UsersAuthService } from "../services/users-auth.service";
 
 @Prefix("/users/auth")
 export class UsersAuthController extends BaseController {
