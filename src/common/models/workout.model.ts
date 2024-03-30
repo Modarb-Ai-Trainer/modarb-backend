@@ -24,16 +24,14 @@ export interface IWorkout {
 const workoutSchema = new Schema({
     name: { type: String, required: true, unique: true, dropDups: true },
     type: { type: String, required: true },
-    created_by: { type: mongoose.Types.ObjectId, ref: "users" },
+    created_by: { type: mongoose.Types.ObjectId, ref: "admins" },
     templateWeeks: [
         {
             days: [
                 {
                     day: Number,
                     exercises: [
-                        {
-                            exercise: { type: mongoose.Types.ObjectId, ref: "exercises" },
-                        },
+                        { type: mongoose.Types.ObjectId, ref: "exercises" },
                     ],
                 },
             ],
