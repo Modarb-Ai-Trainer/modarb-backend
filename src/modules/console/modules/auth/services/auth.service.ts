@@ -7,12 +7,13 @@ import { JwtHelper } from "@helpers/jwt.helper";
 
 export class ConsoleAuthService extends CrudService(Admin) {
   async login(loginRequest: ILogin) {
-    const admin = await this.findOneOrFail({ email: loginRequest.email });
+    const admin = await this.findOne({ email: loginRequest.email });
+    if (!admin) throw new HttpError(401, "Invalid Credentials");
     const isPasswordCorrect = await bcrypt.compare(
       loginRequest.password,
       admin.password
     );
-    if (!isPasswordCorrect) throw new HttpError(401, "Incorrect Password");
+    if (!isPasswordCorrect) throw new HttpError(401, "Invalid Credentials");
     const token = JwtHelper.generateToken({
       id: admin._id,
       email: admin.email,
