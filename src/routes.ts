@@ -5,6 +5,7 @@ import path from "path";
 import { BaseController } from "./lib/controllers/controller.base";
 import { validationErrorHandler } from "./helpers/validation.helper";
 import { JsonResponse } from "@lib/responses/json-response";
+import { errorHandlerMiddleware } from "middlewares/error-handler.middleware";
 
 /**
  * Sets the routes for the Express app.
@@ -54,21 +55,7 @@ const setCustomRoutes = (router: Router) => {
   });
 
   // Error handler
-  router.use((err, req, res, next) => {
-    try {
-      err.message = JSON.parse(err.message);
-    } catch (error) {}
-
-    JsonResponse.error(
-      {
-        error: err.message || "Internal Server Error",
-        status: err.status || 500,
-      },
-      res
-    );
-
-    console.error(err.message, err.stack);
-  });
+  router.use(errorHandlerMiddleware);
 };
 
 /* importing all controllers */
