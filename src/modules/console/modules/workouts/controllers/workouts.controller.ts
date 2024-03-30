@@ -4,6 +4,8 @@ import { JsonResponse } from "@lib/responses/json-response";
 import { parsePaginationQuery } from "@helpers/pagination";
 import { asyncHandler } from "@helpers/async-handler";
 import { paramsValidator, bodyValidator } from "@helpers/validation.helper";
+import { createWorkoutSchema } from "../validations/create-workout.validation";
+import { updateWorkoutSchema } from "../validations/update-workout.validation";
 import { BaseController } from "@lib/controllers/controller.base";
 import { Prefix } from "@lib/decorators/prefix.decorator";
 import { serialize } from "@helpers/serialize";
@@ -12,7 +14,7 @@ import { ControllerMiddleware } from "@lib/decorators/controller-middleware.deco
 import { AdminGuardMiddleware } from "modules/console/common/guards/admins.guard";
 
 @Prefix("/console/workouts")
-@ControllerMiddleware(AdminGuardMiddleware({}))
+// @ControllerMiddleware(AdminGuardMiddleware())
 
 export class WorkoutController extends BaseController {
     private workoutsService = new WorkoutService();
@@ -20,6 +22,20 @@ export class WorkoutController extends BaseController {
     setRoutes() {
         this.router.get("/", asyncHandler(this.list));
         this.router.get("/:id", paramsValidator("id"), asyncHandler(this.get));
+        this.router.post("/",
+            bodyValidator(createWorkoutSchema),
+            asyncHandler(this.create));
+        this.router.patch(
+            "/:id",
+            paramsValidator("id"),
+            bodyValidator(updateWorkoutSchema),
+            asyncHandler(this.update)
+        );
+        this.router.delete(
+            "/:id",
+            paramsValidator("id"),
+            asyncHandler(this.delete)
+        );
     }
 
     list = async (req: Request, res: Response) => {
@@ -29,11 +45,6 @@ export class WorkoutController extends BaseController {
             paginationQuery
         );
 
-        // const response = new JsonResponse({
-        // data: serialize(docs, WorkoutSerialization),
-        // meta: paginationData,
-        // });
-        // return res.json(response);
         return JsonResponse.success(
             {
                 data: serialize(docs, WorkoutSerialization),
