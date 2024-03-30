@@ -12,12 +12,14 @@ export class UsersAuthService extends CrudService(User) {
   }
 
   async login(loginRequest: ILogin) {
-    const user = await this.findOneOrFail({ email: loginRequest.email });
+    const user = await this.findOne({ email: loginRequest.email });
+    if (!user) throw new HttpError(401, "Invalid Credentials");
+    
     const isPasswordCorrect = await bcrypt.compare(
       loginRequest.password,
       user.password
     );
-    if (!isPasswordCorrect) throw new HttpError(401, "Incorrect Password");
+    if (!isPasswordCorrect) throw new HttpError(401, "Invalid Credentials");
     const token = JwtHelper.generateToken({
       id: user._id,
       email: user.email,
