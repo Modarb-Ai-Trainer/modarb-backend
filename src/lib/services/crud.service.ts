@@ -11,14 +11,26 @@ export const CrudService = <ModelDoc extends Document>(
       return this.model.create(data);
     }
 
-    async update(
+    async updateOne(
       filter: FilterQuery<ModelDoc>,
       data: AnyKeys<ModelDoc>
     ): Promise<ModelDoc> {
-      return this.model.findOneAndUpdate(filter, data, { new: true });
+      await this.existsOrThrow(filter);
+      await this.model.updateOne(filter, data);
+      return this.findOneOrFail(filter);
     }
 
-    async delete(filter: FilterQuery<ModelDoc>): Promise<ModelDoc> {
+    async updateMany(
+      filter: FilterQuery<ModelDoc>,
+      data: AnyKeys<ModelDoc>
+    ): Promise<ModelDoc[]> {
+      await this.existsOrThrow(filter);
+      await this.model.updateMany(filter, data);
+      return this.model.find(filter);
+    }
+
+    async deleteOne(filter: FilterQuery<ModelDoc>): Promise<ModelDoc> {
+      await this.existsOrThrow(filter);
       return this.model.findOneAndDelete(filter);
     }
 
@@ -59,10 +71,16 @@ export const CrudService = <ModelDoc extends Document>(
     }
 
     async findOneOrFail(filter: FilterQuery<ModelDoc>): Promise<ModelDoc> {
+      await this.existsOrThrow(filter);
       const document = await this.findOne(filter);
-      if (!document) throw new HttpError(404, "No Matching Result Found.");
 
       return document;
+    }
+
+    private async existsOrThrow(filter: FilterQuery<ModelDoc>) {
+      if (!(await this.model.exists(filter))) {
+        throw new HttpError(404, "No Matching Result Found.");
+      }
     }
   };
 };
