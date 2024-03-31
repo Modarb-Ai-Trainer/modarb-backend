@@ -14,8 +14,7 @@ import { ControllerMiddleware } from "@lib/decorators/controller-middleware.deco
 import { AdminGuardMiddleware } from "modules/console/common/guards/admins.guard";
 
 @Prefix("/console/workouts")
-// @ControllerMiddleware(AdminGuardMiddleware())
-
+@ControllerMiddleware(AdminGuardMiddleware({}))
 export class WorkoutController extends BaseController {
     private workoutsService = new WorkoutService();
 

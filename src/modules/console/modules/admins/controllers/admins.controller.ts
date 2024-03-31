@@ -14,7 +14,7 @@ import { serialize } from "@helpers/serialize";
 import { AdminSerialization } from "modules/console/common/serializers/admin.serialization";
 
 @Prefix("/console/admins")
-// @ControllerMiddleware(AdminGuardMiddleware({ roles: [Role.SUPER_ADMIN] }))
+@ControllerMiddleware(AdminGuardMiddleware({ roles: [Role.SUPER_ADMIN] }))
 export class AdminsController extends BaseController {
   private adminsService = new AdminsService();
 
