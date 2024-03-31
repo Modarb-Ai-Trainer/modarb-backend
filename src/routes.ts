@@ -83,6 +83,7 @@ const findControllerFiles = (): string[] => {
 const importControllers = async (router: Router) => {
   const files = findControllerFiles();
 
+  console.log("importing controllers...");
   await Promise.all(
     files.map(async (file) => {
       const controllerClass = await importController(file);
@@ -93,6 +94,7 @@ const importControllers = async (router: Router) => {
       router.use(controller.prefix, controller.router);
     })
   );
+  console.log("controllers imported!");
 };
 
 /**
