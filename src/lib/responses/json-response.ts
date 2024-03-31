@@ -35,7 +35,7 @@ export abstract class JsonResponse {
     const data = {
       status: props.status || 200,
       message: props.message || "Success",
-      data: props.data,
+      data: props.data || null,
       meta: props.meta,
     } satisfies IJSONSuccessResponse;
 

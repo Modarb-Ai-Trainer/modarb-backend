@@ -1,7 +1,7 @@
 export interface IJSONSuccessResponseProps {
   status?: number;
   message?: string;
-  data: Record<string, any> | Record<string, any>[];
+  data?: Record<string, any> | Record<string, any>[] | null;
   meta?: {
     total: number;
     page: number;
