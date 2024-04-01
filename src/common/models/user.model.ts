@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { UpdateQuery } from "mongoose";
 import bcrypt from "bcrypt";
 import { AuthenticatableType } from "@common/enums/authenticatable-type.enum";
 import { FitnessGoal } from "@common/enums/fitness-goal.enum";
@@ -93,8 +93,31 @@ const userSchema = new Schema({
 });
 
 userSchema.pre("save", async function (next) {
-  this.password = await bcrypt.hash(this.password, saltrounds);
+  if (this.isModified("password")) {
+    this.password = await bcrypt.hash(this.password, saltrounds);
+  }
+  if (this.isModified("email")) {
+    this.email = this.email.toLowerCase();
+  }
   next();
+});
+
+userSchema.pre(["updateOne", "findOneAndUpdate"], async function () {
+  const data = this.getUpdate() as UpdateQuery<IUser>;
+  if (data.password) {
+    data.password = await bcrypt.hash(data.password, saltrounds);
+  }
+  if (data.email) {
+    data.email = data.email.toLowerCase();
+  }
+});
+
+// pre find make email case insensitive
+userSchema.pre(["find", "findOne"], function () {
+  const query = this.getQuery();
+  if (query.email) {
+    query.email = query.email.toLowerCase();
+  }
 });
 
 export type UserDocument = IUser & mongoose.Document;
