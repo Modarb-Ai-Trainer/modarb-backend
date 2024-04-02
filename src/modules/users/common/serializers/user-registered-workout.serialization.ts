@@ -9,10 +9,13 @@ class Days {
 
   @Expose({ name: "exercises" })
   exercises: any;
+
+  @Expose()
+  isDone: Boolean
 }
 
 
-class TemplateWeeks {
+class Weeks {
   @Expose({ name: "days" })
   @Transform(
     ({ value }) => serialize(value, Days)
@@ -20,23 +23,23 @@ class TemplateWeeks {
   days: any;
 }
 
-export class WorkoutSerialization {
+export class UserRegisteredWorkoutsSerialization {
   @Expose({ name: "_id" })
   id: string;
 
   @Expose()
-  name: string;
+  user: string;
 
   @Expose()
-  type: string;
+  workout: string;
 
   @Expose()
-  created_by: string;
+  isActive: Boolean;
 
-  @Expose({ name: "templateWeeks" })
+  @Expose({ name: "weeks" })
   @Transform(
-    ({ value }) => serialize(value, TemplateWeeks)
+    ({ value }) => serialize(value, Weeks)
   )
-  templateWeeks: any;
+  weeks: any;
 
 }

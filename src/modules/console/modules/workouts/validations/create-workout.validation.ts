@@ -5,7 +5,7 @@ export interface ICreateWorkout {
   name: string;
   type: string;
   created_by: string;
-  templateWeeks: string[];
+  templateWeeks: object[];
 };
 
 
@@ -26,8 +26,8 @@ export const createWorkoutSchema = createSchema<ICreateWorkout>({
         "string.empty": "created_by can not be empty",
     }),
     templateWeeks: joi.array().empty().required().messages({
-        "string.base": "please enter a valid templateWeeks",
+        "array.base": "please enter a valid templateWeeks",
         "any.required": "templateWeeks is required",
-        "string.empty": "templateWeeks can not be empty",
+        "array.empty": "templateWeeks can not be empty",
     }),
 });

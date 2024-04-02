@@ -7,11 +7,11 @@ import { paramsValidator } from "@helpers/validation.helper";
 import { BaseController } from "@lib/controllers/controller.base";
 import { Prefix } from "@lib/decorators/prefix.decorator";
 import { serialize } from "@helpers/serialize";
-import { ExerciseSerialization } from "@common/serializers/exercise.serializtion";
+import { ExerciseSerialization } from "@common/serializers/exercise.serialization";
 import { ControllerMiddleware } from "@lib/decorators/controller-middleware.decorator";
 import { UsersGuardMiddleware } from "modules/users/common/guards/users.guard";
 
-@Prefix("/users/exercises")
+@Prefix("/user/exercises")
 @ControllerMiddleware(UsersGuardMiddleware())
 export class ExerciseController extends BaseController {
   private exercisesService = new ExerciseService();
