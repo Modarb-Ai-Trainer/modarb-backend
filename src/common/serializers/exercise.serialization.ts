@@ -6,5 +6,4 @@ export class ExerciseSerialization {
 
   @Expose()
   name: string;
-
 }
