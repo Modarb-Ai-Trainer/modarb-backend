@@ -45,7 +45,7 @@ export const CrudService = <ModelDoc extends Document>(
           skip: 0,
         },
       options?: {
-        populateObject: any
+        populateArray: any
       }
     ): Promise<{
       docs: ModelDoc[];
@@ -59,7 +59,7 @@ export const CrudService = <ModelDoc extends Document>(
         .find(filter)
         .limit(paginationOptions.limit)
         .skip(paginationOptions.skip)
-      if (options?.populateObject) queryInstruction.populate(options.populateObject);
+      if (options?.populateArray) queryInstruction.populate(options.populateArray);
 
       const docs = await queryInstruction
       const total = await this.model.countDocuments(filter);
@@ -72,14 +72,26 @@ export const CrudService = <ModelDoc extends Document>(
       return { docs, paginationData };
     }
 
-    async findOne(filter: FilterQuery<ModelDoc>): Promise<ModelDoc | null> {
-      return this.model.findOne(filter);
+    async findOne(
+      filter: FilterQuery<ModelDoc>,
+      options?: {
+        populateArray: any
+      }): Promise<ModelDoc | null> {
+      const queryInstruction = this.model.findOne(filter);
+      if (options?.populateArray) queryInstruction.populate(options.populateArray);
+      const document = await queryInstruction
+      return document;
     }
 
-    async findOneOrFail(filter: FilterQuery<ModelDoc>): Promise<ModelDoc> {
+    async findOneOrFail(
+      filter: FilterQuery<ModelDoc>,
+      options?: {
+        populateArray: any
+      }
+    ): Promise<ModelDoc> {
       await this.existsOrThrow(filter);
-      const document = await this.findOne(filter);
-
+      let optionsObject = options ? options : { populateArray: [{}] }
+      const document = await this.findOne(filter, optionsObject);
       return document;
     }
 

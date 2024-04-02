@@ -13,7 +13,7 @@ import { serialize } from "@helpers/serialize";
 import { UserSerialization } from "@common/serializers/user.serialization";
 import { UsersAuthService } from "../services/users-auth.service";
 
-@Prefix("/users/auth")
+@Prefix("/user/auth")
 export class UsersAuthController extends BaseController {
   private authService = new UsersAuthService();
 
