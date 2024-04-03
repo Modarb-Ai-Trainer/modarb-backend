@@ -1,100 +1,46 @@
 import * as joi from "joi";
 import { createSchema } from "@helpers/create-schema";
-import { FitnessGoal } from "@common/enums/fitness-goal.enum";
-import { FitnessLevel } from "@common/enums/fitness-level.enum";
-import { Place } from "@common/enums/place.enum";
 
 
-export interface ICreateWorkout {
-    name: string;
-    description: string;
-    type: string;
-    created_by: string;
-    image?: string;
-    fitness_level: string;
-    fitness_goal: string;
-    place: [string];
-    min_per_day: number;
-    total_number_days: number;
-    template_weeks: [
+export interface ICreateUserRegisteredWorkouts {
+    user: string;
+    workout: string;
+    is_active?: Boolean;
+    weeks: [
         {
             week_number: number;
             week_name: string,
             week_description: string,
+            is_done?: boolean,
             days: [
                 {
                     day_number: number,
                     total_number_exercises: number,
                     day_type: string,
                     exercises: [string],
+                    is_done?: boolean,
                 },
             ],
         },
     ]
 }
 
-export const createWorkoutSchema = createSchema<ICreateWorkout>({
-    name: joi.string().empty().required().messages({
-        "string.base": "please enter a valid name",
-        "any.required": "name is required",
-        "string.empty": "name can not be empty",
+export const createUserRegisteredWorkoutsSchema = createSchema<ICreateUserRegisteredWorkouts>({
+    user: joi.string().empty().required().messages({
+        "string.base": "please enter a valid user id",
+        "any.required": "user id is required",
+        "string.empty": "user id can not be empty",
     }),
-    description: joi.string().empty().required().messages({
-        "string.base": "please enter a valid name",
-        "any.required": "name is required",
-        "string.empty": "name can not be empty",
+    is_active: joi.boolean().empty().optional().messages({
+        "boolean.base": "please enter a valid isActive",
+        "boolean.empty": "isActive can not be empty",
     }),
-    type: joi.string().empty().required().messages({
-        "string.base": "please enter a valid type",
-        "any.required": "type is required",
-        "string.empty": "type can not be empty",
+    workout: joi.string().empty().required().messages({
+        "string.base": "please enter a valid workout id",
+        "any.required": "workout id is required",
+        "string.empty": "workout id can not be empty",
     }),
-    created_by: joi.string().empty().required().messages({
-        "string.base": "please enter a valid created_by",
-        "any.required": "created_by is required",
-        "string.empty": "created_by can not be empty",
-    }),
-    image: joi.string().empty().optional().messages({
-        "string.base": "please enter a valid image url",
-        "string.empty": "image url can not be empty",
-    }),
-    fitness_level: joi.string().valid(...Object.values(FitnessLevel)).empty().required().messages({
-        "string.base": "please enter a valid fitness level",
-        "any.required": "fitness level is required",
-        "string.empty": "fitness level can not be empty",
-        "any.only": `Fitness level must be one of the following values: ${FitnessLevel.ADVANCED}, ${FitnessLevel.BEGINNER} or ${FitnessLevel.INTERMEDIATE}`
-    }),
-    fitness_goal: joi.string().valid(...Object.values(FitnessGoal)).empty().required().messages({
-        "string.base": "please enter a valid fitness goal",
-        "any.required": "fitness goal is required",
-        "string.empty": "fitness goal can not be empty",
-        "any.only": `Fitness goal must be one of the following values: ${FitnessGoal.GAIN_MUSCLE}, ${FitnessGoal.GET_FITTER} or ${FitnessGoal.LOSE_WEIGHT}`
-    }),
-    place: joi.array().empty().required().items(
-        joi.string().empty().required().valid(...Object.values(Place)).messages({
-            "string.base": "please enter a valid place",
-            "any.required": "place is required",
-            "string.empty": "place can not be empty",
-            "any.only": `place must be one of the following values: ${Place.GYM} or ${Place.HOME}`
-        })
-    ).messages({
-        "array.base": "please enter a valid place array",
-        "any.required": "place array is required",
-        "array.empty": "place array can not be empty",
-    }),
-    min_per_day: joi.number().integer().empty().required().messages({
-        "number.base": "please enter a valid min per day",
-        "any.required": "min per day is required",
-        "number.empty": "min per day can not be empty",
-        "number.integer": "day number must be an integer",
-    }),
-    total_number_days: joi.number().integer().empty().required().messages({
-        "number.base": "please enter a valid total number days",
-        "any.required": "total number days is required",
-        "number.empty": "total number days can not be empty",
-        "number.integer": "day number must be an integer",
-    }),
-    template_weeks: joi.array().empty().required().items(
+    weeks: joi.array().empty().required().items(
         joi.object({
             week_number: joi.number().integer().empty().required().messages({
                 "number.base": "please enter a valid week number",
@@ -111,6 +57,10 @@ export const createWorkoutSchema = createSchema<ICreateWorkout>({
                 "string.base": "please enter a valid week description",
                 "any.required": "week description is required",
                 "string.empty": "week description can not be empty",
+            }),
+            is_done: joi.boolean().empty().optional().messages({
+                "boolean.base": "please enter a valid isDone",
+                "boolean.empty": "isDone can not be empty",
             }),
             days: joi.array().required().items(
                 joi.object({
@@ -143,6 +93,10 @@ export const createWorkoutSchema = createSchema<ICreateWorkout>({
                             "any.required": "exercises array is required",
                             "array.empty": "exercises array can not be empty",
                         }),
+                    is_done: joi.boolean().empty().optional().messages({
+                        "boolean.base": "please enter a valid isDone",
+                        "boolean.empty": "isDone can not be empty",
+                    }),
                 }).empty().messages({
                     "object.base": "please enter a valid day object",
                     "any.required": "day object is required",
@@ -156,8 +110,8 @@ export const createWorkoutSchema = createSchema<ICreateWorkout>({
 
         })
     ).messages({
-        "array.base": "please enter a valid templateWeeks",
-        "any.required": "templateWeeks is required",
-        "array.empty": "templateWeeks can not be empty",
+        "array.base": "please enter a valid weeks array",
+        "any.required": "weeks array is required",
+        "array.empty": "weeks array can not be empty",
     }),
 });

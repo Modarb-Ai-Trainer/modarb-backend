@@ -11,7 +11,7 @@ import { WorkoutSerialization } from "@common/serializers/workout.serialization"
 import { ControllerMiddleware } from "@lib/decorators/controller-middleware.decorator";
 import { UsersGuardMiddleware } from "modules/users/common/guards/users.guard";
 
-@Prefix("/users/workouts")
+@Prefix("/user/workouts")
 @ControllerMiddleware(UsersGuardMiddleware())
 export class WorkoutController extends BaseController {
   private workoutsService = new WorkoutService();

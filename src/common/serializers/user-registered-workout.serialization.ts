@@ -2,7 +2,6 @@ import { Expose, Transform } from "class-transformer";
 import { serialize } from "@helpers/serialize";
 
 
-
 class Days {
   @Expose()
   day_number: number;
@@ -15,9 +14,12 @@ class Days {
 
   @Expose({ name: "exercises" })
   exercises: any;
+
+  @Expose()
+  is_done: Boolean
 }
 
-class TemplateWeeks {
+class Weeks {
   @Expose()
   week_number: number;
 
@@ -32,46 +34,28 @@ class TemplateWeeks {
     ({ value }) => serialize(value, Days)
   )
   days: any;
+
+  @Expose()
+  is_done: Boolean
 }
 
-export class WorkoutSerialization {
+export class UserRegisteredWorkoutsSerialization {
   @Expose({ name: "_id" })
   id: string;
 
   @Expose()
-  name: string;
+  user: string;
 
   @Expose()
-  description: string;
+  workout: string;
 
   @Expose()
-  type: string;
+  is_active: Boolean;
 
-  @Expose()
-  image: string;
-
-  @Expose()
-  created_by: string;
-
-  @Expose()
-  fitness_level: string;
-
-  @Expose()
-  fitness_goal: string;
-
-  @Expose()
-  place: any;
-
-  @Expose()
-  min_per_day: number;
-
-  @Expose()
-  total_number_days: number;
-
-  @Expose({ name: "template_weeks" })
+  @Expose({ name: "weeks" })
   @Transform(
-    ({ value }) => serialize(value, TemplateWeeks)
+    ({ value }) => serialize(value, Weeks)
   )
-  template_weeks: any;
+  weeks: any;
 
 }
