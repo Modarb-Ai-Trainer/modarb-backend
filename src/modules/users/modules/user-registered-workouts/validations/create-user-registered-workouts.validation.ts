@@ -1,25 +1,29 @@
 import * as joi from "joi";
 import { createSchema } from "@helpers/create-schema";
 
-export interface IDays {
-    day: string;
-    exercises: string[];
-    isDone?: Boolean;
-};
-
-
-export interface IWeeks {
-    days: IDays[];
-};
-
 
 export interface ICreateUserRegisteredWorkouts {
     user: string;
     workout: string;
-    isActive: Boolean;
-    weeks: IWeeks[];
-};
-
+    is_active?: Boolean;
+    weeks: [
+        {
+            week_number: number;
+            week_name: string,
+            week_description: string,
+            is_done?: boolean,
+            days: [
+                {
+                    day_number: number,
+                    total_number_exercises: number,
+                    day_type: string,
+                    exercises: [string],
+                    is_done?: boolean,
+                },
+            ],
+        },
+    ]
+}
 
 export const createUserRegisteredWorkoutsSchema = createSchema<ICreateUserRegisteredWorkouts>({
     user: joi.string().empty().required().messages({
@@ -27,7 +31,7 @@ export const createUserRegisteredWorkoutsSchema = createSchema<ICreateUserRegist
         "any.required": "user id is required",
         "string.empty": "user id can not be empty",
     }),
-    isActive: joi.boolean().empty().optional().messages({
+    is_active: joi.boolean().empty().optional().messages({
         "boolean.base": "please enter a valid isActive",
         "boolean.empty": "isActive can not be empty",
     }),
@@ -38,12 +42,46 @@ export const createUserRegisteredWorkoutsSchema = createSchema<ICreateUserRegist
     }),
     weeks: joi.array().empty().required().items(
         joi.object({
+            week_number: joi.number().integer().empty().required().messages({
+                "number.base": "please enter a valid week number",
+                "any.required": "week number is required",
+                "number.empty": "week number can not be empty",
+                "number.integer": "week number must be an integer",
+            }),
+            week_name: joi.string().empty().required().messages({
+                "string.base": "please enter a valid week name",
+                "any.required": "week name is required",
+                "string.empty": "week name can not be empty",
+            }),
+            week_description: joi.string().empty().required().messages({
+                "string.base": "please enter a valid week description",
+                "any.required": "week description is required",
+                "string.empty": "week description can not be empty",
+            }),
+            is_done: joi.boolean().empty().optional().messages({
+                "boolean.base": "please enter a valid isDone",
+                "boolean.empty": "isDone can not be empty",
+            }),
             days: joi.array().required().items(
                 joi.object({
-                    day: joi.number().empty().required().messages({
-                        "number.base": "please enter a valid day number",
+                    day_number: joi.number().empty().integer().min(1).max(7).required().messages({
+                        "number.base": "Please enter a valid day number",
                         "any.required": "day number is required",
-                        "number.empty": "day number can not be empty",
+                        "number.empty": "day number cannot be empty",
+                        "number.integer": "day number must be an integer",
+                        "number.min": "day number must be between 1 and 7",
+                        "number.max": "day number must be between 1 and 7"
+                    }),
+                    total_number_exercises: joi.number().empty().integer().required().messages({
+                        "number.base": "Please enter a valid total number exercises",
+                        "any.required": "total number exercises is required",
+                        "number.empty": "total number exercises cannot be empty",
+                        "number.integer": "total number exercises must be an integer",
+                    }),
+                    day_type: joi.string().empty().required().messages({
+                        "string.base": "please enter a valid day type",
+                        "any.required": "day type is required",
+                        "string.empty": "day type can not be empty",
                     }),
                     exercises: joi.array().empty().required().items(
                         joi.string().empty().required().messages({
@@ -55,7 +93,7 @@ export const createUserRegisteredWorkoutsSchema = createSchema<ICreateUserRegist
                             "any.required": "exercises array is required",
                             "array.empty": "exercises array can not be empty",
                         }),
-                    isDone: joi.boolean().empty().optional().messages({
+                    is_done: joi.boolean().empty().optional().messages({
                         "boolean.base": "please enter a valid isDone",
                         "boolean.empty": "isDone can not be empty",
                     }),
