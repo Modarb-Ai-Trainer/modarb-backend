@@ -33,7 +33,7 @@ export class UserSerialization {
   email: string;
 
   @Expose()
-  image: object;
+  image: string;
 
   @Expose()
   role: string;
