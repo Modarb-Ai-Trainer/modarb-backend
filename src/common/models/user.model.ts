@@ -15,13 +15,13 @@ export interface IUser {
   name: string;
   email: string;
   password: string;
-  image: object;
+  image: string;
   role: AuthenticatableType;
   gender: string;
   dob: Date;
   height: number;
   weight: number;
-  fitness_level: string;
+  fitness_level: FitnessLevel;
   preferences: {
     fitness_goal: FitnessGoal;
     target_weight: number;
@@ -37,7 +37,7 @@ const userSchema = new Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
   password: { type: String, required: true },
-  image: { type: Object },
+  image: { type: String },
   gender: {
     type: String,
     enum: Gender,

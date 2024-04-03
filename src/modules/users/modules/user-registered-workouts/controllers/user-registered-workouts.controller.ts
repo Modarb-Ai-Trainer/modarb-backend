@@ -7,7 +7,7 @@ import { asyncHandler } from "@helpers/async-handler";
 import { BaseController } from "@lib/controllers/controller.base";
 import { Prefix } from "@lib/decorators/prefix.decorator";
 import { serialize } from "@helpers/serialize";
-import { UserRegisteredWorkoutsSerialization } from "../../../common/serializers/user-registered-workout.serialization";
+import { UserRegisteredWorkoutsSerialization } from "@common/serializers/user-registered-workout.serialization";
 import { ControllerMiddleware } from "@lib/decorators/controller-middleware.decorator";
 import { UsersGuardMiddleware } from "modules/users/common/guards/users.guard";
 import { createUserRegisteredWorkoutsSchema } from "../validations/create-user-registered-workouts.validation";
@@ -23,28 +23,22 @@ export class userRegisteredWorkoutsController extends BaseController {
   private userRegisteredWorkoutsService = new UserRegisteredWorkoutsService();
 
   setRoutes(): void {
-    this.router.get("/get/:id", paramsValidator("id"), asyncHandler(this.get));
-    this.router.get("/list/:userId", paramsValidator("userId"), asyncHandler(this.list));
+    this.router.get("/:id", paramsValidator("id"), asyncHandler(this.get));
+    this.router.get("/", asyncHandler(this.list));
     this.router.post("/",
       bodyValidator(createUserRegisteredWorkoutsSchema),
       asyncHandler(this.create));
-
-    this.router.patch("/",
-      bodyValidator(updateUserRegisteredWorkoutsSchema),
-      asyncHandler(this.update));
   }
 
   list = async (req: userRequest, res: Response) => {
     const paginationQuery = parsePaginationQuery(req.query);
-    // if (req.jwtPayload.id != req.params.userId) console.log(req.jwtPayload);
-
     const { docs, paginationData } = await this.userRegisteredWorkoutsService.list(
-      { user: req.params.userId },
+      { user: req.jwtPayload.id },
       paginationQuery,
       {
         populateArray: [
           { path: "workout", select: "-templateWeeks -created_by" },
-          { path: "weeks.days.exercises" },
+          { path: "weeks.days.exercises", select: "name media reps sets" },
         ]
       }
     );
@@ -63,8 +57,8 @@ export class userRegisteredWorkoutsController extends BaseController {
       { _id: req.params.id },
       {
         populateArray: [
-          { path: "workout", select: "-templateWeeks -created_by" },
-          { path: "weeks.days.exercises" },
+          { path: "workout", select: "-template_weeks -created_by" },
+          { path: "weeks.days.exercises", select: "name media reps sets" },
         ]
       }
     );
@@ -87,16 +81,4 @@ export class userRegisteredWorkoutsController extends BaseController {
     );
   };
 
-  update = async (req: userRequest, res: Response) => {
-    const data = await this.userRegisteredWorkoutsService.updateOne(
-      { _id: req.params.id },
-      req.body
-    );
-    return JsonResponse.success(
-      {
-        data: serialize(data.toJSON(), UserRegisteredWorkoutsSerialization),
-      },
-      res
-    );
-  };
 }
