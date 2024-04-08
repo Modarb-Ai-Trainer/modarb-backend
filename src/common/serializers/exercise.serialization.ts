@@ -1,8 +1,6 @@
 import { Expose, Transform } from "class-transformer";
 import { serialize } from "@helpers/serialize";
 
-
-
 class ExpectedDurationRange {
   @Expose()
   min: number;
