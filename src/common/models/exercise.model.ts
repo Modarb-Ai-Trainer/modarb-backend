@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { ObjectId } from "mongoose";
 const { Schema } = mongoose;
 
 export interface IExercise {
@@ -13,8 +13,11 @@ export interface IExercise {
   sets: number;
   instructions: string;
   benefits: string;
-  targetMuscles: string[]; // refs
-  equipments: string[]; // refs
+  targetMuscles: {
+    primary: ObjectId;
+    secondary: ObjectId;
+  }
+  equipments: ObjectId[];
   media: {
     type: "image" | "video";
     url: string;
@@ -33,7 +36,10 @@ const exerciseSchema = new Schema({
   sets: { type: Number, required: true },
   instructions: { type: String, required: true },
   benefits: { type: String, required: true },
-  targetMuscles: [{ type: Schema.Types.ObjectId, ref: "muscles" }],
+  targetMuscles: {
+    primary: { type: Schema.Types.ObjectId, ref: "muscles" },
+    secondary: { type: Schema.Types.ObjectId, ref: "muscles" },
+  },
   equipments: [{ type: Schema.Types.ObjectId, ref: "equipments" }],
   media: {
     type: {
