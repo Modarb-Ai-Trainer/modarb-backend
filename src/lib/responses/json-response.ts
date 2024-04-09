@@ -23,21 +23,21 @@ export abstract class JsonResponse {
    * @param res - Optional Express response object to send the response.
    * @returns The success response object or the Express response object if provided.
    */
-  static success(props: IJSONSuccessResponseProps): IJSONSuccessResponse;
-  static success(
-    props: IJSONSuccessResponseProps,
-    res: Response<IJSONSuccessResponse>
-  ): Response<IJSONSuccessResponse>;
-  static success(
-    props: IJSONSuccessResponseProps,
-    res?: Response<IJSONSuccessResponse>
-  ): IJSONSuccessResponse | Response<IJSONSuccessResponse> {
+  static success<T>(props: IJSONSuccessResponseProps<T>): IJSONSuccessResponse<T>;
+  static success<T>(
+    props: IJSONSuccessResponseProps<T>,
+    res: Response<IJSONSuccessResponse<T>>
+  ): Response<IJSONSuccessResponse<T>>;
+  static success<T>(
+    props: IJSONSuccessResponseProps<T>,
+    res?: Response<IJSONSuccessResponse<T>>
+  ): IJSONSuccessResponse<T> | Response<IJSONSuccessResponse<T>> {
     const data = {
       status: props.status || 200,
       message: props.message || "Success",
       data: props.data || null,
-      meta: props.meta,
-    } satisfies IJSONSuccessResponse;
+      meta: (props as any).meta,
+    } satisfies IJSONSuccessResponse<T>;
 
     return (res && res.status(data.status).json(data)) || data;
   }
