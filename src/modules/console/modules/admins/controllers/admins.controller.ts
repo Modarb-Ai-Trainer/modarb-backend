@@ -4,7 +4,7 @@ import { BaseController } from "@lib/controllers/controller.base";
 import { Prefix } from "@lib/decorators/prefix.decorator";
 import { Request, Response } from "express";
 import { AdminsService } from "../services/admins.service";
-import { createAdminSchema } from "../validations/create-admin.validation";
+import { ICreateAdmin, createAdminSchema } from "../validations/create-admin.validation";
 import { parsePaginationQuery } from "@helpers/pagination";
 import { JsonResponse } from "@lib/responses/json-response";
 import { ControllerMiddleware } from "@lib/decorators/controller-middleware.decorator";
@@ -12,6 +12,7 @@ import { AdminGuardMiddleware } from "modules/console/common/guards/admins.guard
 import { Role } from "@common/enums/role.enum";
 import { serialize } from "@helpers/serialize";
 import { AdminSerialization } from "modules/console/common/serializers/admin.serialization";
+import { IJSONSuccessResponse } from "@lib/responses/json-responses";
 
 @Prefix("/console/admins")
 @ControllerMiddleware(AdminGuardMiddleware({ roles: [Role.SUPER_ADMIN] }))
@@ -39,7 +40,10 @@ export class AdminsController extends BaseController {
     );
   }
 
-  list = async (req: Request, res: Response): Promise<Response> => {
+  list = async (
+    req: Request,
+    res: Response<IJSONSuccessResponse<AdminSerialization[]>>
+  ): Promise<Response> => {
     const paginationQuery = parsePaginationQuery(req.query);
     const { docs, paginationData } = await this.adminsService.list(
       {},
@@ -55,20 +59,26 @@ export class AdminsController extends BaseController {
     );
   };
 
-  get = async (req: Request, res: Response): Promise<Response> => {
+  get = async (
+    req: Request<{ id: string }>,
+    res: Response<IJSONSuccessResponse<AdminSerialization>>
+  ): Promise<Response> => {
     const data = await this.adminsService.findOneOrFail({
       _id: req.params.id,
     });
 
     return JsonResponse.success(
       {
-        data: serialize(data, AdminSerialization),
+        data: serialize(data, AdminSerialization) as AdminSerialization,
       },
       res
     );
   };
 
-  create = async (req: Request, res: Response): Promise<Response> => {
+  create = async (
+    req: Request<{}, {}, ICreateAdmin>,
+    res: Response<IJSONSuccessResponse<AdminSerialization>>
+  ): Promise<Response> => {
     const admin = await this.adminsService.create(req.body);
 
     return JsonResponse.success(
@@ -80,7 +90,10 @@ export class AdminsController extends BaseController {
     );
   };
 
-  update = async (req: Request, res: Response): Promise<Response> => {
+  update = async (
+    req: Request<{ id: string }, {}, ICreateAdmin>,
+    res: Response<IJSONSuccessResponse<AdminSerialization>>
+  ): Promise<Response> => {
     const admin = await this.adminsService.updateOne(
       {
         _id: req.params.id,
@@ -96,7 +109,10 @@ export class AdminsController extends BaseController {
     );
   };
 
-  delete = async (req: Request, res: Response): Promise<Response> => {
+  delete = async (
+    req: Request<{ id: string }>,
+    res: Response<IJSONSuccessResponse<AdminSerialization>>
+  ): Promise<Response> => {
     const admin = await this.adminsService.deleteOne({
       _id: req.params.id,
     });

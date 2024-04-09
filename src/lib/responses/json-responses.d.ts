@@ -3,14 +3,17 @@ interface IJSONResponse {
   message: string;
 }
 
-export interface IJSONSuccessResponse extends IJSONResponse {
-  data: Record<string, any> | Record<string, any>[];
-  meta?: {
+export type IJSONSuccessResponse<T extends Record<string, any> | Record<string, any>[]> = IJSONResponse & {
+  data: T;
+}
+& 
+(T extends any[] ? {
+  meta:  {
     total: number;
     page: number;
     perPage: number;
   };
-}
+} : {});
 
 export interface IJSONErrorResponse extends IJSONResponse {
   error: string;
