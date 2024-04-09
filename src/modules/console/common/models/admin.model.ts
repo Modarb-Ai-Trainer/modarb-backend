@@ -1,6 +1,5 @@
 import mongoose, { UpdateQuery } from "mongoose";
 import bcrypt from "bcrypt";
-import { config } from "../../../../configs/config";
 import { Role } from "@common/enums/role.enum";
 import { saltrounds } from "@common/models/user.model";
 
