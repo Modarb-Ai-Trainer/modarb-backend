@@ -2,6 +2,7 @@ import { Router, Express } from "express";
 
 import * as glob from "glob";
 import path from "path";
+import { TspecDocsMiddleware } from "tspec";
 import { BaseController } from "./lib/controllers/controller.base";
 import { validationErrorHandler } from "./helpers/validation.helper";
 import { JsonResponse } from "@lib/responses/json-response";
@@ -16,7 +17,7 @@ export const setAppRoutes = async (app: Express) => {
   const mainRouter = Router();
 
   await importControllers(mainRouter);
-  setCustomRoutes(mainRouter);
+  await setCustomRoutes(mainRouter);
 
   app.use("/api/v1", mainRouter);
 };
@@ -28,7 +29,7 @@ export const setAppRoutes = async (app: Express) => {
  *
  * @param router - The router object to set the routes on.
  */
-const setCustomRoutes = (router: Router) => {
+const setCustomRoutes = async (router: Router) => {
   // Health check route
   router.get("/health", (_req: any, res: any) => {
     JsonResponse.success(
@@ -43,8 +44,24 @@ const setCustomRoutes = (router: Router) => {
   // Validation error handler
   router.use(validationErrorHandler);
 
+  // docs
+  router.use("/docs", await TspecDocsMiddleware({
+    openapi: {
+      title: 'API Documentation',
+      version: '0.0.1',
+      securityDefinitions: {
+        jwt: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        }
+      }
+    }
+  }));
+
   // Invalid URL handler
-  router.all("*", (_req: any, res: any) => {
+  router.all("*", (req: any, res: any) => {
+
     JsonResponse.error(
       {
         error: "Invalid URL!",
