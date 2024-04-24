@@ -2,11 +2,12 @@ import { Router, Express } from "express";
 
 import * as glob from "glob";
 import path from "path";
-import { TspecDocsMiddleware } from "tspec";
+import swaggerUi from "swagger-ui-express";
 import { BaseController } from "./lib/controllers/controller.base";
 import { validationErrorHandler } from "./helpers/validation.helper";
 import { JsonResponse } from "@lib/responses/json-response";
 import { errorHandlerMiddleware } from "middlewares/error-handler.middleware";
+import { swaggerRegistry } from "@lib/swagger/swagger";
 
 /**
  * Sets the routes for the Express app.
@@ -45,23 +46,14 @@ const setCustomRoutes = async (router: Router) => {
   router.use(validationErrorHandler);
 
   // docs
-  router.use("/docs", await TspecDocsMiddleware({
-    openapi: {
-      title: 'API Documentation',
-      version: '0.0.1',
-      securityDefinitions: {
-        jwt: {
-          type: 'http',
-          scheme: 'bearer',
-          bearerFormat: 'JWT',
-        }
-      }
-    }
-  }));
+  router.use(
+    "/docs",
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerRegistry.generateSwaggerDocument())
+  );
 
   // Invalid URL handler
   router.all("*", (req: any, res: any) => {
-
     JsonResponse.error(
       {
         error: "Invalid URL!",

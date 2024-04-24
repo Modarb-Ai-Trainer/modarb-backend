@@ -3,11 +3,13 @@ import { JsonResponse } from "@lib/responses/json-response";
 import { Request, Response } from "express";
 import { asyncHandler } from "@helpers/async-handler";
 import { BaseController } from "@lib/controllers/controller.base";
-import { Prefix } from "@lib/decorators/prefix.decorator";
+import { Controller } from "@lib/decorators/prefix.decorator";
 import { serialize } from "@helpers/serialize";
 import { UserSerialization } from "@common/serializers/user.serialization";
+import { SwaggerPost } from "@lib/decorators/swagger-routes.decorator";
+import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
 
-@Prefix("/console/users")
+@Controller("/console/users")
 export class AdminUsersController extends BaseController {
   private usersService: UsersService = new UsersService();
 
@@ -15,6 +17,8 @@ export class AdminUsersController extends BaseController {
     this.router.post("/create", asyncHandler(this.create));
   }
 
+  @SwaggerPost("/create")
+  @SwaggerResponse(UserSerialization)
   create = async (req: Request, res: Response): Promise<Response> => {
     let user = await this.usersService.create(req.body);
 

@@ -5,13 +5,15 @@ import { parsePaginationQuery } from "@helpers/pagination";
 import { asyncHandler } from "@helpers/async-handler";
 import { paramsValidator } from "@helpers/validation.helper";
 import { BaseController } from "@lib/controllers/controller.base";
-import { Prefix } from "@lib/decorators/prefix.decorator";
+import { Controller } from "@lib/decorators/prefix.decorator";
 import { serialize } from "@helpers/serialize";
 import { ExerciseSerialization } from "@common/serializers/exercise.serialization";
 import { ControllerMiddleware } from "@lib/decorators/controller-middleware.decorator";
 import { UsersGuardMiddleware } from "modules/users/common/guards/users.guard";
+import { SwaggerGet } from "@lib/decorators/swagger-routes.decorator";
+import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
 
-@Prefix("/user/exercises")
+@Controller("/user/exercises")
 @ControllerMiddleware(UsersGuardMiddleware())
 export class ExerciseController extends BaseController {
   private exercisesService = new ExerciseService();
@@ -21,6 +23,8 @@ export class ExerciseController extends BaseController {
     this.router.get("/:id", paramsValidator("id"), asyncHandler(this.get));
   }
 
+  @SwaggerGet()
+  @SwaggerResponse([ExerciseSerialization])
   list = async (req: Request, res: Response): Promise<Response> => {
     const paginationQuery = parsePaginationQuery(req.query);
     const { docs, paginationData } = await this.exercisesService.list(
@@ -37,6 +41,8 @@ export class ExerciseController extends BaseController {
     );
   };
 
+  @SwaggerGet("/:id")
+  @SwaggerResponse(ExerciseSerialization)
   get = async (req: Request, res: Response): Promise<Response> => {
     const data = await this.exercisesService.findOneOrFail({
       _id: req.params.id,

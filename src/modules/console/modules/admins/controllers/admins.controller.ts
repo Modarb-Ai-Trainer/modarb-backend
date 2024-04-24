@@ -1,10 +1,13 @@
 import { asyncHandler } from "@helpers/async-handler";
 import { paramsValidator, bodyValidator } from "@helpers/validation.helper";
 import { BaseController } from "@lib/controllers/controller.base";
-import { Prefix } from "@lib/decorators/prefix.decorator";
+import { Controller } from "@lib/decorators/prefix.decorator";
 import { Request, Response } from "express";
 import { AdminsService } from "../services/admins.service";
-import { ICreateAdmin, createAdminSchema } from "../validations/create-admin.validation";
+import {
+  ICreateAdmin,
+  createAdminSchema,
+} from "../validations/create-admin.validation";
 import { parsePaginationQuery } from "@helpers/pagination";
 import { JsonResponse } from "@lib/responses/json-response";
 import { ControllerMiddleware } from "@lib/decorators/controller-middleware.decorator";
@@ -13,8 +16,16 @@ import { Role } from "@common/enums/role.enum";
 import { serialize } from "@helpers/serialize";
 import { AdminSerialization } from "modules/console/common/serializers/admin.serialization";
 import { IJSONSuccessResponse } from "@lib/responses/json-responses";
+import {
+  SwaggerDelete,
+  SwaggerGet,
+  SwaggerPatch,
+  SwaggerPost,
+} from "@lib/decorators/swagger-routes.decorator";
+import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
+import { SwaggerRequest } from "@lib/decorators/swagger-request.decorator";
 
-@Prefix("/console/admins")
+@Controller("/console/admins")
 @ControllerMiddleware(AdminGuardMiddleware({ roles: [Role.SUPER_ADMIN] }))
 export class AdminsController extends BaseController {
   private adminsService = new AdminsService();
@@ -40,6 +51,8 @@ export class AdminsController extends BaseController {
     );
   }
 
+  @SwaggerGet()
+  @SwaggerResponse([AdminSerialization])
   list = async (
     req: Request,
     res: Response<IJSONSuccessResponse<AdminSerialization[]>>
@@ -59,6 +72,8 @@ export class AdminsController extends BaseController {
     );
   };
 
+  @SwaggerGet("/:id")
+  @SwaggerResponse(AdminSerialization)
   get = async (
     req: Request<{ id: string }>,
     res: Response<IJSONSuccessResponse<AdminSerialization>>
@@ -75,6 +90,9 @@ export class AdminsController extends BaseController {
     );
   };
 
+  @SwaggerPost()
+  @SwaggerResponse(AdminSerialization)
+  @SwaggerRequest(createAdminSchema)
   create = async (
     req: Request<{}, {}, ICreateAdmin>,
     res: Response<IJSONSuccessResponse<AdminSerialization>>
@@ -90,6 +108,9 @@ export class AdminsController extends BaseController {
     );
   };
 
+  @SwaggerPatch("/:id")
+  @SwaggerResponse(AdminSerialization)
+  @SwaggerRequest(createAdminSchema)
   update = async (
     req: Request<{ id: string }, {}, ICreateAdmin>,
     res: Response<IJSONSuccessResponse<AdminSerialization>>
@@ -109,6 +130,8 @@ export class AdminsController extends BaseController {
     );
   };
 
+  @SwaggerDelete("/:id")
+  @SwaggerResponse(AdminSerialization)
   delete = async (
     req: Request<{ id: string }>,
     res: Response<IJSONSuccessResponse<AdminSerialization>>
