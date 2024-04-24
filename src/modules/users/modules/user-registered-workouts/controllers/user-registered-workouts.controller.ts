@@ -30,6 +30,7 @@ export class userRegisteredWorkoutsController extends BaseController {
 
   setRoutes(): void {
     this.router.get("/:id", paramsValidator("id"), asyncHandler(this.get));
+    this.router.get("/home/:userId", paramsValidator("userId"), asyncHandler(this.getHomePage));
     this.router.get("/", asyncHandler(this.list));
     this.router.post(
       "/",
@@ -42,17 +43,16 @@ export class userRegisteredWorkoutsController extends BaseController {
   @SwaggerResponse([UserRegisteredWorkoutsSerialization])
   list = async (req: userRequest, res: Response) => {
     const paginationQuery = parsePaginationQuery(req.query);
-    const { docs, paginationData } =
-      await this.userRegisteredWorkoutsService.list(
-        { user: req.jwtPayload.id },
-        paginationQuery,
-        {
-          populateArray: [
-            { path: "workout", select: "-templateWeeks -created_by" },
-            { path: "weeks.days.exercises", select: "name media reps sets" },
-          ],
-        }
-      );
+    const { docs, paginationData } = await this.userRegisteredWorkoutsService.list(
+      { user: req.jwtPayload.id, is_active: true },
+      paginationQuery,
+      {
+        populateArray: [
+          { path: "workout", select: "-templateWeeks -created_by" },
+          { path: "weeks.days.exercises", select: "name media reps sets" },
+        ]
+      }
+    );
 
     return JsonResponse.success(
       {
@@ -72,7 +72,26 @@ export class userRegisteredWorkoutsController extends BaseController {
         populateArray: [
           { path: "workout", select: "-template_weeks -created_by" },
           { path: "weeks.days.exercises", select: "name media reps sets" },
-        ],
+        ]
+      }
+    );
+    return JsonResponse.success(
+      {
+        data: serialize(data.toJSON(), UserRegisteredWorkoutsSerialization),
+      },
+      res
+    );
+  };
+
+  getHomePage = async (req: userRequest, res: Response) => {
+    const data = await this.userRegisteredWorkoutsService.findOneOrFail(
+      { user: req.params.userId },
+      {
+        populateArray: [
+          { path: "workout", select: "-template_weeks -created_by" },
+          { path: "weeks.days.exercises", select: "name media reps sets" },
+          { path: "user", select: "name preferences" }
+        ]
       }
     );
     return JsonResponse.success(

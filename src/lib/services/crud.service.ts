@@ -1,6 +1,6 @@
 import { HttpError } from "@lib/error-handling/http-error";
-import { populate } from "dotenv";
 import { AnyKeys, Document, FilterQuery, Model } from "mongoose";
+
 
 export const CrudService = <ModelDoc extends Document>(
   model: Model<ModelDoc>
@@ -42,11 +42,11 @@ export const CrudService = <ModelDoc extends Document>(
         skip?: number;
       } = {
           limit: 10,
-          skip: 0,
+          skip: 1,
         },
       options?: {
         populateArray: any
-      }
+      },
     ): Promise<{
       docs: ModelDoc[];
       paginationData: {
@@ -58,10 +58,10 @@ export const CrudService = <ModelDoc extends Document>(
       const queryInstruction = this.model
         .find(filter)
         .limit(paginationOptions.limit)
-        .skip(paginationOptions.skip)
+        .skip(paginationOptions.skip);
       if (options?.populateArray) queryInstruction.populate(options.populateArray);
 
-      const docs = await queryInstruction
+      const docs = await queryInstruction;
       const total = await this.model.countDocuments(filter);
       const paginationData = {
         total: total,
@@ -90,8 +90,9 @@ export const CrudService = <ModelDoc extends Document>(
       }
     ): Promise<ModelDoc> {
       await this.existsOrThrow(filter);
-      let optionsObject = options ? options : { populateArray: [{}] }
-      const document = await this.findOne(filter, optionsObject);
+      const queryInstruction = this.model.findOne(filter);
+      if (options?.populateArray) queryInstruction.populate(options.populateArray);
+      const document = await queryInstruction;
       return document;
     }
 
