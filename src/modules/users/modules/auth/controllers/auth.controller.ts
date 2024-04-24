@@ -8,12 +8,15 @@ import {
 import { asyncHandler } from "@helpers/async-handler";
 import { bodyValidator } from "@helpers/validation.helper";
 import { BaseController } from "@lib/controllers/controller.base";
-import { Prefix } from "@lib/decorators/prefix.decorator";
+import { Controller } from "@lib/decorators/prefix.decorator";
 import { serialize } from "@helpers/serialize";
 import { UserSerialization } from "@common/serializers/user.serialization";
 import { UsersAuthService } from "../services/users-auth.service";
+import { SwaggerPost } from "@lib/decorators/swagger-routes.decorator";
+import { SwaggerRequest } from "@lib/decorators/swagger-request.decorator";
+import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
 
-@Prefix("/user/auth")
+@Controller("/user/auth")
 export class UsersAuthController extends BaseController {
   private authService = new UsersAuthService();
 
@@ -30,6 +33,9 @@ export class UsersAuthController extends BaseController {
     );
   }
 
+  @SwaggerPost("/register")
+  @SwaggerRequest(userRegisterSchema)
+  @SwaggerResponse(UserSerialization)
   register = async (req: Request, res: Response) => {
     const user = await this.authService.register(req.body as IUserRegister);
 
@@ -41,6 +47,9 @@ export class UsersAuthController extends BaseController {
     );
   };
 
+  @SwaggerPost("/login")
+  @SwaggerRequest(loginValidationSchema)
+  @SwaggerResponse(UserSerialization)
   login = async (req: Request, res: Response): Promise<Response> => {
     const { user, token } = await this.authService.login(req.body);
 
