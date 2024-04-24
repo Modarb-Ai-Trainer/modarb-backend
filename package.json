@@ -4,9 +4,9 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "start": "rimraf dist && tsc && tsc-alias && node dist/index.js",
+    "start": "build && node dist/index.js",
     "start:dev": "ts-node-dev --files -r tsconfig-paths/register src/index.ts",
-    "build": "tsc",
+    "build": "rimraf dist && tsc && tsc-alias",
     "lint": "eslint . --ext .ts"
   },
   "author": "",

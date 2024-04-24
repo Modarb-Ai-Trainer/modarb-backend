@@ -13,11 +13,17 @@ RUN npm install
 # Copy the entire application code to the working directory
 COPY . .
 
+# remove .env file
+RUN rm .env
+
 # Build the TypeScript code
-# RUN npm run build
+RUN npm run build
+
+# Set the PORT environment variable
+ENV PORT=3000
 
 # Expose the port on which your application will run
-EXPOSE 4000
+EXPOSE $PORT
 
 # Command to run the application
-CMD ["npm", "start:dev"]
+CMD ["node", "dist/index.js"]
