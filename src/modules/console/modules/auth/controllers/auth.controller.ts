@@ -2,14 +2,17 @@ import { asyncHandler } from "@helpers/async-handler";
 import { serialize } from "@helpers/serialize";
 import { bodyValidator } from "@helpers/validation.helper";
 import { BaseController } from "@lib/controllers/controller.base";
-import { Prefix } from "@lib/decorators/prefix.decorator";
+import { Controller } from "@lib/decorators/prefix.decorator";
 import { JsonResponse } from "@lib/responses/json-response";
 import { Request, Response } from "express";
 import { loginValidationSchema } from "modules/users/modules/auth/validation/login.validation";
 import { ConsoleAuthService } from "../services/auth.service";
 import { AdminSerialization } from "modules/console/common/serializers/admin.serialization";
+import { SwaggerRequest } from "@lib/decorators/swagger-request.decorator";
+import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
+import { SwaggerPost } from "@lib/decorators/swagger-routes.decorator";
 
-@Prefix("/console/auth")
+@Controller("/console/auth")
 export class ConsoleAuthController extends BaseController {
   private authService = new ConsoleAuthService();
 
@@ -21,6 +24,9 @@ export class ConsoleAuthController extends BaseController {
     );
   }
 
+  @SwaggerPost('/login')
+  @SwaggerRequest(loginValidationSchema)
+  @SwaggerResponse(AdminSerialization)
   login = async (req: Request, res: Response): Promise<Response> => {
     const { admin, token } = await this.authService.login(req.body);
 

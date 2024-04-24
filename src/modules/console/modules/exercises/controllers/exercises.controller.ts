@@ -4,7 +4,7 @@ import { parsePaginationQuery } from "@helpers/pagination";
 import { paramsValidator, bodyValidator } from "@helpers/validation.helper";
 import { BaseController } from "@lib/controllers/controller.base";
 import { ControllerMiddleware } from "@lib/decorators/controller-middleware.decorator";
-import { Prefix } from "@lib/decorators/prefix.decorator";
+import { Controller } from "@lib/decorators/prefix.decorator";
 import { JsonResponse } from "@lib/responses/json-response";
 import { AdminGuardMiddleware } from "modules/console/common/guards/admins.guard";
 import { ExercisesService } from "../services/exercises.service";
@@ -12,8 +12,11 @@ import { Request, Response } from "express";
 import { serialize } from "@helpers/serialize";
 import { createExerciseSchema } from "../validations/create-excercise.validation";
 import { updateExerciseSchema } from "../validations/update-excercise.validation";
+import { SwaggerDelete, SwaggerGet, SwaggerPatch, SwaggerPost } from "@lib/decorators/swagger-routes.decorator";
+import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
+import { SwaggerRequest } from "@lib/decorators/swagger-request.decorator";
 
-@Prefix("/console/exercises")
+@Controller("/console/exercises")
 @ControllerMiddleware(AdminGuardMiddleware({}))
 export class ExercisesController extends BaseController {
   private exercisesService = new ExercisesService();
@@ -39,6 +42,8 @@ export class ExercisesController extends BaseController {
     );
   }
 
+  @SwaggerGet()
+  @SwaggerResponse([ExerciseSerialization])
   list = async (req: Request, res: Response) => {
     const paginationQuery = parsePaginationQuery(req.query);
     const { docs, paginationData } = await this.exercisesService.list(
@@ -55,6 +60,8 @@ export class ExercisesController extends BaseController {
     );
   };
 
+  @SwaggerGet("/:id")
+  @SwaggerResponse(ExerciseSerialization)
   get = async (req: Request, res: Response) => {
     const data = await this.exercisesService.findOneOrFail({
       _id: req.params.id,
@@ -67,6 +74,9 @@ export class ExercisesController extends BaseController {
     );
   };
 
+  @SwaggerPost()
+  @SwaggerResponse(ExerciseSerialization)
+  @SwaggerRequest(createExerciseSchema)
   create = async (req: Request, res: Response) => {
     const data = await this.exercisesService.create(req.body);
     return JsonResponse.success(
@@ -77,6 +87,9 @@ export class ExercisesController extends BaseController {
     );
   };
 
+  @SwaggerPatch("/:id")
+  @SwaggerRequest(updateExerciseSchema)
+  @SwaggerResponse(ExerciseSerialization)
   update = async (req: Request, res: Response) => {
     const data = await this.exercisesService.updateOne(
       { _id: req.params.id },
@@ -90,6 +103,8 @@ export class ExercisesController extends BaseController {
     );
   };
 
+  @SwaggerDelete("/:id")
+  @SwaggerResponse({})
   delete = async (req: Request, res: Response) => {
     await this.exercisesService.deleteOne({ _id: req.params.id });
     return JsonResponse.success({}, res);
