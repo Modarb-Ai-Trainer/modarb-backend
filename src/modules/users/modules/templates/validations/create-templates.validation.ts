@@ -5,6 +5,7 @@ import { createSchema } from "@helpers/create-schema";
 export interface ICreateTemplates {
     name: string;
     user: string;
+    creationDate?: Date;
     exercises: string[];
 }
 
@@ -18,6 +19,9 @@ export const createTemplatesSchema = createSchema<ICreateTemplates>({
         "string.base": "please enter a valid user id",
         "any.required": "user id is required",
         "string.empty": "user id can not be empty",
+    }),
+    creationDate: joi.date().optional().messages({
+        "date.base": "please enter a valid creation date",
     }),
     exercises: joi.array().empty().required().items(
         joi.string().empty().required().messages({
