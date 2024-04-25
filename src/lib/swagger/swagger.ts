@@ -2,7 +2,7 @@
  * Swagger registry class.
  */
 class SwaggerRegistry {
-  public static registry = new Map<
+  public controllersRegistry = new Map<
     any,
     {
       routes: {
@@ -17,9 +17,43 @@ class SwaggerRegistry {
     }
   >();
 
+  public schemasRegistry = new Map<
+    any,
+    {
+      properties: {
+        [key: string]: any;
+      };
+      propertiesToExclude: string[];
+    }
+  >();
+
+  public initSchemaIfNotExists(schema: any) {
+    if (!this.schemasRegistry.has(schema)) {
+      this.schemasRegistry.set(schema, {
+        properties: {},
+        propertiesToExclude: [],
+      });
+    }
+  }
+
+  public updateSchemaProperty(props: {
+    schema: any;
+    property: string;
+    newName?: string;
+    type: any;
+  }) {
+    this.initSchemaIfNotExists(props.schema);
+    const data = this.schemasRegistry.get(props.schema);
+    data.properties[props.newName || props.property] = { type: props.type };
+    if (props.newName) {
+      data.propertiesToExclude.push(props.property);
+    }
+    this.schemasRegistry.set(props.schema, data);
+  }
+
   public initControllerIfNotExists(controller: any, prefix: string = "") {
-    if (!SwaggerRegistry.registry.has(controller)) {
-      SwaggerRegistry.registry.set(controller, {
+    if (!this.controllersRegistry.has(controller)) {
+      this.controllersRegistry.set(controller, {
         routes: [],
         prefix,
       });
@@ -28,9 +62,9 @@ class SwaggerRegistry {
 
   public setControllerPrefix(controller: any, prefix: string) {
     this.initControllerIfNotExists(controller);
-    const data = SwaggerRegistry.registry.get(controller);
+    const data = this.controllersRegistry.get(controller);
     data.prefix = prefix;
-    SwaggerRegistry.registry.set(controller, data);
+    this.controllersRegistry.set(controller, data);
   }
 
   public updateRoute(
@@ -44,7 +78,7 @@ class SwaggerRegistry {
     }
   ) {
     this.initControllerIfNotExists(controller);
-    const data = SwaggerRegistry.registry.get(controller);
+    const data = this.controllersRegistry.get(controller);
 
     // delete undefined keys
     Object.keys(params).forEach(
@@ -60,19 +94,19 @@ class SwaggerRegistry {
       data.routes.push(params);
     }
 
-    SwaggerRegistry.registry.set(controller, data);
+    this.controllersRegistry.set(controller, data);
   }
 
   public setControllerTags(controller: any, tags: string[]) {
     this.initControllerIfNotExists(controller);
-    const data = SwaggerRegistry.registry.get(controller);
+    const data = this.controllersRegistry.get(controller);
     data.tags = tags;
-    SwaggerRegistry.registry.set(controller, data);
+    this.controllersRegistry.set(controller, data);
   }
 
   public generateSwaggerDocument() {
     const paths: any = {};
-    SwaggerRegistry.registry.forEach((value) => {
+    this.controllersRegistry.forEach((value) => {
       const controllerData = value;
 
       controllerData.routes.forEach((route) => {
