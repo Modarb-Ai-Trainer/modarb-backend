@@ -45,7 +45,12 @@ export class templateController extends BaseController {
     const paginationQuery = parsePaginationQuery(req.query);
     const { docs, paginationData } = await this.templatesService.list(
       { user: req.jwtPayload.id },
-      paginationQuery
+      paginationQuery,
+      {
+        populateArray: [
+          { path: "exercises", select: "name duration reps sets" },
+        ],
+      }
     );
 
     return JsonResponse.success(
@@ -60,10 +65,16 @@ export class templateController extends BaseController {
   @SwaggerGet("/:id")
   @SwaggerResponse(TemplateSerialization)
   get = async (req: userRequest, res: Response): Promise<Response> => {
-    const data = await this.templatesService.findOneOrFail({
-      _id: req.params.id,
-      user: req.jwtPayload.id
-    });
+    const data = await this.templatesService.findOneOrFail(
+      {
+        _id: req.params.id,
+        user: req.jwtPayload.id
+      },
+      {
+        populateArray: [
+          { path: "exercises", select: "name duration reps sets" },
+        ],
+      });
 
     return JsonResponse.success(
       {

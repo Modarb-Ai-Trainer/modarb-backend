@@ -15,6 +15,10 @@ export class TemplateSerialization {
   user: string;
 
   @Expose()
+  @SwaggerResponseProperty({ type: "Date" })
+  creationDate: Date;
+
+  @Expose()
   @SwaggerResponseProperty({ type: ["string"] })
   exercises: string[];
 }

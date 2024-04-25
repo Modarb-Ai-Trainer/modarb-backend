@@ -6,6 +6,7 @@ import { createSchema } from "@helpers/create-schema";
 export interface IUpdateTemplates {
     name?: string;
     user?: string;
+    creationDate?: Date;
     exercises?: string[];
 }
 
@@ -18,6 +19,9 @@ export const updateTemplatesSchema = createSchema<IUpdateTemplates>({
     user: joi.string().empty().optional().messages({
         "string.base": "please enter a valid user id",
         "string.empty": "user id can not be empty",
+    }),
+    creationDate: joi.date().optional().messages({
+        "date.base": "please enter a valid creation date",
     }),
     exercises: joi.array().empty().optional().items(
         joi.string().empty().optional().messages({
