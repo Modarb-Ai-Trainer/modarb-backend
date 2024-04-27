@@ -1,3 +1,5 @@
+import { config } from "@configs/config";
+
 /**
  * Swagger registry class.
  */
@@ -173,7 +175,7 @@ class SwaggerRegistry {
       },
       servers: [
         {
-          url: "http://localhost:3000",
+          url: `${config.host}:${config.port}`,
         },
       ],
       security: [
