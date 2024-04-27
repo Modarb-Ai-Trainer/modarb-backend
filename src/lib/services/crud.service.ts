@@ -72,6 +72,43 @@ export const CrudService = <ModelDoc extends Document>(
       return { docs, paginationData };
     }
 
+    async search(
+      filter: FilterQuery<ModelDoc>,
+      paginationOptions: {
+        limit?: number;
+        skip?: number;
+      } = {
+          limit: 10,
+          skip: 1,
+        },
+      options?: {
+        populateArray: any
+      },
+    ): Promise<{
+      docs: ModelDoc[];
+      paginationData: {
+        total: number;
+        page: number;
+        perPage: number;
+      };
+    }> {
+      const queryInstruction = this.model
+        .find(filter)
+        .limit(paginationOptions.limit)
+        .skip(paginationOptions.skip);
+      if (options?.populateArray) queryInstruction.populate(options.populateArray);
+
+      const docs = await queryInstruction;
+      const total = await this.model.countDocuments(filter);
+      const paginationData = {
+        total: total,
+        page: paginationOptions.skip,
+        perPage: paginationOptions.limit,
+      };
+
+      return { docs, paginationData };
+    }
+
     async findOne(
       filter: FilterQuery<ModelDoc>,
       options?: {

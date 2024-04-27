@@ -19,6 +19,7 @@ export class ExerciseController extends BaseController {
   private exercisesService = new ExerciseService();
 
   setRoutes(): void {
+    this.router.get("/search", asyncHandler(this.search));
     this.router.get("/", asyncHandler(this.list));
     this.router.get("/:id", paramsValidator("id"), asyncHandler(this.get));
   }
@@ -51,6 +52,58 @@ export class ExerciseController extends BaseController {
     return JsonResponse.success(
       {
         data: serialize(data, ExerciseSerialization),
+      },
+      res
+    );
+  };
+
+  @SwaggerGet()
+  @SwaggerResponse([ExerciseSerialization])
+  search = async (req: Request, res: Response): Promise<Response> => {
+    const paginationQuery = parsePaginationQuery(req.query);
+    let query = {};
+    let searchTerm = req.query.searchTerm;
+
+    let isNum = !isNaN(parseInt(String(searchTerm)));
+
+    if (isNum) {
+      query =
+      {
+        $or: [
+          { reps: { $eq: searchTerm } },
+          { sets: { $eq: searchTerm } },
+          { duration: { $eq: searchTerm } }
+        ]
+      };
+    }
+
+    else {
+      if (req.query.filter === "category") {
+        query = { category: { $regex: searchTerm, $options: "i" } };
+      }
+      else {
+        query = {
+          $or: [
+            { name: { $regex: searchTerm, $options: "i" } },
+            { category: { $regex: searchTerm, $options: "i" } },
+            { benefits: { $regex: searchTerm, $options: "i" } },
+            { description: { $regex: searchTerm, $options: "i" } },
+            { instructions: { $regex: searchTerm, $options: "i" } },
+            { url: { $regex: searchTerm, $options: "i" } }
+          ],
+        };
+      }
+    }
+
+    const { docs, paginationData } = await this.exercisesService.search(
+      query,
+      paginationQuery
+    );
+
+    return JsonResponse.success(
+      {
+        data: serialize(docs, ExerciseSerialization),
+        meta: paginationData,
       },
       res
     );
