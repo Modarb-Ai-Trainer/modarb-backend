@@ -13,8 +13,8 @@ RUN npm install
 # Copy the entire application code to the working directory
 COPY . .
 
-# remove .env file
-RUN rm .env
+# remove .env file if it exists
+RUN rm -f -- .env
 
 # Build the TypeScript code
 RUN npm run build
