@@ -7,7 +7,9 @@
     "start": "build && node dist/index.js",
     "start:dev": "ts-node-dev --files -r tsconfig-paths/register src/index.ts",
     "build": "rimraf dist && tsc && tsc-alias",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "seed": "ts-node-dev --files -r tsconfig-paths/register src/seeder/seed.ts",
+    "seed:reset": "ts-node --files -r tsconfig-paths/register src/seeder/seed.ts --reset"
   },
   "author": "",
   "license": "ISC",
