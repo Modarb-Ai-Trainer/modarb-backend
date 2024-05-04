@@ -63,7 +63,7 @@ export const createExerciseSchema = createSchema<ICreateExercise>({
     "any.required": "benefits is required",
     "string.empty": "benefits can not be empty",
   }),
-  targetMuscles: joi.array().items(joi.string()).empty().required().messages({
+  targetMuscles: joi.object().empty().required().messages({
     "array.base": "please enter a valid target muscles",
     "any.required": "target muscles is required",
   }),
