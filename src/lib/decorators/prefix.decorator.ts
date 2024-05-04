@@ -1,5 +1,6 @@
 import { swaggerRegistry } from "@lib/swagger/swagger";
 import { BaseController } from "../controllers/controller.base";
+import { getCallingFileName } from "@lib/utils/calling-file.helper";
 
 export const Controller = (prefix: string) => {
   return (target: typeof BaseController) => {
@@ -10,11 +11,13 @@ export const Controller = (prefix: string) => {
       return instance;
     };
     newConstructor.prototype = originalConstructor.prototype;
+
+    target.prototype.constructor['targetName'] = target.prototype.constructor.name + getCallingFileName();
     swaggerRegistry.setControllerPrefix(
-      target.prototype.constructor.name,
+      target.prototype.constructor['targetName'],
       prefix
     );
-    swaggerRegistry.setControllerTags(target.prototype.constructor.name, [
+    swaggerRegistry.setControllerTags(target.prototype.constructor['targetName'], [
       prefix
         .split("/")
         .slice(1)
