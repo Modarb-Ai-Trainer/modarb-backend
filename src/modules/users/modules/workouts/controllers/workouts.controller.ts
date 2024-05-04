@@ -15,7 +15,7 @@ import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
 
 @Controller("/user/workouts")
 @ControllerMiddleware(UsersGuardMiddleware())
-export class WorkoutController extends BaseController {
+export class UsersWorkoutController extends BaseController {
   private workoutsService = new WorkoutService();
 
   setRoutes(): void {
@@ -44,9 +44,13 @@ export class WorkoutController extends BaseController {
   @SwaggerGet("/:id")
   @SwaggerResponse(WorkoutSerialization)
   get = async (req: Request, res: Response): Promise<Response> => {
-    const data = await this.workoutsService.findOneOrFail({
-      _id: req.params.id,
-    });
+    const data = await this.workoutsService.findOneOrFail(
+      { _id: req.params.id },
+      {
+        populateArray: [
+          { path: "template_weeks.days.exercises", select: "name media reps sets" },
+        ],
+      });
 
     return JsonResponse.success(
       {
