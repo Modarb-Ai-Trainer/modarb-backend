@@ -1,6 +1,7 @@
 import { Expose, Transform } from "class-transformer";
 import { serialize } from "@helpers/serialize";
 import { SwaggerResponseProperty } from "@lib/decorators/swagger-response-property.decorator";
+import { ExerciseSerialization } from "./exercise.serialization";
 
 class Days {
   @Expose()
@@ -16,7 +17,7 @@ class Days {
   day_type: string;
 
   @Expose({ name: "exercises" })
-  @SwaggerResponseProperty({ type: {} })
+  @SwaggerResponseProperty({ type: [ExerciseSerialization] })
   exercises: any;
 
   @Expose()

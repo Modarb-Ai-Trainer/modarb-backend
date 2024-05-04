@@ -1,10 +1,11 @@
 import { swaggerRegistry } from "@lib/swagger/swagger";
+import { getCallingFileName } from "@lib/utils/calling-file.helper";
 import { instanceToPlain } from "class-transformer";
 
 const responseToSwaggerSchema = (response: any) => {
   const isClass = typeof response === "function";
   const responseName =
-    (isClass && response.prototype.constructor.name) || undefined;
+    (isClass && response.prototype.constructor['targetName']) || undefined;
   const responseData = swaggerRegistry.schemasRegistry.get(responseName);
 
   // turn class to swagger schema
@@ -120,7 +121,8 @@ export const SwaggerResponse = (responseClass: any) => {
       };
     }
 
-    swaggerRegistry.updateRoute(target.constructor.name, {
+    target.constructor['targetName'] = target.constructor.name + getCallingFileName();
+    swaggerRegistry.updateRoute(target.constructor['targetName'], {
       propertyKey,
       response: standardResponseSchema,
     });

@@ -1,11 +1,13 @@
 import { swaggerRegistry } from "@lib/swagger/swagger";
+import { getCallingFileName } from "@lib/utils/calling-file.helper";
 
 export const SwaggerRoute = (
   path: string = "",
   method: "get" | "post" | "put" | "patch" | "delete"
 ) => {
   return (target: any, propertyKey: string) => {
-    swaggerRegistry.updateRoute(target.constructor.name, {
+    target.constructor['targetName'] = target.constructor.name + getCallingFileName()
+    swaggerRegistry.updateRoute(target.constructor.name + getCallingFileName(), {
       propertyKey,
       path,
       method,
