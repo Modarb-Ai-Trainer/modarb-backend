@@ -49,7 +49,24 @@ const setCustomRoutes = async (router: Router) => {
   router.use(
     "/docs",
     swaggerUi.serve,
-    swaggerUi.setup(swaggerRegistry.generateSwaggerDocument())
+    swaggerUi.setup(swaggerRegistry.generateSwaggerDocument(), {
+      customCss: ".swagger-ui .topbar { display: none }",
+      customSiteTitle: "API Documentation",
+      swaggerOptions: {
+        layout: "StandaloneLayout",
+        deepLinking: true,
+        docExpansion: "none",
+        filter: true,
+        tagsSorter: "alpha",
+        operationsSorter: "alpha",
+        showMutatedRequest: true,
+        showMutatedResponse: true,
+        showRequestDuration: true,
+        persistAuthorization: true,
+        displayRequestDuration: true,
+        withCredentials: true,
+      },
+    })
   );
 
   // Invalid URL handler
