@@ -178,10 +178,9 @@ class SwaggerRegistry {
     const document = {
       openapi: "3.0.0",
       info: {
-        title: "Express TypeScript Swagger",
+        title: "Modarb API Documentation",
         version: "1.0.0",
-        description:
-          "API documentation using Swagger and Express with TypeScript.",
+        description: "Look! Docs!",
       },
       servers: [
         {
@@ -205,6 +204,7 @@ class SwaggerRegistry {
       },
     };
 
+    console.log(JSON.stringify(document, null, 2));
     return document;
   }
 }
