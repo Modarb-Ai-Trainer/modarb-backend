@@ -122,7 +122,6 @@ class SwaggerRegistry {
       controllerData.routes.forEach((route) => {
         route.path = `/api/v1${controllerData.prefix}${route.path}`;
         const params = route.path.match(/:(\w+)/g);
-        console.log(route.path, params);
 
         if (!paths[route.path]) {
           paths[route.path] = {};

@@ -58,15 +58,6 @@ export class AdminsController extends BaseController {
   @SwaggerResponse([AdminSerialization])
   @SwaggerSummary("List all admins")
   @SwaggerDescription("List all admins")
-  @SwaggerQuery({
-    exampleRequiredQuery: {
-      type: "string",
-      required: true,
-    },
-    exampleOptionQuery: ["option 1", "option 2", 3],
-    exampleSimpleQuery: "number",
-    exampleSimpleQuery2: "boolean",
-  })
   list = async (
     req: Request,
     res: Response<IJSONSuccessResponse<AdminSerialization[]>>
