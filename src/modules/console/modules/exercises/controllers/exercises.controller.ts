@@ -4,7 +4,7 @@ import { parsePaginationQuery } from "@helpers/pagination";
 import { paramsValidator, bodyValidator } from "@helpers/validation.helper";
 import { BaseController } from "@lib/controllers/controller.base";
 import { ControllerMiddleware } from "@lib/decorators/controller-middleware.decorator";
-import { Controller } from "@lib/decorators/prefix.decorator";
+import { Controller } from "@lib/decorators/controller.decorator";
 import { JsonResponse } from "@lib/responses/json-response";
 import { AdminGuardMiddleware } from "modules/console/common/guards/admins.guard";
 import { ExercisesService } from "../services/exercises.service";

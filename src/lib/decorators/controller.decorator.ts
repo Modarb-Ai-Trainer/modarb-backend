@@ -2,7 +2,13 @@ import { swaggerRegistry } from "@lib/swagger/swagger";
 import { BaseController } from "../controllers/controller.base";
 import { getCallingFileName } from "@lib/utils/calling-file.helper";
 
-export const Controller = (prefix: string) => {
+export const Controller = (
+  prefix: string,
+  options: { autoTag?: boolean } = {}
+) => {
+  // default options
+  const { autoTag = true } = options;
+
   return (target: typeof BaseController) => {
     const originalConstructor = target;
     const newConstructor: any = function (...args: any[]) {
@@ -12,18 +18,25 @@ export const Controller = (prefix: string) => {
     };
     newConstructor.prototype = originalConstructor.prototype;
 
-    target.prototype.constructor['targetName'] = target.prototype.constructor.name + getCallingFileName();
+    target.prototype.constructor["targetName"] =
+      target.prototype.constructor.name + getCallingFileName();
     swaggerRegistry.setControllerPrefix(
-      target.prototype.constructor['targetName'],
+      target.prototype.constructor["targetName"],
       prefix
     );
-    swaggerRegistry.setControllerTags(target.prototype.constructor['targetName'], [
-      prefix
-        .split("/")
-        .slice(1)
-        .map((tag) => tag.charAt(0).toUpperCase() + tag.slice(1))
-        .join(" - "),
-    ]);
+
+    if (autoTag) {
+      swaggerRegistry.setControllerTags(
+        target.prototype.constructor["targetName"],
+        [
+          prefix
+            .split("/")
+            .slice(1)
+            .map((tag) => tag.charAt(0).toUpperCase() + tag.slice(1))
+            .join(" - "),
+        ]
+      );
+    }
     return newConstructor;
   };
 };

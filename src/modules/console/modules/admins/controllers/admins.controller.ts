@@ -1,7 +1,7 @@
 import { asyncHandler } from "@helpers/async-handler";
 import { paramsValidator, bodyValidator } from "@helpers/validation.helper";
 import { BaseController } from "@lib/controllers/controller.base";
-import { Controller } from "@lib/decorators/prefix.decorator";
+import { Controller } from "@lib/decorators/controller.decorator";
 import { Request, Response } from "express";
 import { AdminsService } from "../services/admins.service";
 import {
@@ -24,6 +24,8 @@ import {
 } from "@lib/decorators/swagger-routes.decorator";
 import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
 import { SwaggerRequest } from "@lib/decorators/swagger-request.decorator";
+import { SwaggerSummary } from "@lib/decorators/swagger-summary.decorator";
+import { SwaggerDescription } from "@lib/decorators/swagger-description.decorator";
 
 @Controller("/console/admins")
 @ControllerMiddleware(AdminGuardMiddleware({ roles: [Role.SUPER_ADMIN] }))
@@ -53,6 +55,8 @@ export class AdminsController extends BaseController {
 
   @SwaggerGet()
   @SwaggerResponse([AdminSerialization])
+  @SwaggerSummary("List all admins")
+  @SwaggerDescription("List all admins")
   list = async (
     req: Request,
     res: Response<IJSONSuccessResponse<AdminSerialization[]>>
@@ -74,6 +78,8 @@ export class AdminsController extends BaseController {
 
   @SwaggerGet("/:id")
   @SwaggerResponse(AdminSerialization)
+  @SwaggerSummary("Get admin by id")
+  @SwaggerDescription("Get admin by id")
   get = async (
     req: Request<{ id: string }>,
     res: Response<IJSONSuccessResponse<AdminSerialization>>
@@ -93,6 +99,8 @@ export class AdminsController extends BaseController {
   @SwaggerPost()
   @SwaggerResponse(AdminSerialization)
   @SwaggerRequest(createAdminSchema)
+  @SwaggerSummary("Create new admin")
+  @SwaggerDescription("Creates a new admin with role of admin")
   create = async (
     req: Request<{}, {}, ICreateAdmin>,
     res: Response<IJSONSuccessResponse<AdminSerialization>>
@@ -111,6 +119,8 @@ export class AdminsController extends BaseController {
   @SwaggerPatch("/:id")
   @SwaggerResponse(AdminSerialization)
   @SwaggerRequest(createAdminSchema)
+  @SwaggerSummary("Update admin")
+  @SwaggerDescription("Updates an admin")
   update = async (
     req: Request<{ id: string }, {}, ICreateAdmin>,
     res: Response<IJSONSuccessResponse<AdminSerialization>>
@@ -132,6 +142,8 @@ export class AdminsController extends BaseController {
 
   @SwaggerDelete("/:id")
   @SwaggerResponse(AdminSerialization)
+  @SwaggerSummary("Delete admin")
+  @SwaggerDescription("Deletes an admin")
   delete = async (
     req: Request<{ id: string }>,
     res: Response<IJSONSuccessResponse<AdminSerialization>>

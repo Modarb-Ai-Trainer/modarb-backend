@@ -13,6 +13,10 @@ class SwaggerRegistry {
         method?: "get" | "post" | "put" | "patch" | "delete";
         request?: any;
         response?: any;
+        query?: any;
+        description?: string;
+        summary?: string;
+        tags?: string[];
       }[];
       prefix: string;
       tags?: string[];
@@ -77,6 +81,10 @@ class SwaggerRegistry {
       method?: "get" | "post" | "put" | "patch" | "delete";
       request?: any;
       response?: any;
+      query?: any;
+      description?: string;
+      summary?: string;
+      tags?: string[];
     }
   ) {
     this.initControllerIfNotExists(controller);
@@ -124,7 +132,9 @@ class SwaggerRegistry {
               bearerAuth: [],
             },
           ],
-          tags: controllerData.tags,
+          tags: [...(controllerData.tags || []), ...(route.tags || [])],
+          summary: route.summary,
+          description: route.description,
           responses: {
             200: {
               description: "Success",
@@ -145,22 +155,6 @@ class SwaggerRegistry {
               },
             },
           };
-        }
-
-        if (!paths[route.path].summary) {
-          paths[route.path].summary = route.propertyKey;
-        }
-
-        if (!paths[route.path].description) {
-          paths[route.path].description = route.propertyKey;
-        }
-
-        if (!paths[route.path].parameters) {
-          paths[route.path].parameters = [];
-        }
-
-        if (!paths[route.path].responses) {
-          paths[route.path].responses = [];
         }
       });
     });
