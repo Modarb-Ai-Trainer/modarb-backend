@@ -26,6 +26,7 @@ import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
 import { SwaggerRequest } from "@lib/decorators/swagger-request.decorator";
 import { SwaggerSummary } from "@lib/decorators/swagger-summary.decorator";
 import { SwaggerDescription } from "@lib/decorators/swagger-description.decorator";
+import { SwaggerQuery } from "@lib/decorators/swagger-query.decorator";
 
 @Controller("/console/admins")
 @ControllerMiddleware(AdminGuardMiddleware({ roles: [Role.SUPER_ADMIN] }))
@@ -57,6 +58,15 @@ export class AdminsController extends BaseController {
   @SwaggerResponse([AdminSerialization])
   @SwaggerSummary("List all admins")
   @SwaggerDescription("List all admins")
+  @SwaggerQuery({
+    exampleRequiredQuery: {
+      type: "string",
+      required: true,
+    },
+    exampleOptionQuery: ["option 1", "option 2", 3],
+    exampleSimpleQuery: "number",
+    exampleSimpleQuery2: "boolean",
+  })
   list = async (
     req: Request,
     res: Response<IJSONSuccessResponse<AdminSerialization[]>>
