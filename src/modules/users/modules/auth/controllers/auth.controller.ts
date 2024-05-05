@@ -15,6 +15,7 @@ import { UsersAuthService } from "../services/users-auth.service";
 import { SwaggerPost } from "@lib/decorators/swagger-routes.decorator";
 import { SwaggerRequest } from "@lib/decorators/swagger-request.decorator";
 import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
+import { SwaggerSummary } from "@lib/decorators/swagger-summary.decorator";
 
 @Controller("/user/auth")
 export class UsersAuthController extends BaseController {
@@ -36,6 +37,7 @@ export class UsersAuthController extends BaseController {
   @SwaggerPost("/register")
   @SwaggerRequest(userRegisterSchema)
   @SwaggerResponse(UserSerialization)
+  @SwaggerSummary("Register a new user")
   register = async (req: Request, res: Response) => {
     const user = await this.authService.register(req.body as IUserRegister);
 
@@ -50,6 +52,7 @@ export class UsersAuthController extends BaseController {
   @SwaggerPost("/login")
   @SwaggerRequest(loginValidationSchema)
   @SwaggerResponse(UserSerialization)
+  @SwaggerSummary("Login a user")
   login = async (req: Request, res: Response): Promise<Response> => {
     const { user, token } = await this.authService.login(req.body);
 
