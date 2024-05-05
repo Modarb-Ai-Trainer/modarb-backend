@@ -121,6 +121,8 @@ class SwaggerRegistry {
 
       controllerData.routes.forEach((route) => {
         route.path = `/api/v1${controllerData.prefix}${route.path}`;
+        const params = route.path.match(/:(\w+)/g);
+        console.log(route.path, params);
 
         if (!paths[route.path]) {
           paths[route.path] = {};
@@ -135,6 +137,19 @@ class SwaggerRegistry {
           tags: [...(controllerData.tags || []), ...(route.tags || [])],
           summary: route.summary,
           description: route.description,
+          parameters:
+            (params &&
+              params.map((param) => {
+                return {
+                  name: param.replace(":", ""),
+                  in: "path",
+                  required: true,
+                  schema: {
+                    type: "string",
+                  },
+                };
+              })) ||
+            [],
           responses: {
             200: {
               description: "Success",
