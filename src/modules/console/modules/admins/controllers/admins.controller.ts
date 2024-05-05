@@ -26,6 +26,7 @@ import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
 import { SwaggerRequest } from "@lib/decorators/swagger-request.decorator";
 import { SwaggerSummary } from "@lib/decorators/swagger-summary.decorator";
 import { SwaggerDescription } from "@lib/decorators/swagger-description.decorator";
+import { SwaggerQuery } from "@lib/decorators/swagger-query.decorator";
 
 @Controller("/console/admins")
 @ControllerMiddleware(AdminGuardMiddleware({ roles: [Role.SUPER_ADMIN] }))
