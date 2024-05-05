@@ -3,7 +3,7 @@ import { JsonResponse } from "@lib/responses/json-response";
 import { Request, Response } from "express";
 import { asyncHandler } from "@helpers/async-handler";
 import { BaseController } from "@lib/controllers/controller.base";
-import { Controller } from "@lib/decorators/prefix.decorator";
+import { Controller } from "@lib/decorators/controller.decorator";
 import { serialize } from "@helpers/serialize";
 import { UserSerialization } from "@common/serializers/user.serialization";
 import { SwaggerPost } from "@lib/decorators/swagger-routes.decorator";

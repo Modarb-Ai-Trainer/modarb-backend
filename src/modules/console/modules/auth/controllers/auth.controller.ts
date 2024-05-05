@@ -2,7 +2,7 @@ import { asyncHandler } from "@helpers/async-handler";
 import { serialize } from "@helpers/serialize";
 import { bodyValidator } from "@helpers/validation.helper";
 import { BaseController } from "@lib/controllers/controller.base";
-import { Controller } from "@lib/decorators/prefix.decorator";
+import { Controller } from "@lib/decorators/controller.decorator";
 import { JsonResponse } from "@lib/responses/json-response";
 import { Request, Response } from "express";
 import { loginValidationSchema } from "modules/users/modules/auth/validation/login.validation";
