@@ -7,7 +7,7 @@ export const SwaggerRoute = (
 ) => {
   return (target: any, propertyKey: string) => {
     target.constructor['targetName'] = target.constructor.name + getCallingFileName()
-    swaggerRegistry.updateRoute(target.constructor.name + getCallingFileName(), {
+    swaggerRegistry.updateRoute(target.constructor['targetName'], {
       propertyKey,
       path,
       method,

@@ -5,7 +5,7 @@ import { parsePaginationQuery } from "@helpers/pagination";
 import { paramsValidator, bodyValidator } from "@helpers/validation.helper";
 import { asyncHandler } from "@helpers/async-handler";
 import { BaseController } from "@lib/controllers/controller.base";
-import { Controller } from "@lib/decorators/prefix.decorator";
+import { Controller } from "@lib/decorators/controller.decorator";
 import { serialize } from "@helpers/serialize";
 import { UserRegisteredWorkoutsSerialization } from "@common/serializers/user-registered-workout.serialization";
 import { ControllerMiddleware } from "@lib/decorators/controller-middleware.decorator";
