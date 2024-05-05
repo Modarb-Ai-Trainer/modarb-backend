@@ -12,6 +12,7 @@ import { ControllerMiddleware } from "@lib/decorators/controller-middleware.deco
 import { UsersGuardMiddleware } from "modules/users/common/guards/users.guard";
 import { SwaggerGet } from "@lib/decorators/swagger-routes.decorator";
 import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
+import { SwaggerSummary } from "@lib/decorators/swagger-summary.decorator";
 
 @Controller("/user/exercises")
 @ControllerMiddleware(UsersGuardMiddleware())
@@ -26,6 +27,7 @@ export class ExerciseController extends BaseController {
 
   @SwaggerGet()
   @SwaggerResponse([ExerciseSerialization])
+  @SwaggerSummary("List all exercises for the user")
   list = async (req: Request, res: Response): Promise<Response> => {
     const paginationQuery = parsePaginationQuery(req.query);
     const { docs, paginationData } = await this.exercisesService.list(
@@ -44,6 +46,7 @@ export class ExerciseController extends BaseController {
 
   @SwaggerGet("/:id")
   @SwaggerResponse(ExerciseSerialization)
+  @SwaggerSummary("Get a single exercise")
   get = async (req: Request, res: Response): Promise<Response> => {
     const data = await this.exercisesService.findOneOrFail({
       _id: req.params.id,
@@ -59,6 +62,7 @@ export class ExerciseController extends BaseController {
 
   @SwaggerGet()
   @SwaggerResponse([ExerciseSerialization])
+  @SwaggerSummary("Search for exercises")
   search = async (req: Request, res: Response): Promise<Response> => {
     const paginationQuery = parsePaginationQuery(req.query);
     let query = {};
