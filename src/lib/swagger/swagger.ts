@@ -13,7 +13,7 @@ class SwaggerRegistry {
         method?: "get" | "post" | "put" | "patch" | "delete";
         request?: any;
         response?: any;
-        query?: any;
+        queryParams?: any;
         description?: string;
         summary?: string;
         tags?: string[];
@@ -81,7 +81,7 @@ class SwaggerRegistry {
       method?: "get" | "post" | "put" | "patch" | "delete";
       request?: any;
       response?: any;
-      query?: any;
+      queryParams?: any;
       description?: string;
       summary?: string;
       tags?: string[];
@@ -137,8 +137,8 @@ class SwaggerRegistry {
           tags: [...(controllerData.tags || []), ...(route.tags || [])],
           summary: route.summary,
           description: route.description,
-          parameters:
-            (params &&
+          parameters: [
+            ...((params &&
               params.map((param) => {
                 return {
                   name: param.replace(":", ""),
@@ -149,7 +149,9 @@ class SwaggerRegistry {
                   },
                 };
               })) ||
-            [],
+              []),
+            ...(route.queryParams || []),
+          ],
           responses: {
             200: {
               description: "Success",
