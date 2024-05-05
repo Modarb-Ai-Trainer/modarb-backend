@@ -14,6 +14,7 @@ import {
   SwaggerGet,
   SwaggerPost,
 } from "@lib/decorators/swagger-routes.decorator";
+import { SwaggerSummary } from "@lib/decorators/swagger-summary.decorator";
 import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
 import { SwaggerRequest } from "@lib/decorators/swagger-request.decorator";
 import { createTemplatesSchema } from "../validations/create-templates.validation";
@@ -41,6 +42,7 @@ export class templateController extends BaseController {
 
   @SwaggerGet()
   @SwaggerResponse([TemplateSerialization])
+  @SwaggerSummary("List all templates for the user")
   list = async (req: userRequest, res: Response): Promise<Response> => {
     const paginationQuery = parsePaginationQuery(req.query);
     const { docs, paginationData } = await this.templatesService.list(
@@ -64,6 +66,7 @@ export class templateController extends BaseController {
 
   @SwaggerGet("/:id")
   @SwaggerResponse(TemplateSerialization)
+  @SwaggerSummary("Get a single template")
   get = async (req: userRequest, res: Response): Promise<Response> => {
     const data = await this.templatesService.findOneOrFail(
       {
@@ -87,6 +90,7 @@ export class templateController extends BaseController {
   @SwaggerPost()
   @SwaggerResponse(TemplateSerialization)
   @SwaggerRequest(createTemplatesSchema)
+  @SwaggerSummary("Create a new template plan")
   create = async (req: userRequest, res: Response) => {
     const data = await this.templatesService.create(req.body);
     return JsonResponse.success(

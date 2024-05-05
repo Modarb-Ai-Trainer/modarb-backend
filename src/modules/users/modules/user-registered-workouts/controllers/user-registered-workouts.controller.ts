@@ -16,6 +16,8 @@ import {
   SwaggerGet,
   SwaggerPost,
 } from "@lib/decorators/swagger-routes.decorator";
+import { SwaggerSummary } from "@lib/decorators/swagger-summary.decorator";
+import { SwaggerDescription } from "@lib/decorators/swagger-description.decorator";
 import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
 import { SwaggerRequest } from "@lib/decorators/swagger-request.decorator";
 
@@ -45,6 +47,7 @@ export class userRegisteredWorkoutsController extends BaseController {
 
   @SwaggerGet()
   @SwaggerResponse([UserRegisteredWorkoutsSerialization])
+  @SwaggerDescription("List all user registered workouts (workouts that the user had started)")
   list = async (req: userRequest, res: Response) => {
     const paginationQuery = parsePaginationQuery(req.query);
     const { docs, paginationData } =
@@ -70,6 +73,7 @@ export class userRegisteredWorkoutsController extends BaseController {
 
   @SwaggerGet("/:id")
   @SwaggerResponse(UserRegisteredWorkoutsSerialization)
+  @SwaggerDescription("Get a single workout from user registered workouts (workouts that the user had started)")
   get = async (req: userRequest, res: Response) => {
     const data = await this.userRegisteredWorkoutsService.findOneOrFail(
       { _id: req.params.id },
@@ -90,6 +94,7 @@ export class userRegisteredWorkoutsController extends BaseController {
 
   @SwaggerGet("/home/:userId")
   @SwaggerResponse(UserRegisteredWorkoutsSerialization)
+  @SwaggerSummary("Get the home page for the user")
   getHomePage = async (req: userRequest, res: Response) => {
     const data = await this.userRegisteredWorkoutsService.findOneOrFail(
       { user: req.params.userId },
@@ -112,6 +117,7 @@ export class userRegisteredWorkoutsController extends BaseController {
   @SwaggerPost()
   @SwaggerResponse(UserRegisteredWorkoutsSerialization)
   @SwaggerRequest(createUserRegisteredWorkoutsSchema)
+  @SwaggerSummary("Create a workout for the user")
   create = async (req: userRequest, res: Response) => {
     const data = await this.userRegisteredWorkoutsService.create(req.body);
     return JsonResponse.success(
