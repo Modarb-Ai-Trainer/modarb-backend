@@ -1,5 +1,6 @@
 import { Expose } from "class-transformer";
 import { SwaggerResponseProperty } from "@lib/decorators/swagger-response-property.decorator";
+import { IngredientSerialization } from "./ingredient.serialization";
 
 
 export class MealSerialization {
@@ -12,8 +13,8 @@ export class MealSerialization {
   created_at: Date;
 
   @Expose()
-  @SwaggerResponseProperty({ type: "string" })
-  ingredients: [string];
+  @SwaggerResponseProperty({ type: [IngredientSerialization] })
+  ingredients: any;
 
   @Expose()
   @SwaggerResponseProperty({ type: "number" })
