@@ -4,7 +4,7 @@ import { SwaggerResponseProperty } from "@lib/decorators/swagger-response-proper
 
 
 
-class Days {
+class MealDays {
   @Expose()
   @SwaggerResponseProperty({ type: "number" })
   day_number: number;
@@ -19,7 +19,7 @@ class Days {
 
 }
 
-export class WorkoutSerialization {
+export class UserRegisteredMealPlansSerialization {
   @Expose({ name: "_id" })
   @SwaggerResponseProperty({ type: "string" })
   id: string;
@@ -37,9 +37,9 @@ export class WorkoutSerialization {
   isActive: boolean;
 
   @Expose({ name: "days" })
-  @SwaggerResponseProperty({ type: [Days] })
+  @SwaggerResponseProperty({ type: [MealDays] })
   @Transform(
-    ({ value }) => serialize(value, Days)
+    ({ value }) => serialize(value, MealDays)
   )
   days: any;
 
