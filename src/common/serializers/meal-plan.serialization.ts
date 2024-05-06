@@ -3,17 +3,17 @@ import { serialize } from "@helpers/serialize";
 import { SwaggerResponseProperty } from "@lib/decorators/swagger-response-property.decorator";
 
 
-class Days {
+class MealPlanDays {
   @Expose()
   @SwaggerResponseProperty({ type: "string" })
   title: string;
 
   @Expose({ name: "meals" })
-  @SwaggerResponseProperty({ type: "string" })
-  meals: string;
+  @SwaggerResponseProperty({ type: {} })
+  meals: any;
 }
 
-class KeyFeatures {
+class MealPlanKeyFeatures {
   @Expose()
   @SwaggerResponseProperty({ type: "number" })
   day_number: number;
@@ -23,7 +23,7 @@ class KeyFeatures {
   description: any;
 }
 
-export class WorkoutSerialization {
+export class MealPlanSerialization {
   @Expose({ name: "_id" })
   @SwaggerResponseProperty({ type: "string" })
   id: string;
@@ -49,16 +49,16 @@ export class WorkoutSerialization {
   your_Journey: string;
 
   @Expose({ name: "key_Features" })
-  @SwaggerResponseProperty({ type: [KeyFeatures] })
+  @SwaggerResponseProperty({ type: [MealPlanKeyFeatures] })
   @Transform(
-    ({ value }) => serialize(value, KeyFeatures)
+    ({ value }) => serialize(value, MealPlanKeyFeatures)
   )
   key_Features: any;
 
   @Expose({ name: "days" })
-  @SwaggerResponseProperty({ type: [Days] })
+  @SwaggerResponseProperty({ type: [MealPlanDays] })
   @Transform(
-    ({ value }) => serialize(value, Days)
+    ({ value }) => serialize(value, MealPlanDays)
   )
   days: any;
 
