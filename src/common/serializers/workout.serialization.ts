@@ -4,7 +4,7 @@ import { SwaggerResponseProperty } from "@lib/decorators/swagger-response-proper
 
 
 
-class Days {
+class WorkoutDays {
   @Expose()
   @SwaggerResponseProperty({ type: "number" })
   day_number: number;
@@ -22,7 +22,7 @@ class Days {
   exercises: any;
 }
 
-class TemplateWeeks {
+class WorkoutTemplateWeeks {
   @Expose()
   @SwaggerResponseProperty({ type: "number" })
   week_number: number;
@@ -36,9 +36,9 @@ class TemplateWeeks {
   week_description: string;
 
   @Expose({ name: "days" })
-  @SwaggerResponseProperty({ type: [Days] })
+  @SwaggerResponseProperty({ type: [WorkoutDays] })
   @Transform(
-    ({ value }) => serialize(value, Days)
+    ({ value }) => serialize(value, WorkoutDays)
   )
   days: any;
 }
@@ -89,9 +89,9 @@ export class WorkoutSerialization {
   total_number_days: number;
 
   @Expose({ name: "template_weeks" })
-  @SwaggerResponseProperty({ type: [TemplateWeeks] })
+  @SwaggerResponseProperty({ type: [WorkoutTemplateWeeks] })
   @Transform(
-    ({ value }) => serialize(value, TemplateWeeks)
+    ({ value }) => serialize(value, WorkoutTemplateWeeks)
   )
   template_weeks: any;
 

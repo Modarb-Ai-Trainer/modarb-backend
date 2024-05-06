@@ -40,7 +40,7 @@ export class ExerciseSerialization {
   duration: number | null;
 
   @Expose({ name: "expectedDurationRange" })
-  @SwaggerResponseProperty({ type: {} })
+  @SwaggerResponseProperty({ type: ExpectedDurationRange })
   @Transform(({ value }) => serialize(value, ExpectedDurationRange))
   expectedDurationRange: object;
 
@@ -69,7 +69,7 @@ export class ExerciseSerialization {
   equipments: any;
 
   @Expose({ name: "media" })
-  @SwaggerResponseProperty({ type: {} })
+  @SwaggerResponseProperty({ type: Media })
   @Transform(({ value }) => serialize(value, Media))
   media: object;
 }

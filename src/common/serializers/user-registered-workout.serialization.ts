@@ -3,7 +3,7 @@ import { serialize } from "@helpers/serialize";
 import { SwaggerResponseProperty } from "@lib/decorators/swagger-response-property.decorator";
 import { ExerciseSerialization } from "./exercise.serialization";
 
-class Days {
+class MyWorkoutDays {
   @Expose()
   @SwaggerResponseProperty({ type: "number" })
   day_number: number;
@@ -25,7 +25,7 @@ class Days {
   is_done: Boolean;
 }
 
-class Weeks {
+class MyWorkoutWeeks {
   @Expose()
   @SwaggerResponseProperty({ type: "number" })
   week_number: number;
@@ -39,8 +39,8 @@ class Weeks {
   week_description: string;
 
   @Expose({ name: "days" })
-  @SwaggerResponseProperty({ type: [Days] })
-  @Transform(({ value }) => serialize(value, Days))
+  @SwaggerResponseProperty({ type: [MyWorkoutDays] })
+  @Transform(({ value }) => serialize(value, MyWorkoutDays))
   days: any;
 
   @Expose()
@@ -66,7 +66,7 @@ export class UserRegisteredWorkoutsSerialization {
   is_active: Boolean;
 
   @Expose({ name: "weeks" })
-  @SwaggerResponseProperty({ type: [Weeks] })
-  @Transform(({ value }) => serialize(value, Weeks))
+  @SwaggerResponseProperty({ type: [MyWorkoutWeeks] })
+  @Transform(({ value }) => serialize(value, MyWorkoutWeeks))
   weeks: any;
 }
