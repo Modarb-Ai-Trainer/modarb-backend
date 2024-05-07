@@ -11,6 +11,8 @@ import { AdminSerialization } from "modules/console/common/serializers/admin.ser
 import { SwaggerRequest } from "@lib/decorators/swagger-request.decorator";
 import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
 import { SwaggerPost } from "@lib/decorators/swagger-routes.decorator";
+import { SwaggerSummary } from "@lib/decorators/swagger-summary.decorator";
+import { SwaggerDescription } from "@lib/decorators/swagger-description.decorator";
 
 @Controller("/console/auth")
 export class ConsoleAuthController extends BaseController {
@@ -27,6 +29,8 @@ export class ConsoleAuthController extends BaseController {
   @SwaggerPost('/login')
   @SwaggerRequest(loginValidationSchema)
   @SwaggerResponse(AdminSerialization)
+  @SwaggerSummary("Login an admin")
+  @SwaggerDescription("Login an admin")
   login = async (req: Request, res: Response): Promise<Response> => {
     const { admin, token } = await this.authService.login(req.body);
 

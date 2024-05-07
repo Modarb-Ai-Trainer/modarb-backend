@@ -1,8 +1,10 @@
 import { Expose, Transform } from "class-transformer";
 import { serialize } from "@helpers/serialize";
+import { EquipmentSerialization } from "./muscle.serialization";
+import { MuscleSerialization } from "./equipment.serialization";
 import { SwaggerResponseProperty } from "@lib/decorators/swagger-response-property.decorator";
 
-class ExpectedDurationRange {
+class ExpectedDurationRangePopulate {
   @Expose()
   @SwaggerResponseProperty({ type: "number" })
   min: number;
@@ -12,7 +14,7 @@ class ExpectedDurationRange {
   max: number;
 }
 
-class Media {
+class MediaPopulate {
   @Expose()
   @SwaggerResponseProperty({ type: "string" })
   type: string;
@@ -22,17 +24,17 @@ class Media {
   url: string;
 }
 
-class TargetMuscles {
+class TargetMusclesPopulate {
   @Expose()
-  @SwaggerResponseProperty({ type: "string" })
+  @SwaggerResponseProperty({ type: MuscleSerialization })
   primary: string;
 
   @Expose()
-  @SwaggerResponseProperty({ type: "string" })
+  @SwaggerResponseProperty({ type: MuscleSerialization })
   secondary: string;
 }
 
-export class ExerciseSerialization {
+export class ExercisePopulateSerialization {
   @Expose({ name: "_id" })
   @SwaggerResponseProperty({ type: "string" })
   id: string;
@@ -50,8 +52,8 @@ export class ExerciseSerialization {
   duration: number | null;
 
   @Expose({ name: "expectedDurationRange" })
-  @SwaggerResponseProperty({ type: ExpectedDurationRange })
-  @Transform(({ value }) => serialize(value, ExpectedDurationRange))
+  @SwaggerResponseProperty({ type: ExpectedDurationRangePopulate })
+  @Transform(({ value }) => serialize(value, ExpectedDurationRangePopulate))
   expectedDurationRange: object;
 
   @Expose()
@@ -71,15 +73,15 @@ export class ExerciseSerialization {
   benefits: string;
 
   @Expose()
-  @SwaggerResponseProperty({ type: [TargetMuscles] })
+  @SwaggerResponseProperty({ type: [TargetMusclesPopulate] })
   targetMuscles: any;
 
   @Expose()
-  @SwaggerResponseProperty({ type: ["string"] })
+  @SwaggerResponseProperty({ type: [EquipmentSerialization] })
   equipments: any;
 
   @Expose({ name: "media" })
-  @SwaggerResponseProperty({ type: Media })
-  @Transform(({ value }) => serialize(value, Media))
+  @SwaggerResponseProperty({ type: MediaPopulate })
+  @Transform(({ value }) => serialize(value, MediaPopulate))
   media: object;
 }

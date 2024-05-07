@@ -7,12 +7,13 @@ import { paramsValidator } from "@helpers/validation.helper";
 import { BaseController } from "@lib/controllers/controller.base";
 import { Controller } from "@lib/decorators/controller.decorator";
 import { serialize } from "@helpers/serialize";
-import { WorkoutSerialization } from "@common/serializers/workout.serialization";
+import { WorkoutSerializationPopulate } from "@common/serializers/workoutPopulate.serialization";
 import { ControllerMiddleware } from "@lib/decorators/controller-middleware.decorator";
 import { UsersGuardMiddleware } from "modules/users/common/guards/users.guard";
 import { SwaggerGet } from "@lib/decorators/swagger-routes.decorator";
 import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
 import { SwaggerSummary } from "@lib/decorators/swagger-summary.decorator";
+import { SwaggerDescription } from "@lib/decorators/swagger-description.decorator";
 
 
 @Controller("/user/workouts")
@@ -26,8 +27,9 @@ export class UsersWorkoutController extends BaseController {
   }
 
   @SwaggerGet()
-  @SwaggerResponse([WorkoutSerialization])
-  @SwaggerSummary("List all workouts for the user")
+  @SwaggerResponse([WorkoutSerializationPopulate])
+  @SwaggerSummary("List workouts")
+  @SwaggerDescription("List all workouts in the system")
   list = async (req: Request, res: Response): Promise<Response> => {
     const paginationQuery = parsePaginationQuery(req.query);
     const { docs, paginationData } = await this.workoutsService.list(
@@ -37,7 +39,7 @@ export class UsersWorkoutController extends BaseController {
 
     return JsonResponse.success(
       {
-        data: serialize(docs, WorkoutSerialization),
+        data: serialize(docs, WorkoutSerializationPopulate),
         meta: paginationData,
       },
       res
@@ -45,8 +47,9 @@ export class UsersWorkoutController extends BaseController {
   };
 
   @SwaggerGet("/:id")
-  @SwaggerResponse(WorkoutSerialization)
-  @SwaggerSummary("Get a single workout")
+  @SwaggerResponse(WorkoutSerializationPopulate)
+  @SwaggerSummary("Get  workout")
+  @SwaggerDescription("Get a single workout")
   get = async (req: Request, res: Response): Promise<Response> => {
     const data = await this.workoutsService.findOneOrFail(
       { _id: req.params.id },
@@ -58,7 +61,7 @@ export class UsersWorkoutController extends BaseController {
 
     return JsonResponse.success(
       {
-        data: serialize(data, WorkoutSerialization),
+        data: serialize(data, WorkoutSerializationPopulate),
       },
       res
     );

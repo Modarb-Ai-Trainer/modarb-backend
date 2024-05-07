@@ -1,19 +1,20 @@
 import { Expose, Transform } from "class-transformer";
 import { serialize } from "@helpers/serialize";
+import { MealSerialization } from './meal.serialization';
 import { SwaggerResponseProperty } from "@lib/decorators/swagger-response-property.decorator";
 
 
-class MealPlanDays {
+class MealPlanDaysPopulate {
   @Expose()
   @SwaggerResponseProperty({ type: "string" })
   title: string;
 
   @Expose({ name: "meals" })
-  @SwaggerResponseProperty({ type: ["string"] })
+  @SwaggerResponseProperty({ type: MealSerialization })
   meals: any;
 }
 
-class MealPlanKeyFeatures {
+class MealPlanKeyFeaturesPopulate {
   @Expose()
   @SwaggerResponseProperty({ type: "number" })
   day_number: number;
@@ -23,7 +24,7 @@ class MealPlanKeyFeatures {
   description: any;
 }
 
-export class MealPlanSerialization {
+export class MealPlanPopulateSerialization {
   @Expose({ name: "_id" })
   @SwaggerResponseProperty({ type: "string" })
   id: string;
@@ -49,16 +50,16 @@ export class MealPlanSerialization {
   your_Journey: string;
 
   @Expose({ name: "key_Features" })
-  @SwaggerResponseProperty({ type: [MealPlanKeyFeatures] })
+  @SwaggerResponseProperty({ type: [MealPlanKeyFeaturesPopulate] })
   @Transform(
-    ({ value }) => serialize(value, MealPlanKeyFeatures)
+    ({ value }) => serialize(value, MealPlanKeyFeaturesPopulate)
   )
   key_Features: any;
 
   @Expose({ name: "days" })
-  @SwaggerResponseProperty({ type: [MealPlanDays] })
+  @SwaggerResponseProperty({ type: [MealPlanDaysPopulate] })
   @Transform(
-    ({ value }) => serialize(value, MealPlanDays)
+    ({ value }) => serialize(value, MealPlanDaysPopulate)
   )
   days: any;
 
