@@ -15,6 +15,8 @@ import { MuscleSerialization } from "@common/serializers/equipment.serialization
 import { SwaggerRequest } from "@lib/decorators/swagger-request.decorator";
 import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
 import { SwaggerGet, SwaggerPost, SwaggerPatch, SwaggerDelete } from "@lib/decorators/swagger-routes.decorator";
+import { SwaggerSummary } from "@lib/decorators/swagger-summary.decorator";
+import { SwaggerDescription } from "@lib/decorators/swagger-description.decorator";
 
 @Controller("/console/muscles")
 @ControllerMiddleware(AdminGuardMiddleware({}))
@@ -42,6 +44,8 @@ export class MusclesController extends BaseController {
 
     @SwaggerGet()
     @SwaggerResponse([MuscleSerialization])
+    @SwaggerSummary("List muscles")
+    @SwaggerDescription("List all muscles in the system")
     list = async (req: Request, res: Response) => {
         const paginationQuery = parsePaginationQuery(req.query);
         const { docs, paginationData } = await this.musclesService.list(
@@ -60,6 +64,8 @@ export class MusclesController extends BaseController {
 
     @SwaggerGet('/:id')
     @SwaggerResponse(MuscleSerialization)
+    @SwaggerSummary("Get muscle")
+    @SwaggerDescription("Get muscle by id")
     get = async (req: Request, res: Response) => {
         const data = await this.musclesService.findOneOrFail({
             _id: req.params.id,
@@ -75,6 +81,8 @@ export class MusclesController extends BaseController {
     @SwaggerPost()
     @SwaggerRequest(createMusclechema)
     @SwaggerResponse(MuscleSerialization)
+    @SwaggerSummary("Create muscle")
+    @SwaggerDescription("Create a new muscle")
     create = async (req: Request, res: Response) => {
         const data = await this.musclesService.create(req.body);
         return JsonResponse.success(
@@ -89,6 +97,8 @@ export class MusclesController extends BaseController {
     @SwaggerPatch('/:id')
     @SwaggerRequest(updateMuscleSchema)
     @SwaggerResponse(MuscleSerialization)
+    @SwaggerSummary("Update muscle")
+    @SwaggerDescription("Update a muscle by id")
     update = async (req: Request, res: Response) => {
         const data = await this.musclesService.updateOne(
             { _id: req.params.id },
@@ -104,6 +114,8 @@ export class MusclesController extends BaseController {
 
     @SwaggerDelete('/:id')
     @SwaggerResponse(MuscleSerialization)
+    @SwaggerSummary("Delete muscle")
+    @SwaggerDescription("Delete a muscle by id")
     delete = async (req: Request, res: Response) => {
         const data = await this.musclesService.deleteOne({ _id: req.params.id });
         return JsonResponse.success(

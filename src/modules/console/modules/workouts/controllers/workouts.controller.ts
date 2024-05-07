@@ -10,6 +10,7 @@ import { BaseController } from "@lib/controllers/controller.base";
 import { Controller } from "@lib/decorators/controller.decorator";
 import { serialize } from "@helpers/serialize";
 import { WorkoutSerialization } from "@common/serializers/workout.serialization";
+import { WorkoutSerializationPopulate } from "@common/serializers/workoutPopulate.serialization";
 import { ControllerMiddleware } from "@lib/decorators/controller-middleware.decorator";
 import { AdminGuardMiddleware } from "modules/console/common/guards/admins.guard";
 import {
@@ -20,6 +21,8 @@ import {
 } from "@lib/decorators/swagger-routes.decorator";
 import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
 import { SwaggerRequest } from "@lib/decorators/swagger-request.decorator";
+import { SwaggerSummary } from "@lib/decorators/swagger-summary.decorator";
+import { SwaggerDescription } from "@lib/decorators/swagger-description.decorator";
 
 @Controller("/console/workouts")
 @ControllerMiddleware(AdminGuardMiddleware({}))
@@ -48,17 +51,22 @@ export class WorkoutController extends BaseController {
   }
 
   @SwaggerGet()
-  @SwaggerResponse([WorkoutSerialization])
+  @SwaggerResponse([WorkoutSerializationPopulate])
+  @SwaggerSummary("List workouts")
+  @SwaggerDescription("List all workouts in the system")
   list = async (req: Request, res: Response) => {
     const paginationQuery = parsePaginationQuery(req.query);
     const { docs, paginationData } = await this.workoutsService.list(
       {},
-      paginationQuery
+      paginationQuery,
+      {
+        populateArray: [{ path: "exercises" }],
+      }
     );
 
     return JsonResponse.success(
       {
-        data: serialize(docs, WorkoutSerialization),
+        data: serialize(docs, WorkoutSerializationPopulate),
         meta: paginationData,
       },
       res
@@ -66,14 +74,21 @@ export class WorkoutController extends BaseController {
   };
 
   @SwaggerGet("/:id")
-  @SwaggerResponse(WorkoutSerialization)
+  @SwaggerResponse(WorkoutSerializationPopulate)
+  @SwaggerSummary("Get workout")
+  @SwaggerDescription("Get workout by id")
   get = async (req: Request, res: Response) => {
-    const data = await this.workoutsService.findOneOrFail({
-      _id: req.params.id,
-    });
+    const data = await this.workoutsService.findOneOrFail(
+      {
+        _id: req.params.id,
+      },
+      {
+        populateArray: [{ path: "exercises" }],
+      }
+    );
     return JsonResponse.success(
       {
-        data: serialize(data.toJSON(), WorkoutSerialization),
+        data: serialize(data.toJSON(), WorkoutSerializationPopulate),
       },
       res
     );
@@ -82,6 +97,8 @@ export class WorkoutController extends BaseController {
   @SwaggerPost()
   @SwaggerResponse(WorkoutSerialization)
   @SwaggerRequest(createWorkoutSchema)
+  @SwaggerSummary("Create workout")
+  @SwaggerDescription("Create a new workout")
   create = async (req: Request, res: Response) => {
     const data = await this.workoutsService.create(req.body);
     return JsonResponse.success(
@@ -96,6 +113,8 @@ export class WorkoutController extends BaseController {
   @SwaggerPatch("/:id")
   @SwaggerResponse(WorkoutSerialization)
   @SwaggerRequest(updateWorkoutSchema)
+  @SwaggerSummary("Update workout")
+  @SwaggerDescription("Update a workout by id")
   update = async (req: Request, res: Response) => {
     const data = await this.workoutsService.updateOne(
       { _id: req.params.id },
@@ -111,6 +130,8 @@ export class WorkoutController extends BaseController {
 
   @SwaggerDelete("/:id")
   @SwaggerResponse(WorkoutSerialization)
+  @SwaggerSummary("Delete workout")
+  @SwaggerDescription("Delete a workout by id")
   delete = async (req: Request, res: Response) => {
     const data = await this.workoutsService.deleteOne({ _id: req.params.id });
     return JsonResponse.success(

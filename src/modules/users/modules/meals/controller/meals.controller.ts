@@ -1,5 +1,5 @@
 import { MealsService } from "../services/meals.service";
-import { MealSerialization } from "@common/serializers/meal.serialization";
+import { MealPopulateSerialization } from "@common/serializers/mealPopulate.serialization";
 import { Request, Response } from "express";
 import { JsonResponse } from "@lib/responses/json-response";
 import { parsePaginationQuery } from "@helpers/pagination";
@@ -25,9 +25,9 @@ export class UsersMealsController extends BaseController {
   }
 
   @SwaggerGet()
-  @SwaggerResponse([MealSerialization])
+  @SwaggerResponse([MealPopulateSerialization])
   @SwaggerSummary("list meals")
-  @SwaggerDescription("list meals")
+  @SwaggerDescription("List all meals")
   list = async (req: Request, res: Response) => {
     const paginationQuery = parsePaginationQuery(req.query);
     const { docs, paginationData } = await this.mealsService.list(
@@ -41,7 +41,7 @@ export class UsersMealsController extends BaseController {
 
     return JsonResponse.success(
       {
-        data: serialize(docs, MealSerialization),
+        data: serialize(docs, MealPopulateSerialization),
         meta: paginationData,
       },
       res

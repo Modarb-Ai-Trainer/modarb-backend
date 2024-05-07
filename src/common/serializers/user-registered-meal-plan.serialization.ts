@@ -10,7 +10,7 @@ class MealDays {
   day_number: number;
 
   @Expose({ name: "meals" })
-  @SwaggerResponseProperty({ type: {} })
+  @SwaggerResponseProperty({ type: ["string"] })
   meals: any;
 
   @Expose()

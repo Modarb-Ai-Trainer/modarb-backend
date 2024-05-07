@@ -1,8 +1,11 @@
 import { Expose, Transform } from "class-transformer";
 import { serialize } from "@helpers/serialize";
 import { SwaggerResponseProperty } from "@lib/decorators/swagger-response-property.decorator";
+import { ExerciseSerialization } from "./exercise.serialization";
+import { WorkoutSerialization } from "./workout.serialization";
 
-class MyWorkoutDays {
+
+class MyWorkoutDaysPopulate {
   @Expose()
   @SwaggerResponseProperty({ type: "number" })
   day_number: number;
@@ -16,7 +19,7 @@ class MyWorkoutDays {
   day_type: string;
 
   @Expose({ name: "exercises" })
-  @SwaggerResponseProperty({ type: ["string"] })
+  @SwaggerResponseProperty({ type: [ExerciseSerialization] })
   exercises: any;
 
   @Expose()
@@ -24,7 +27,7 @@ class MyWorkoutDays {
   is_done: Boolean;
 }
 
-class MyWorkoutWeeks {
+class MyWorkoutWeeksPopulate {
   @Expose()
   @SwaggerResponseProperty({ type: "number" })
   week_number: number;
@@ -38,8 +41,8 @@ class MyWorkoutWeeks {
   week_description: string;
 
   @Expose({ name: "days" })
-  @SwaggerResponseProperty({ type: [MyWorkoutDays] })
-  @Transform(({ value }) => serialize(value, MyWorkoutDays))
+  @SwaggerResponseProperty({ type: [MyWorkoutDaysPopulate] })
+  @Transform(({ value }) => serialize(value, MyWorkoutDaysPopulate))
   days: any;
 
   @Expose()
@@ -47,7 +50,7 @@ class MyWorkoutWeeks {
   is_done: Boolean;
 }
 
-export class UserRegisteredWorkoutsSerialization {
+export class UserRegisteredWorkoutsPopulateSerialization {
   @Expose({ name: "_id" })
   @SwaggerResponseProperty({ type: "string" })
   id: string;
@@ -57,7 +60,7 @@ export class UserRegisteredWorkoutsSerialization {
   user: string;
 
   @Expose()
-  @SwaggerResponseProperty({ type: "string" })
+  @SwaggerResponseProperty({ type: WorkoutSerialization })
   workout: string;
 
   @Expose()
@@ -65,9 +68,7 @@ export class UserRegisteredWorkoutsSerialization {
   is_active: Boolean;
 
   @Expose({ name: "weeks" })
-  @SwaggerResponseProperty({ type: [MyWorkoutWeeks] })
-  @Transform(({ value }) => serialize(value, MyWorkoutWeeks))
+  @SwaggerResponseProperty({ type: [MyWorkoutWeeksPopulate] })
+  @Transform(({ value }) => serialize(value, MyWorkoutWeeksPopulate))
   weeks: any;
 }
-
-
