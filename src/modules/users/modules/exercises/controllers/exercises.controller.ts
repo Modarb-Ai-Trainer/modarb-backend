@@ -14,6 +14,7 @@ import { SwaggerGet } from "@lib/decorators/swagger-routes.decorator";
 import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
 import { SwaggerSummary } from "@lib/decorators/swagger-summary.decorator";
 import { SwaggerDescription } from "@lib/decorators/swagger-description.decorator";
+import { SwaggerQuery } from "@lib/decorators/swagger-query.decorator";
 
 @Controller("/user/exercises")
 @ControllerMiddleware(UsersGuardMiddleware())
@@ -30,6 +31,10 @@ export class UsersExerciseController extends BaseController {
   @SwaggerResponse([ExercisePopulateSerialization])
   @SwaggerSummary("List exercises")
   @SwaggerDescription("List all exercises")
+  @SwaggerQuery({
+    limit: "number",
+    
+  })
   list = async (req: Request, res: Response): Promise<Response> => {
     const paginationQuery = parsePaginationQuery(req.query);
     const { docs, paginationData } = await this.exercisesService.list(
@@ -79,7 +84,7 @@ export class UsersExerciseController extends BaseController {
     );
   };
 
-  @SwaggerGet()
+  @SwaggerGet('/search')
   @SwaggerResponse([ExercisePopulateSerialization])
   @SwaggerSummary("Search")
   @SwaggerDescription("Search for exercises")
