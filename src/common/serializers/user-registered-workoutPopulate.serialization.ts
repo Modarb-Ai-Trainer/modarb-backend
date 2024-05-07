@@ -3,6 +3,7 @@ import { serialize } from "@helpers/serialize";
 import { SwaggerResponseProperty } from "@lib/decorators/swagger-response-property.decorator";
 import { ExerciseSerialization } from "./exercise.serialization";
 import { WorkoutSerialization } from "./workout.serialization";
+import { UserSerialization } from "./user.serialization";
 
 
 class MyWorkoutDaysPopulate {
@@ -58,6 +59,31 @@ export class UserRegisteredWorkoutsPopulateSerialization {
   @Expose()
   @SwaggerResponseProperty({ type: "string" })
   user: string;
+
+  @Expose()
+  @SwaggerResponseProperty({ type: WorkoutSerialization })
+  workout: string;
+
+  @Expose()
+  @SwaggerResponseProperty({ type: "boolean" })
+  is_active: Boolean;
+
+  @Expose({ name: "weeks" })
+  @SwaggerResponseProperty({ type: [MyWorkoutWeeksPopulate] })
+  @Transform(({ value }) => serialize(value, MyWorkoutWeeksPopulate))
+  weeks: any;
+}
+
+
+
+export class UserRegisteredWorkoutsPopulateUserSerialization {
+  @Expose({ name: "_id" })
+  @SwaggerResponseProperty({ type: "string" })
+  id: string;
+
+  @Expose()
+  @SwaggerResponseProperty({ type: UserSerialization })
+  user: any;
 
   @Expose()
   @SwaggerResponseProperty({ type: WorkoutSerialization })
