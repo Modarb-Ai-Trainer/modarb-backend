@@ -8,7 +8,7 @@ import { BaseController } from "@lib/controllers/controller.base";
 import { Controller } from "@lib/decorators/controller.decorator";
 import { serialize } from "@helpers/serialize";
 import { UserRegisteredWorkoutsSerialization } from "@common/serializers/user-registered-workout.serialization";
-import { UserRegisteredMealPlansPopulateSerialization, UserRegisteredMealPlansPopulateUserSerialization } from "@common/serializers/user-registered-meal-planPopulate.serialization";
+import { UserRegisteredWorkoutsPopulateSerialization, UserRegisteredWorkoutsPopulateUserSerialization } from "@common/serializers/user-registered-workoutPopulate.serialization";
 import { ControllerMiddleware } from "@lib/decorators/controller-middleware.decorator";
 import { UsersGuardMiddleware } from "modules/users/common/guards/users.guard";
 import { createUserRegisteredWorkoutsSchema } from "../validations/create-user-registered-workouts.validation";
@@ -47,7 +47,7 @@ export class userRegisteredWorkoutsController extends BaseController {
   }
 
   @SwaggerGet()
-  @SwaggerResponse([UserRegisteredMealPlansPopulateSerialization])
+  @SwaggerResponse([UserRegisteredWorkoutsPopulateSerialization])
   @SwaggerSummary("List my workouts")
   @SwaggerDescription("List all user registered workouts (workouts that the user had started)")
   list = async (req: userRequest, res: Response) => {
@@ -66,7 +66,7 @@ export class userRegisteredWorkoutsController extends BaseController {
 
     return JsonResponse.success(
       {
-        data: serialize(docs, UserRegisteredMealPlansPopulateSerialization),
+        data: serialize(docs, UserRegisteredWorkoutsPopulateSerialization),
         meta: paginationData,
       },
       res
@@ -74,7 +74,7 @@ export class userRegisteredWorkoutsController extends BaseController {
   };
 
   @SwaggerGet("/:id")
-  @SwaggerResponse(UserRegisteredMealPlansPopulateSerialization)
+  @SwaggerResponse(UserRegisteredWorkoutsPopulateSerialization)
   @SwaggerSummary("Get a workout")
   @SwaggerDescription("Get a single workout from user registered workouts (workouts that the user had started)")
   get = async (req: userRequest, res: Response) => {
@@ -89,18 +89,17 @@ export class userRegisteredWorkoutsController extends BaseController {
     );
     return JsonResponse.success(
       {
-        data: serialize(data.toJSON(), UserRegisteredMealPlansPopulateSerialization),
+        data: serialize(data.toJSON(), UserRegisteredWorkoutsPopulateSerialization),
       },
       res
     );
   };
 
   @SwaggerGet("/home/:userId")
-  @SwaggerResponse(UserRegisteredMealPlansPopulateUserSerialization)
+  @SwaggerResponse(UserRegisteredWorkoutsPopulateUserSerialization)
   @SwaggerSummary("Get home page")
   @SwaggerDescription("Get the home page for the user")
   getHomePage = async (req: userRequest, res: Response) => {
-    console.log(req.params);
     
     const data = await this.userRegisteredWorkoutsService.findOneOrFail(
       { user: req.params.userId },
@@ -114,7 +113,7 @@ export class userRegisteredWorkoutsController extends BaseController {
     );
     return JsonResponse.success(
       {
-        data: serialize(data.toJSON(), UserRegisteredMealPlansPopulateUserSerialization),
+        data: serialize(data.toJSON(), UserRegisteredWorkoutsPopulateUserSerialization),
       },
       res
     );
