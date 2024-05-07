@@ -1,10 +1,11 @@
 import { Expose, Transform } from "class-transformer";
 import { serialize } from "@helpers/serialize";
 import { SwaggerResponseProperty } from "@lib/decorators/swagger-response-property.decorator";
+import { ExerciseSerialization } from "./exercise.serialization";
 
 
 
-class WorkoutDays {
+class WorkoutDaysPopulate {
   @Expose()
   @SwaggerResponseProperty({ type: "number" })
   day_number: number;
@@ -18,11 +19,11 @@ class WorkoutDays {
   day_type: string;
 
   @Expose({ name: "exercises" })
-  @SwaggerResponseProperty({ type: ["string"] })
+  @SwaggerResponseProperty({ type: [ExerciseSerialization] })
   exercises: any;
 }
 
-class WorkoutTemplateWeeks {
+class WorkoutTemplateWeeksPopulate {
   @Expose()
   @SwaggerResponseProperty({ type: "number" })
   week_number: number;
@@ -36,14 +37,14 @@ class WorkoutTemplateWeeks {
   week_description: string;
 
   @Expose({ name: "days" })
-  @SwaggerResponseProperty({ type: [WorkoutDays] })
+  @SwaggerResponseProperty({ type: [WorkoutDaysPopulate] })
   @Transform(
-    ({ value }) => serialize(value, WorkoutDays)
+    ({ value }) => serialize(value, WorkoutDaysPopulate)
   )
   days: any;
 }
 
-export class WorkoutSerialization {
+export class WorkoutSerializationPopulate {
   @Expose({ name: "_id" })
   @SwaggerResponseProperty({ type: "string" })
   id: string;
@@ -89,9 +90,9 @@ export class WorkoutSerialization {
   total_number_days: number;
 
   @Expose({ name: "template_weeks" })
-  @SwaggerResponseProperty({ type: [WorkoutTemplateWeeks] })
+  @SwaggerResponseProperty({ type: [WorkoutTemplateWeeksPopulate] })
   @Transform(
-    ({ value }) => serialize(value, WorkoutTemplateWeeks)
+    ({ value }) => serialize(value, WorkoutTemplateWeeksPopulate)
   )
   template_weeks: any;
 

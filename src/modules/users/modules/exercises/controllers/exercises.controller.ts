@@ -7,16 +7,17 @@ import { paramsValidator } from "@helpers/validation.helper";
 import { BaseController } from "@lib/controllers/controller.base";
 import { Controller } from "@lib/decorators/controller.decorator";
 import { serialize } from "@helpers/serialize";
-import { ExerciseSerialization } from "@common/serializers/exercise.serialization";
+import { ExercisePopulateSerialization } from "@common/serializers/exercisePopulate.serialization";
 import { ControllerMiddleware } from "@lib/decorators/controller-middleware.decorator";
 import { UsersGuardMiddleware } from "modules/users/common/guards/users.guard";
 import { SwaggerGet } from "@lib/decorators/swagger-routes.decorator";
 import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
 import { SwaggerSummary } from "@lib/decorators/swagger-summary.decorator";
+import { SwaggerDescription } from "@lib/decorators/swagger-description.decorator";
 
 @Controller("/user/exercises")
 @ControllerMiddleware(UsersGuardMiddleware())
-export class ExerciseController extends BaseController {
+export class UsersExerciseController extends BaseController {
   private exercisesService = new ExerciseService();
 
   setRoutes(): void {
@@ -26,18 +27,26 @@ export class ExerciseController extends BaseController {
   }
 
   @SwaggerGet()
-  @SwaggerResponse([ExerciseSerialization])
-  @SwaggerSummary("List all exercises for the user")
+  @SwaggerResponse([ExercisePopulateSerialization])
+  @SwaggerSummary("List exercises")
+  @SwaggerDescription("List all exercises")
   list = async (req: Request, res: Response): Promise<Response> => {
     const paginationQuery = parsePaginationQuery(req.query);
     const { docs, paginationData } = await this.exercisesService.list(
       {},
-      paginationQuery
+      paginationQuery,
+      {
+        populateArray: [
+          { path: "targetMuscles.primary" },
+          { path: "targetMuscles.primary" },
+          { path: "equipments" }
+        ]
+      }
     );
 
     return JsonResponse.success(
       {
-        data: serialize(docs, ExerciseSerialization),
+        data: serialize(docs, ExercisePopulateSerialization),
         meta: paginationData,
       },
       res
@@ -45,24 +54,35 @@ export class ExerciseController extends BaseController {
   };
 
   @SwaggerGet("/:id")
-  @SwaggerResponse(ExerciseSerialization)
-  @SwaggerSummary("Get a single exercise")
+  @SwaggerResponse(ExercisePopulateSerialization)
+  @SwaggerSummary("Get exercise")
+  @SwaggerDescription("Get a single exercise")
   get = async (req: Request, res: Response): Promise<Response> => {
-    const data = await this.exercisesService.findOneOrFail({
-      _id: req.params.id,
-    });
+    const data = await this.exercisesService.findOneOrFail(
+      {
+        _id: req.params.id,
+      },
+      {
+        populateArray: [
+          { path: "targetMuscles.primary" },
+          { path: "targetMuscles.primary" },
+          { path: "equipments" }
+        ]
+      }
+    );
 
     return JsonResponse.success(
       {
-        data: serialize(data, ExerciseSerialization),
+        data: serialize(data, ExercisePopulateSerialization),
       },
       res
     );
   };
 
   @SwaggerGet()
-  @SwaggerResponse([ExerciseSerialization])
-  @SwaggerSummary("Search for exercises")
+  @SwaggerResponse([ExercisePopulateSerialization])
+  @SwaggerSummary("Search")
+  @SwaggerDescription("Search for exercises")
   search = async (req: Request, res: Response): Promise<Response> => {
     const paginationQuery = parsePaginationQuery(req.query);
     let query = {};
@@ -101,12 +121,19 @@ export class ExerciseController extends BaseController {
 
     const { docs, paginationData } = await this.exercisesService.search(
       query,
-      paginationQuery
+      paginationQuery,
+      {
+        populateArray: [
+          { path: "targetMuscles.primary" },
+          { path: "targetMuscles.primary" },
+          { path: "equipments" }
+        ]
+      }
     );
 
     return JsonResponse.success(
       {
-        data: serialize(docs, ExerciseSerialization),
+        data: serialize(docs, ExercisePopulateSerialization),
         meta: paginationData,
       },
       res

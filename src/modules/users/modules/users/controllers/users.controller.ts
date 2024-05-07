@@ -12,6 +12,8 @@ import { ControllerMiddleware } from "@lib/decorators/controller-middleware.deco
 import { UsersGuardMiddleware } from "modules/users/common/guards/users.guard";
 import { SwaggerGet, SwaggerPut } from "@lib/decorators/swagger-routes.decorator";
 import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
+import { SwaggerSummary } from "@lib/decorators/swagger-summary.decorator";
+import { SwaggerDescription } from "@lib/decorators/swagger-description.decorator";
 
 @Controller("/users")
 @ControllerMiddleware(UsersGuardMiddleware())
@@ -26,6 +28,8 @@ export class UsersController extends BaseController {
 
     @SwaggerGet("/:id")
     @SwaggerResponse(UserSerialization)
+    @SwaggerSummary("Get my account")
+    @SwaggerDescription("Get a my account details")
     get = async (req: Request, res: Response): Promise<Response> => {
         const data = await this.userService.findOneOrFail({
             _id: req.params.id,
@@ -41,6 +45,8 @@ export class UsersController extends BaseController {
 
     @SwaggerPut("/:id")
     @SwaggerResponse(UserSerialization)
+    @SwaggerSummary("Update my account")
+    @SwaggerDescription("Update my account details")
     update = async (req: Request, res: Response): Promise<Response> => {
         const data = await this.userService.updateOne(
             {

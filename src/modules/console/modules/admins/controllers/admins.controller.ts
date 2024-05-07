@@ -26,7 +26,6 @@ import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
 import { SwaggerRequest } from "@lib/decorators/swagger-request.decorator";
 import { SwaggerSummary } from "@lib/decorators/swagger-summary.decorator";
 import { SwaggerDescription } from "@lib/decorators/swagger-description.decorator";
-import { SwaggerQuery } from "@lib/decorators/swagger-query.decorator";
 
 @Controller("/console/admins")
 @ControllerMiddleware(AdminGuardMiddleware({ roles: [Role.SUPER_ADMIN] }))
@@ -56,8 +55,8 @@ export class AdminsController extends BaseController {
 
   @SwaggerGet()
   @SwaggerResponse([AdminSerialization])
-  @SwaggerSummary("List all admins")
-  @SwaggerDescription("List all admins")
+  @SwaggerSummary("List admins")
+  @SwaggerDescription("List all admins in the system")
   list = async (
     req: Request,
     res: Response<IJSONSuccessResponse<AdminSerialization[]>>
@@ -79,8 +78,8 @@ export class AdminsController extends BaseController {
 
   @SwaggerGet("/:id")
   @SwaggerResponse(AdminSerialization)
-  @SwaggerSummary("Get admin by id")
-  @SwaggerDescription("Get admin by id")
+  @SwaggerSummary("Get admin")
+  @SwaggerDescription("Get an admin by id")
   get = async (
     req: Request<{ id: string }>,
     res: Response<IJSONSuccessResponse<AdminSerialization>>
@@ -121,7 +120,7 @@ export class AdminsController extends BaseController {
   @SwaggerResponse(AdminSerialization)
   @SwaggerRequest(createAdminSchema)
   @SwaggerSummary("Update admin")
-  @SwaggerDescription("Updates an admin")
+  @SwaggerDescription("Updates an admin by id")
   update = async (
     req: Request<{ id: string }, {}, ICreateAdmin>,
     res: Response<IJSONSuccessResponse<AdminSerialization>>
@@ -144,7 +143,7 @@ export class AdminsController extends BaseController {
   @SwaggerDelete("/:id")
   @SwaggerResponse(AdminSerialization)
   @SwaggerSummary("Delete admin")
-  @SwaggerDescription("Deletes an admin")
+  @SwaggerDescription("Delete an admin by id")
   delete = async (
     req: Request<{ id: string }>,
     res: Response<IJSONSuccessResponse<AdminSerialization>>

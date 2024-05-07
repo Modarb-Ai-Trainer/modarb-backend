@@ -11,10 +11,13 @@ import { AdminGuardMiddleware } from "modules/console/common/guards/admins.guard
 import { MealPlansService } from "../services/meal-plans.service";
 import { CreateMealPlan } from "../validations/create-meal-plan.validation";
 import { UpdateMealPlan } from "../validations/update-meal-plan.validation";
-import { MealPlanSerialization } from "@common/serializers/meal-plan.serialization"; 
+import { MealPlanSerialization } from "@common/serializers/meal-plan.serialization";
+import { MealPlanPopulateSerialization } from "@common/serializers/meal-planPopulate.serialization";
 import { SwaggerRequest } from "@lib/decorators/swagger-request.decorator";
 import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
 import { SwaggerGet, SwaggerPost, SwaggerPatch, SwaggerDelete } from "@lib/decorators/swagger-routes.decorator";
+import { SwaggerSummary } from "@lib/decorators/swagger-summary.decorator";
+import { SwaggerDescription } from "@lib/decorators/swagger-description.decorator";
 
 @Controller("/console/mealPlans")
 @ControllerMiddleware(AdminGuardMiddleware({}))
@@ -41,12 +44,19 @@ export class AdminsMealPlansController extends BaseController {
     }
 
     @SwaggerGet()
-    @SwaggerResponse([MealPlanSerialization])
+    @SwaggerResponse([MealPlanPopulateSerialization])
+    @SwaggerSummary("List meal plans")
+    @SwaggerDescription("List all meal plans in the system")
     list = async (req: Request, res: Response) => {
         const paginationQuery = parsePaginationQuery(req.query);
         const { docs, paginationData } = await this.mealPlansService.list(
             {},
-            paginationQuery
+            paginationQuery,
+            {
+                populateArray: [
+                    { path: "days.meals" }
+                ],
+            }
         );
 
         return JsonResponse.success(
@@ -59,11 +69,20 @@ export class AdminsMealPlansController extends BaseController {
     };
 
     @SwaggerGet('/:id')
-    @SwaggerResponse(MealPlanSerialization)
+    @SwaggerResponse(MealPlanPopulateSerialization)
+    @SwaggerSummary('Get meal plan')
+    @SwaggerDescription('Get meal plan by id')
     get = async (req: Request, res: Response) => {
-        const data = await this.mealPlansService.findOneOrFail({
-            _id: req.params.id,
-        });
+        const data = await this.mealPlansService.findOneOrFail(
+            {
+                _id: req.params.id,
+            },
+            {
+                populateArray: [
+                    { path: "days.meals" }
+                ],
+            }
+        );
         return JsonResponse.success(
             {
                 data: serialize(data.toJSON(), MealPlanSerialization),
@@ -75,6 +94,8 @@ export class AdminsMealPlansController extends BaseController {
     @SwaggerPost()
     @SwaggerRequest(CreateMealPlan)
     @SwaggerResponse(MealPlanSerialization)
+    @SwaggerSummary('Create meal plan')
+    @SwaggerDescription('Create a new meal plan')
     create = async (req: Request, res: Response) => {
         const data = await this.mealPlansService.create(req.body);
         return JsonResponse.success(
@@ -89,6 +110,8 @@ export class AdminsMealPlansController extends BaseController {
     @SwaggerPatch('/:id')
     @SwaggerRequest(UpdateMealPlan)
     @SwaggerResponse(MealPlanSerialization)
+    @SwaggerSummary('Update meal plan')
+    @SwaggerDescription('Update a meal plan by id')
     update = async (req: Request, res: Response) => {
         const data = await this.mealPlansService.updateOne(
             { _id: req.params.id },
@@ -104,6 +127,8 @@ export class AdminsMealPlansController extends BaseController {
 
     @SwaggerDelete('/:id')
     @SwaggerResponse(MealPlanSerialization)
+    @SwaggerSummary('Delete meal plan')
+    @SwaggerDescription('Delete a meal plan by id')
     delete = async (req: Request, res: Response) => {
         const data = await this.mealPlansService.deleteOne({ _id: req.params.id });
         return JsonResponse.success(
