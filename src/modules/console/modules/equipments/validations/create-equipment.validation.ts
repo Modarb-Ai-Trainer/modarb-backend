@@ -6,7 +6,7 @@ export interface ICreateEquipment{
     image: string;
 }
 
-export const createEquipmentchema = createSchema<ICreateEquipment>({
+export const createEquipmentSchema = createSchema<ICreateEquipment>({
     name: joi.string().empty().required().messages({
         "string.base": "please enter a valid name",
         "any.required": "name is required",

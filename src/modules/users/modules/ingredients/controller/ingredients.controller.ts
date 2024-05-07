@@ -28,7 +28,7 @@ export class UsersIngredientsController extends BaseController {
   @SwaggerGet()
   @SwaggerResponse([IngredientSerialization])
   @SwaggerSummary("list ingredients")
-  @SwaggerDescription("list ingredients")
+  @SwaggerDescription("List all ingredients")
   list = async (req: Request, res: Response) => {
     const paginationQuery = parsePaginationQuery(req.query);
     const { docs, paginationData } = await this.ingredientsService.list(

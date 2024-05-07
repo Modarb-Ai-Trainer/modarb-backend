@@ -8,6 +8,8 @@ import { serialize } from "@helpers/serialize";
 import { UserSerialization } from "@common/serializers/user.serialization";
 import { SwaggerPost } from "@lib/decorators/swagger-routes.decorator";
 import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
+import { SwaggerSummary } from "@lib/decorators/swagger-summary.decorator";
+import { SwaggerDescription } from "@lib/decorators/swagger-description.decorator";
 
 @Controller("/console/users")
 export class AdminUsersController extends BaseController {
@@ -19,6 +21,8 @@ export class AdminUsersController extends BaseController {
 
   @SwaggerPost("/create")
   @SwaggerResponse(UserSerialization)
+  @SwaggerSummary("Create user")
+  @SwaggerDescription("Create a new user")
   create = async (req: Request, res: Response): Promise<Response> => {
     let user = await this.usersService.create(req.body);
 

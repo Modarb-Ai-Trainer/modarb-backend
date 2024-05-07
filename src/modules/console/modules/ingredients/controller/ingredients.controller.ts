@@ -15,6 +15,8 @@ import { IngredientSerialization } from "@common/serializers/ingredient.serializ
 import { SwaggerRequest } from "@lib/decorators/swagger-request.decorator";
 import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
 import { SwaggerGet, SwaggerPost, SwaggerPatch, SwaggerDelete } from "@lib/decorators/swagger-routes.decorator";
+import { SwaggerSummary } from "@lib/decorators/swagger-summary.decorator";
+import { SwaggerDescription } from "@lib/decorators/swagger-description.decorator";
 
 @Controller("/console/ingredients")
 @ControllerMiddleware(AdminGuardMiddleware({}))
@@ -42,6 +44,8 @@ export class AdminsIngredientsController extends BaseController {
 
     @SwaggerGet()
     @SwaggerResponse([IngredientSerialization])
+    @SwaggerSummary("List ingredients")
+    @SwaggerDescription("List all ingredients in the system")
     list = async (req: Request, res: Response) => {
         const paginationQuery = parsePaginationQuery(req.query);
         const { docs, paginationData } = await this.ingredientsService.list(
@@ -60,6 +64,8 @@ export class AdminsIngredientsController extends BaseController {
 
     @SwaggerGet('/:id')
     @SwaggerResponse(IngredientSerialization)
+    @SwaggerSummary('Get ingredient')
+    @SwaggerDescription('Get ingredient by id')
     get = async (req: Request, res: Response) => {
         const data = await this.ingredientsService.findOneOrFail({
             _id: req.params.id,
@@ -75,6 +81,8 @@ export class AdminsIngredientsController extends BaseController {
     @SwaggerPost()
     @SwaggerRequest(createIngredientsSchema)
     @SwaggerResponse(IngredientSerialization)
+    @SwaggerSummary('Create ingredient')
+    @SwaggerDescription('Create a new ingredient')
     create = async (req: Request, res: Response) => {
         const data = await this.ingredientsService.create(req.body);
         return JsonResponse.success(
@@ -89,6 +97,8 @@ export class AdminsIngredientsController extends BaseController {
     @SwaggerPatch('/:id')
     @SwaggerRequest(updateIngredientsSchema)
     @SwaggerResponse(IngredientSerialization)
+    @SwaggerSummary('Update ingredient')
+    @SwaggerDescription('Update an ingredient by id')
     update = async (req: Request, res: Response) => {
         const data = await this.ingredientsService.updateOne(
             { _id: req.params.id },
@@ -104,6 +114,8 @@ export class AdminsIngredientsController extends BaseController {
 
     @SwaggerDelete('/:id')
     @SwaggerResponse(IngredientSerialization)
+    @SwaggerSummary('Delete ingredient')
+    @SwaggerDescription('Delete an ingredient by id')
     delete = async (req: Request, res: Response) => {
         const data = await this.ingredientsService.deleteOne({ _id: req.params.id });
         return JsonResponse.success(

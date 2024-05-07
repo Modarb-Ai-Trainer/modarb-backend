@@ -1,5 +1,5 @@
 import { MealPlansService } from "../services/meal-plans.service";
-import { MealPlanSerialization } from "@common/serializers/meal-plan.serialization";
+import { MealPlanPopulateSerialization } from "@common/serializers/meal-planPopulate.serialization";
 import { Request, Response } from "express";
 import { JsonResponse } from "@lib/responses/json-response";
 import { parsePaginationQuery } from "@helpers/pagination";
@@ -25,9 +25,9 @@ export class UsersMealPlansController extends BaseController {
   }
 
   @SwaggerGet()
-  @SwaggerResponse([MealPlanSerialization])
+  @SwaggerResponse([MealPlanPopulateSerialization])
   @SwaggerSummary("list meal plans")
-  @SwaggerDescription("list meal plans")
+  @SwaggerDescription("List all meal plans")
   list = async (req: Request, res: Response) => {
     const paginationQuery = parsePaginationQuery(req.query);
     const { docs, paginationData } = await this.mealPlansService.list(
@@ -35,14 +35,14 @@ export class UsersMealPlansController extends BaseController {
       paginationQuery,
       {
         populateArray: [
-          { path: "days.meals", select: "name ingredients calories carbs proteins fats type" }
+          { path: "days.meals" }
         ],
       }
     );
 
     return JsonResponse.success(
       {
-        data: serialize(docs, MealPlanSerialization),
+        data: serialize(docs, MealPlanPopulateSerialization),
         meta: paginationData,
       },
       res

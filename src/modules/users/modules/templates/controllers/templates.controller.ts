@@ -8,6 +8,7 @@ import { BaseController } from "@lib/controllers/controller.base";
 import { Controller } from "@lib/decorators/controller.decorator";
 import { serialize } from "@helpers/serialize";
 import { TemplateSerialization } from "@common/serializers/template.serialization";
+import { TemplatePopulateSerialization } from "@common/serializers/templatePopulate.serialization";
 import { ControllerMiddleware } from "@lib/decorators/controller-middleware.decorator";
 import { UsersGuardMiddleware } from "modules/users/common/guards/users.guard";
 import {
@@ -18,7 +19,7 @@ import { SwaggerSummary } from "@lib/decorators/swagger-summary.decorator";
 import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
 import { SwaggerRequest } from "@lib/decorators/swagger-request.decorator";
 import { createTemplatesSchema } from "../validations/create-templates.validation";
-import { updateTemplatesSchema } from "../validations/update-templates.validation";
+import { SwaggerDescription } from "@lib/decorators/swagger-description.decorator";
 
 
 interface userRequest extends Request {
@@ -41,8 +42,9 @@ export class templateController extends BaseController {
   }
 
   @SwaggerGet()
-  @SwaggerResponse([TemplateSerialization])
-  @SwaggerSummary("List all templates for the user")
+  @SwaggerResponse([TemplatePopulateSerialization])
+  @SwaggerSummary("List my custom plans")
+  @SwaggerDescription("List all custom plans created by the user logged in")
   list = async (req: userRequest, res: Response): Promise<Response> => {
     const paginationQuery = parsePaginationQuery(req.query);
     const { docs, paginationData } = await this.templatesService.list(
@@ -50,14 +52,14 @@ export class templateController extends BaseController {
       paginationQuery,
       {
         populateArray: [
-          { path: "exercises", select: "name duration reps sets" },
+          { path: "exercises" },
         ],
       }
     );
 
     return JsonResponse.success(
       {
-        data: serialize(docs, TemplateSerialization),
+        data: serialize(docs, TemplatePopulateSerialization),
         meta: paginationData,
       },
       res
@@ -65,8 +67,9 @@ export class templateController extends BaseController {
   };
 
   @SwaggerGet("/:id")
-  @SwaggerResponse(TemplateSerialization)
-  @SwaggerSummary("Get a single template")
+  @SwaggerResponse(TemplatePopulateSerialization)
+  @SwaggerSummary("Get custom plan")
+  @SwaggerDescription("Get a single custom plan created by the user logged in")
   get = async (req: userRequest, res: Response): Promise<Response> => {
     const data = await this.templatesService.findOneOrFail(
       {
@@ -75,13 +78,13 @@ export class templateController extends BaseController {
       },
       {
         populateArray: [
-          { path: "exercises", select: "name duration reps sets" },
+          { path: "exercises" },
         ],
       });
 
     return JsonResponse.success(
       {
-        data: serialize(data, TemplateSerialization),
+        data: serialize(data, TemplatePopulateSerialization),
       },
       res
     );
@@ -90,7 +93,8 @@ export class templateController extends BaseController {
   @SwaggerPost()
   @SwaggerResponse(TemplateSerialization)
   @SwaggerRequest(createTemplatesSchema)
-  @SwaggerSummary("Create a new template plan")
+  @SwaggerSummary("Create custom plan")
+  @SwaggerDescription("Create a new custom plan")
   create = async (req: userRequest, res: Response) => {
     const data = await this.templatesService.create(req.body);
     return JsonResponse.success(
