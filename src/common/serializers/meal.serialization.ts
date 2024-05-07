@@ -3,6 +3,10 @@ import { SwaggerResponseProperty } from "@lib/decorators/swagger-response-proper
 
 
 export class MealSerialization {
+  @Expose({ name: "_id" })
+  @SwaggerResponseProperty({ type: "string" })
+  id: string;
+  
   @Expose()
   @SwaggerResponseProperty({ type: "string" })
   name: string;
