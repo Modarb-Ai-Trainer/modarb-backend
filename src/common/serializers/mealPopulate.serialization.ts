@@ -4,6 +4,10 @@ import { IngredientSerialization } from "./ingredient.serialization";
 
 
 export class MealPopulateSerialization {
+  @Expose({ name: "_id" })
+  @SwaggerResponseProperty({ type: "string" })
+  id: string;
+  
   @Expose()
   @SwaggerResponseProperty({ type: "string" })
   name: string;
