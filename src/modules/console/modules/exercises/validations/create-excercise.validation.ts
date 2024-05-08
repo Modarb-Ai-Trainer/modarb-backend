@@ -13,8 +13,12 @@ export interface ICreateExercise {
   sets: number;
   instructions: string;
   benefits: string;
-  targetMuscles: string[]; // refs
+  targetMuscles: {
+    primary: string;
+    secondary: string;
+  };
   equipments: string[]; // refs
+  coverImage: string,
   media: {
     type: "image" | "video";
     url: string;

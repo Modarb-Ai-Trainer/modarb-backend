@@ -80,6 +80,10 @@ export class ExercisePopulateSerialization {
   @SwaggerResponseProperty({ type: [EquipmentSerialization] })
   equipments: any;
 
+  @Expose()
+  @SwaggerResponseProperty('string')
+  coverImage: string;
+
   @Expose({ name: "media" })
   @SwaggerResponseProperty({ type: MediaPopulate })
   @Transform(({ value }) => serialize(value, MediaPopulate))
