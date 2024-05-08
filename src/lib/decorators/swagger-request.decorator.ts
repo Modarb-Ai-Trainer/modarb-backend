@@ -3,12 +3,7 @@ import { getCallingFileName } from "@lib/utils/calling-file.helper";
 
 const parseToSchema = (schema: any, joiSchema: any) => {
   joiSchema = joiSchema.describe && joiSchema.describe().keys || joiSchema.keys || joiSchema;
-  let properties: any;
-  try {
-    properties = Object.getOwnPropertyNames(joiSchema);
-  } catch (error) {
-    console.log(joiSchema)
-  }
+  const properties = Object.getOwnPropertyNames(joiSchema);
   properties.forEach((property) => {
     const type = joiSchema[property].type;
     if (type === "object") {
