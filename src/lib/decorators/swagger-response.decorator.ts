@@ -54,10 +54,15 @@ const responseToSwaggerSchema = (response: any) => {
         );
         schema.properties[property].type = "array";
       } else {
-        schema.properties[property].items = {
-          type: schema.properties[property].type[0],
-        };
-        schema.properties[property].type = "array";
+        if(Array.isArray(schema.properties[property].type[0])){
+          schema.properties[property].enum = schema.properties[property].type[0]
+          schema.properties[property].type = "string";
+        }else{
+          schema.properties[property].items = {
+            type: schema.properties[property].type[0],
+          };
+          schema.properties[property].type = "array";
+        }
       }
     }
 

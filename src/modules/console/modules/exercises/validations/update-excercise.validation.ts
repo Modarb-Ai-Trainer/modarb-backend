@@ -13,8 +13,12 @@ export interface IUpdateExercise {
   sets?: number;
   instructions?: string;
   benefits?: string;
-  targetMuscles?: string[]; // refs
+  targetMuscles?: {
+    primary: string;
+    secondary: string;
+  };
   equipments?: string[]; // refs
+  coverImage?: string,
   media?: {
     type: "image" | "video";
     url: string;
@@ -63,13 +67,24 @@ export const updateExerciseSchema = createSchema<IUpdateExercise>({
     "any.required": "benefits is required",
     "string.empty": "benefits can not be empty",
   }),
-  targetMuscles: joi.array().items(joi.string()).empty().optional().messages({
-    "array.base": "please enter a valid target muscles",
-    "any.required": "target muscles is required",
+  targetMuscles: joi.object().keys({
+    primary: joi.string().empty().optional().messages({
+      "string.base": "please enter a valid primary muscle",
+      "any.required": "primary muscle is required",
+    }),
+    secondary: joi.string().empty().optional().messages({
+      "string.base": "please enter a valid secondary muscle",
+      "any.required": "secondary muscle is required",
+    }),
   }),
   equipments: joi.array().items(joi.string()).empty().optional().messages({
     "array.base": "please enter a valid equipments",
     "any.required": "equipments is required",
+  }),
+  coverImage: joi.string().empty().optional().messages({
+    "string.base": "please enter a valid cover image",
+    "any.required": "cover image is required",
+    "string.empty": "cover image can not be empty",
   }),
   media: joi.object().keys({
     type: joi.string().valid("image", "video").optional().messages({
