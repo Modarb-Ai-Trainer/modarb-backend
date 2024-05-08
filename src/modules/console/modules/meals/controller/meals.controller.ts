@@ -18,6 +18,7 @@ import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
 import { SwaggerGet, SwaggerPost, SwaggerPatch, SwaggerDelete } from "@lib/decorators/swagger-routes.decorator";
 import { SwaggerSummary } from "@lib/decorators/swagger-summary.decorator";
 import { SwaggerDescription } from "@lib/decorators/swagger-description.decorator";
+import { SwaggerQuery } from "@lib/decorators/swagger-query.decorator";
 
 @Controller("/console/meals")
 @ControllerMiddleware(AdminGuardMiddleware({}))
@@ -47,6 +48,10 @@ export class AdminsMealsController extends BaseController {
     @SwaggerResponse([MealPopulateSerialization])
     @SwaggerSummary("List meals")
     @SwaggerDescription("List all meals in the system")
+    @SwaggerQuery({
+        limit: "number",
+        skip: "number",
+      })
     list = async (req: Request, res: Response) => {
         const paginationQuery = parsePaginationQuery(req.query);
         const { docs, paginationData } = await this.mealsService.list(

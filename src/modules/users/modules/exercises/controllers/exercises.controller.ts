@@ -33,6 +33,7 @@ export class UsersExerciseController extends BaseController {
   @SwaggerDescription("List all exercises")
   @SwaggerQuery({
     limit: "number",
+    skip: "number",
   })
   list = async (req: Request, res: Response): Promise<Response> => {
     const paginationQuery = parsePaginationQuery(req.query);
@@ -91,7 +92,6 @@ export class UsersExerciseController extends BaseController {
     const paginationQuery = parsePaginationQuery(req.query);
     let query = {};
     let searchTerm = req.query.searchTerm;
-
     let isNum = !isNaN(parseInt(String(searchTerm)));
 
     if (isNum) {
@@ -106,6 +106,8 @@ export class UsersExerciseController extends BaseController {
     }
 
     else {
+      console.log(req.query);
+      
       if (req.query.filter === "category") {
         query = { category: { $regex: searchTerm, $options: "i" } };
       }

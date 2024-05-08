@@ -17,6 +17,7 @@ import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
 import { SwaggerGet, SwaggerPost, SwaggerPatch, SwaggerDelete } from "@lib/decorators/swagger-routes.decorator";
 import { SwaggerSummary } from "@lib/decorators/swagger-summary.decorator";
 import { SwaggerDescription } from "@lib/decorators/swagger-description.decorator";
+import { SwaggerQuery } from "@lib/decorators/swagger-query.decorator";
 
 @Controller("/console/ingredients")
 @ControllerMiddleware(AdminGuardMiddleware({}))
@@ -46,6 +47,10 @@ export class AdminsIngredientsController extends BaseController {
     @SwaggerResponse([IngredientSerialization])
     @SwaggerSummary("List ingredients")
     @SwaggerDescription("List all ingredients in the system")
+    @SwaggerQuery({
+        limit: "number",
+        skip: "number",
+      })
     list = async (req: Request, res: Response) => {
         const paginationQuery = parsePaginationQuery(req.query);
         const { docs, paginationData } = await this.ingredientsService.list(

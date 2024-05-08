@@ -13,6 +13,7 @@ import { SwaggerGet } from "@lib/decorators/swagger-routes.decorator";
 import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
 import { SwaggerSummary } from "@lib/decorators/swagger-summary.decorator";
 import { SwaggerDescription } from "@lib/decorators/swagger-description.decorator";
+import { SwaggerQuery } from "@lib/decorators/swagger-query.decorator";
 
 
 @Controller("/user/mealPlans")
@@ -28,6 +29,10 @@ export class UsersMealPlansController extends BaseController {
   @SwaggerResponse([MealPlanPopulateSerialization])
   @SwaggerSummary("list meal plans")
   @SwaggerDescription("List all meal plans")
+  @SwaggerQuery({
+    limit: "number",
+    skip: "number",
+  })
   list = async (req: Request, res: Response) => {
     const paginationQuery = parsePaginationQuery(req.query);
     const { docs, paginationData } = await this.mealPlansService.list(

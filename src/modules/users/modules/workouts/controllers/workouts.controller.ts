@@ -14,6 +14,7 @@ import { SwaggerGet } from "@lib/decorators/swagger-routes.decorator";
 import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
 import { SwaggerSummary } from "@lib/decorators/swagger-summary.decorator";
 import { SwaggerDescription } from "@lib/decorators/swagger-description.decorator";
+import { SwaggerQuery } from "@lib/decorators/swagger-query.decorator";
 
 
 @Controller("/user/workouts")
@@ -30,6 +31,10 @@ export class UsersWorkoutController extends BaseController {
   @SwaggerResponse([WorkoutSerializationPopulate])
   @SwaggerSummary("List workouts")
   @SwaggerDescription("List all workouts in the system")
+  @SwaggerQuery({
+    limit: "number",
+    skip: "number",
+  })
   list = async (req: Request, res: Response): Promise<Response> => {
     const paginationQuery = parsePaginationQuery(req.query);
     const { docs, paginationData } = await this.workoutsService.list(

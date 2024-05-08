@@ -20,6 +20,7 @@ import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
 import { SwaggerRequest } from "@lib/decorators/swagger-request.decorator";
 import { createTemplatesSchema } from "../validations/create-templates.validation";
 import { SwaggerDescription } from "@lib/decorators/swagger-description.decorator";
+import { SwaggerQuery } from "@lib/decorators/swagger-query.decorator";
 
 
 interface userRequest extends Request {
@@ -45,6 +46,10 @@ export class templateController extends BaseController {
   @SwaggerResponse([TemplatePopulateSerialization])
   @SwaggerSummary("my trainer --> custom workout")
   @SwaggerDescription("List all custom plans created by the user logged in")
+  @SwaggerQuery({
+    limit: "number",
+    skip: "number",
+  })
   list = async (req: userRequest, res: Response): Promise<Response> => {
     const paginationQuery = parsePaginationQuery(req.query);
     const { docs, paginationData } = await this.templatesService.list(
