@@ -43,7 +43,7 @@ export class templateController extends BaseController {
 
   @SwaggerGet()
   @SwaggerResponse([TemplatePopulateSerialization])
-  @SwaggerSummary("List my custom plans")
+  @SwaggerSummary("my trainer --> custom workout")
   @SwaggerDescription("List all custom plans created by the user logged in")
   list = async (req: userRequest, res: Response): Promise<Response> => {
     const paginationQuery = parsePaginationQuery(req.query);
