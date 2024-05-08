@@ -8,13 +8,16 @@ import { CrudService } from "@lib/services/crud.service";
 
 export class UsersAuthService extends CrudService(User) {
   async register(createParams: IUserRegister) {
+    if (createParams.password !== createParams.confirmPassword) {
+      throw new HttpError(400, "passwords do not match");
+    }
     return this.create(createParams);
   }
 
   async login(loginRequest: ILogin) {
     const user = await this.findOne({ email: loginRequest.email });
     if (!user) throw new HttpError(401, "Invalid Credentials");
-    
+
     const isPasswordCorrect = await bcrypt.compare(
       loginRequest.password,
       user.password
