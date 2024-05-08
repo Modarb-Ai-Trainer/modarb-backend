@@ -22,6 +22,7 @@ import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
 import { SwaggerRequest } from "@lib/decorators/swagger-request.decorator";
 import { SwaggerSummary } from "@lib/decorators/swagger-summary.decorator";
 import { SwaggerDescription } from "@lib/decorators/swagger-description.decorator";
+import { SwaggerQuery } from "@lib/decorators/swagger-query.decorator";
 @Controller("/console/equipments")
 @ControllerMiddleware(AdminGuardMiddleware({}))
 export class EquipmentsController extends BaseController {
@@ -52,6 +53,10 @@ export class EquipmentsController extends BaseController {
   @SwaggerResponse([EquipmentSerialization])
   @SwaggerSummary("List equipments")
   @SwaggerDescription("List all equipments in the system")
+  @SwaggerQuery({
+    limit: "number",
+    skip: "number",
+  })
   list = async (req: Request, res: Response) => {
     const paginationQuery = parsePaginationQuery(req.query);
     const { docs, paginationData } = await this.equipmentsService.list(
