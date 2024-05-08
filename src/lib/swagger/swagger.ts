@@ -206,7 +206,7 @@ class SwaggerRegistry {
       },
     };
 
-    console.log(JSON.stringify(document, null, 2));
+    //console.log(JSON.stringify(document, null, 2));
     return document;
   }
 }
