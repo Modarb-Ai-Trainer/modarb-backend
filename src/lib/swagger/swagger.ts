@@ -121,7 +121,9 @@ class SwaggerRegistry {
 
       controllerData.routes.forEach((route) => {
         route.path = `/api/v1${controllerData.prefix}${route.path}`;
-        const params = route.path.match(/:(\w+)/g);
+        // convert :param to {param}
+        route.path = route.path.replace(/:(\w+)/g, "{$1}");
+        const params = route.path.match(/{(\w+)}/g);
 
         if (!paths[route.path]) {
           paths[route.path] = {};
@@ -140,7 +142,7 @@ class SwaggerRegistry {
             ...((params &&
               params.map((param) => {
                 return {
-                  name: param.replace(":", ""),
+                  name: param.replace(/{|}/g, ""),
                   in: "path",
                   required: true,
                   schema: {
@@ -204,7 +206,7 @@ class SwaggerRegistry {
       },
     };
 
-    // console.log(JSON.stringify(document, null, 2));
+    //console.log(JSON.stringify(document, null, 2));
     return document;
   }
 }
