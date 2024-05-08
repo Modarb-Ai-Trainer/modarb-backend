@@ -18,6 +18,7 @@ export interface IExercise {
     secondary: ObjectId;
   }
   equipments: ObjectId[];
+  coverImage: string;
   media: {
     type: "image" | "video";
     url: string;
@@ -41,6 +42,7 @@ const exerciseSchema = new Schema({
     secondary: { type: Schema.Types.ObjectId, ref: "muscles" },
   },
   equipments: [{ type: Schema.Types.ObjectId, ref: "equipments" }],
+  coverImage: { type: String, required: true },
   media: {
     type: {
       type: String,

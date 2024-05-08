@@ -77,9 +77,13 @@ export class ExerciseSerialization {
   @Expose()
   @SwaggerResponseProperty({ type: ["string"] })
   equipments: any;
+  
+  @Expose()
+  @SwaggerResponseProperty('string')
+  coverImage: string;
 
   @Expose({ name: "media" })
   @SwaggerResponseProperty({ type: Media })
   @Transform(({ value }) => serialize(value, Media))
-  media: object;
+  media: Media;
 }
