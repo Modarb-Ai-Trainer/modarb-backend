@@ -47,7 +47,7 @@ export class UsersExerciseController extends BaseController {
           { path: "equipments" }
         ]
       }
-    );
+    );    
 
     return JsonResponse.success(
       {
