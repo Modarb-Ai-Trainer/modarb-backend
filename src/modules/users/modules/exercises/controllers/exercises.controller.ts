@@ -33,7 +33,6 @@ export class UsersExerciseController extends BaseController {
   @SwaggerDescription("List all exercises")
   @SwaggerQuery({
     limit: "number",
-    
   })
   list = async (req: Request, res: Response): Promise<Response> => {
     const paginationQuery = parsePaginationQuery(req.query);
@@ -60,7 +59,7 @@ export class UsersExerciseController extends BaseController {
 
   @SwaggerGet("/:id")
   @SwaggerResponse(ExercisePopulateSerialization)
-  @SwaggerSummary("Get exercise")
+  @SwaggerSummary("instructions-workout && target muscle-workout")
   @SwaggerDescription("Get a single exercise")
   get = async (req: Request, res: Response): Promise<Response> => {
     const data = await this.exercisesService.findOneOrFail(

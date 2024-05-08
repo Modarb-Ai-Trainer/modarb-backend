@@ -123,12 +123,14 @@ export const CrudService = <ModelDoc extends Document>(
     async findOneOrFail(
       filter: FilterQuery<ModelDoc>,
       options?: {
-        populateArray: any
+        populateArray?: any,
+        selectArray?: any
       }
     ): Promise<ModelDoc> {
       await this.existsOrThrow(filter);
       const queryInstruction = this.model.findOne(filter);
       if (options?.populateArray) queryInstruction.populate(options.populateArray);
+      if (options?.selectArray) queryInstruction.select(options.selectArray);
       const document = await queryInstruction;
       return document;
     }
