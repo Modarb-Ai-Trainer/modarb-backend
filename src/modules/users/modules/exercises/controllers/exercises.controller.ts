@@ -106,8 +106,6 @@ export class UsersExerciseController extends BaseController {
     }
 
     else {
-      console.log(req.query);
-      
       if (req.query.filter === "category") {
         query = { category: { $regex: searchTerm, $options: "i" } };
       }
