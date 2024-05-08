@@ -36,7 +36,7 @@ export const CrudService = <ModelDoc extends Document>(
     }
 
     async list(
-      filter: FilterQuery<ModelDoc>,
+      filter: FilterQuery<ModelDoc>, 
       paginationOptions: {
         limit?: number;
         skip?: number;
@@ -45,7 +45,8 @@ export const CrudService = <ModelDoc extends Document>(
           skip: 1,
         },
       options?: {
-        populateArray: any
+        populateArray?: any,
+        filterOptions?: any
       },
     ): Promise<{
       docs: ModelDoc[];
@@ -55,6 +56,7 @@ export const CrudService = <ModelDoc extends Document>(
         perPage: number;
       };
     }> {
+      if (options?.filterOptions) filter = { ...filter, ...options.filterOptions };
       const queryInstruction = this.model
         .find(filter)
         .limit(paginationOptions.limit)
