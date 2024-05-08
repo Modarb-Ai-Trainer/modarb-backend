@@ -14,6 +14,7 @@ import { SwaggerGet } from "@lib/decorators/swagger-routes.decorator";
 import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
 import { SwaggerSummary } from "@lib/decorators/swagger-summary.decorator";
 import { SwaggerDescription } from "@lib/decorators/swagger-description.decorator";
+import { SwaggerQuery } from "@lib/decorators/swagger-query.decorator";
 
 
 @Controller("/user/ingredients")
@@ -29,6 +30,10 @@ export class UsersIngredientsController extends BaseController {
   @SwaggerResponse([IngredientSerialization])
   @SwaggerSummary("list ingredients")
   @SwaggerDescription("List all ingredients")
+  @SwaggerQuery({
+    limit: "number",
+    skip: "number",
+  })
   list = async (req: Request, res: Response) => {
     const paginationQuery = parsePaginationQuery(req.query);
     const { docs, paginationData } = await this.ingredientsService.list(
