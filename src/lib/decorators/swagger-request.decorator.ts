@@ -6,14 +6,21 @@ const parseToSchema = (schema: any, joiSchema: any) => {
   const properties = Object.getOwnPropertyNames(joiSchema);
   properties.forEach((property) => {
     const type = joiSchema[property].type;
-    if (type === "object") {
+    if (type === "array") {
+      schema.properties[property] = {
+        type: "array",
+        items: {
+          type: joiSchema[property].items.type,
+        },
+      };
+    } else if (type === "object") {
       schema.properties[property] = {
         type: "object",
         properties: {},
       };
       parseToSchema(schema.properties[property], joiSchema[property]);
     } else {
-      schema.properties[property] = {type};
+      schema.properties[property] = { type };
     }
   });
 }

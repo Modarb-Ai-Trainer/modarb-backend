@@ -67,13 +67,26 @@ export const createExerciseSchema = createSchema<ICreateExercise>({
     "any.required": "benefits is required",
     "string.empty": "benefits can not be empty",
   }),
-  targetMuscles: joi.object().empty().required().messages({
-    "array.base": "please enter a valid target muscles",
-    "any.required": "target muscles is required",
+  targetMuscles: joi.object().keys({
+    primary: joi.string().empty().required().messages({
+      "string.base": "please enter a valid primary target muscle",
+      "any.required": "primary target muscle is required",
+      "string.empty": "primary target muscle can not be empty",
+    }),
+    secondary: joi.string().empty().required().messages({
+      "string.base": "please enter a valid secondary target muscle",
+      "any.required": "secondary target muscle is required",
+      "string.empty": "secondary target muscle can not be empty",
+    }),
   }),
   equipments: joi.array().items(joi.string()).empty().required().messages({
     "array.base": "please enter a valid equipments",
     "any.required": "equipments is required",
+  }),
+  coverImage: joi.string().empty().required().messages({
+    "string.base": "please enter a valid cover image",
+    "any.required": "cover image is required",
+    "string.empty": "cover image can not be empty",
   }),
   media: joi.object().keys({
     type: joi.string().valid("image", "video").required().messages({
