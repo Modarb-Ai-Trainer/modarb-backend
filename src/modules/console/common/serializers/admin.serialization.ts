@@ -27,11 +27,4 @@ export class AdminSerialization {
   @Expose()
   @SwaggerResponseProperty("string")
   gender: string;
-
-  @Expose({ name: "dob" })
-  @SwaggerResponseProperty("number")
-  @Transform(
-    ({ value }) => new Date().getFullYear() - new Date(value).getFullYear()
-  )
-  age: number;
 }

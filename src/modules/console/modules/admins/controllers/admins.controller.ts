@@ -8,6 +8,7 @@ import {
   ICreateAdmin,
   createAdminSchema,
 } from "../validations/create-admin.validation";
+import { updateAdminSchema } from "../validations/update-admin.validation";
 import { parsePaginationQuery } from "@helpers/pagination";
 import { JsonResponse } from "@lib/responses/json-response";
 import { ControllerMiddleware } from "@lib/decorators/controller-middleware.decorator";
@@ -38,13 +39,13 @@ export class AdminsController extends BaseController {
     this.router.get("/:id", paramsValidator("id"), asyncHandler(this.get));
     this.router.post(
       "/",
-
+      bodyValidator(createAdminSchema),
       this.create
     );
     this.router.patch(
       "/:id",
       paramsValidator("id"),
-      bodyValidator(createAdminSchema),
+      bodyValidator(updateAdminSchema),
       asyncHandler(this.update)
     );
     this.router.delete(
@@ -123,7 +124,7 @@ export class AdminsController extends BaseController {
 
   @SwaggerPatch("/:id")
   @SwaggerResponse(AdminSerialization)
-  @SwaggerRequest(createAdminSchema)
+  @SwaggerRequest(updateAdminSchema)
   @SwaggerSummary("Update admin")
   @SwaggerDescription("Updates an admin by id")
   update = async (
