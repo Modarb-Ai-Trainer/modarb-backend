@@ -78,7 +78,11 @@ export class userRegisteredWorkoutsController extends BaseController {
       {
         populateArray: [
           { path: "workout", select: ["-weeks"] },
-          { path: "weeks.days.exercises" },
+          { path: "weeks.days.exercises", populate: [
+            { path: "targetMuscles.primary" },
+            { path: "targetMuscles.secondary" },
+            { path: "equipments" }
+          ]}
         ],
       }
     );
