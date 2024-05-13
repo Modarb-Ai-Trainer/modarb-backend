@@ -1,13 +1,14 @@
-import { Expose } from "class-transformer";
+import { Expose, Transform } from "class-transformer";
 import { SwaggerResponseProperty } from "@lib/decorators/swagger-response-property.decorator";
 import { IngredientSerialization } from "./ingredient.serialization";
+import { serialize } from "@helpers/serialize";
 
 
 export class MealPopulateSerialization {
   @Expose({ name: "_id" })
   @SwaggerResponseProperty({ type: "string" })
   id: string;
-  
+
   @Expose()
   @SwaggerResponseProperty({ type: "string" })
   name: string;
@@ -18,6 +19,9 @@ export class MealPopulateSerialization {
 
   @Expose()
   @SwaggerResponseProperty({ type: [IngredientSerialization] })
+  @Transform(
+    ({ value }) => serialize(value, IngredientSerialization)
+  )
   ingredients: any;
 
   @Expose()

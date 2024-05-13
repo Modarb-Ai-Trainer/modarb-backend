@@ -70,7 +70,7 @@ export class UsersExerciseController extends BaseController {
       {
         populateArray: [
           { path: "targetMuscles.primary" },
-          { path: "targetMuscles.primary" },
+          { path: "targetMuscles.secondary" },
           { path: "equipments" }
         ]
       }
