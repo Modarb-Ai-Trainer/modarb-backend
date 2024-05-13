@@ -65,7 +65,7 @@ export class WorkoutController extends BaseController {
       {},
       paginationQuery,
       {
-        populateArray: [{ path: "exercises" }],
+        populateArray: [{ path: "template_weeks.days.exercises" }],
       }
     );
 
@@ -88,7 +88,7 @@ export class WorkoutController extends BaseController {
         _id: req.params.id,
       },
       {
-        populateArray: [{ path: "exercises" }],
+        populateArray: [{ path: "template_weeks.days.exercises" }],
       }
     );
     return JsonResponse.success(
