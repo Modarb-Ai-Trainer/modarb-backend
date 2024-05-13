@@ -5,11 +5,11 @@ import { seederWrapper } from "seeder/helpers/seeder-wrapper";
 export default seederWrapper(Admin, async () => {
   // create super admin
   await Admin.create({
+    name: "Super Admin",
     email: "super@app.com",
     password: "super",
-    role: Role.SUPER_ADMIN,
+    image: `https://placehold.co/300x400`,
     gender: "M1 Abrams Tank",
-    name: "Super Admin",
-    dob: new Date(),
+    role: Role.SUPER_ADMIN,
   });
 });
