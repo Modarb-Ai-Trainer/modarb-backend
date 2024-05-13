@@ -26,11 +26,11 @@ export interface IUser {
     fitness_goal: FitnessGoal;
     target_weight: number;
     workout_frequency: number;
-    preferred_days: [PreferredDay];
+    preferred_days: PreferredDay[];
     workout_place: WorkoutPlace;
-    preferred_equipment: [PreferredEquipment];
+    preferred_equipment: PreferredEquipment[];
   };
-  injuries: [Injury];
+  injuries: Injury[];
 }
 
 const userSchema = new Schema({
