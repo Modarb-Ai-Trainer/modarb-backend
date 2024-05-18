@@ -48,6 +48,10 @@ export class ExercisePopulateSerialization {
   category: string;
 
   @Expose()
+  @SwaggerResponseProperty({ type: "string" })
+  exerciseType: string;
+
+  @Expose()
   @SwaggerResponseProperty({ type: "number" })
   duration: number | null;
 

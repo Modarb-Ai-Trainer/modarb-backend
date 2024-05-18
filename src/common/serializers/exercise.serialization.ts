@@ -46,6 +46,10 @@ export class ExerciseSerialization {
   category: string;
 
   @Expose()
+  @SwaggerResponseProperty({ type: "string" })
+  exerciseType: string;
+
+  @Expose()
   @SwaggerResponseProperty({ type: "number" })
   duration: number | null;
 
