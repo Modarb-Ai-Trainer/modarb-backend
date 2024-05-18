@@ -1,3 +1,4 @@
+import { ExerciseType } from "@common/enums/exercise-type.enum";
 import mongoose, { ObjectId } from "mongoose";
 const { Schema } = mongoose;
 
@@ -5,12 +6,13 @@ export interface IExercise {
   name: string;
   category: string;
   duration?: number | null;
+  exerciseType: ExerciseType;
   expectedDurationRange: {
     min: number;
     max: number;
   };
-  reps: number;
-  sets: number;
+  reps?: number;
+  sets?: number;
   instructions: string;
   benefits: string;
   targetMuscles: {
@@ -25,16 +27,21 @@ export interface IExercise {
   };
 }
 
-const exerciseSchema = new Schema({
+const exerciseSchema = new Schema<IExercise>({
   name: { type: String, required: true, unique: true, dropDups: true },
   category: { type: String, required: true },
   duration: { type: Number, required: false },
+  exerciseType: {
+    type: String,
+    required: false,
+    enum: ExerciseType
+  },
   expectedDurationRange: {
     min: { type: Number, required: true },
     max: { type: Number, required: true },
   },
-  reps: { type: Number, required: true },
-  sets: { type: Number, required: true },
+  reps: { type: Number, required: false },
+  sets: { type: Number, required: false },
   instructions: { type: String, required: true },
   benefits: { type: String, required: true },
   targetMuscles: {

@@ -9,6 +9,18 @@
 
 import * as glob from "glob";
 import path from "path";
+import { loadExercisesDataset } from "./helpers/load-exercises-dataset";
+import { dbStore } from "./helpers/db-store";
+
+const loadDatasets = async() => {
+  const exercisesDataset = await loadExercisesDataset();
+  const musclesDataset = Array.from(new Set(exercisesDataset.map((exercise) => exercise.target)));
+  const equipmentsDataset = Array.from(new Set(exercisesDataset.map((exercise) => exercise.equipment)))
+  
+  dbStore.excerisesDataset = exercisesDataset;
+  dbStore.musclesDataset = musclesDataset;
+  dbStore.equipmentsDataset = equipmentsDataset;
+}
 
 const main = async () => {
   // get cli arguments
@@ -33,7 +45,11 @@ const main = async () => {
       }
 
       return seederNames.includes(path.basename(file));
-    });
+    })
+    .sort();
+
+  // load datasets
+  await loadDatasets();
 
   // run all seeders
   let count = 0;
