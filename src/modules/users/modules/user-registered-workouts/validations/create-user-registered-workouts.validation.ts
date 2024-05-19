@@ -3,26 +3,7 @@ import { createSchema } from "@helpers/create-schema";
 
 
 export interface ICreateUserRegisteredWorkouts {
-    user: string;
     workout: string;
-    is_active?: Boolean;
-    weeks: [
-        {
-            week_number: number;
-            week_name: string,
-            week_description: string,
-            is_done?: boolean,
-            days: [
-                {
-                    day_number: number,
-                    total_number_exercises: number,
-                    day_type: string,
-                    exercises: [string],
-                    is_done?: boolean,
-                },
-            ],
-        },
-    ]
 }
 
 export const createUserRegisteredWorkoutsSchema = createSchema<ICreateUserRegisteredWorkouts>({
