@@ -33,11 +33,21 @@ export class UsersIngredientsController extends BaseController {
   @SwaggerQuery({
     limit: "number",
     skip: "number",
+    filterName: "string",
+    filterVal: "string"
   })
   list = async (req: Request, res: Response) => {
     const paginationQuery = parsePaginationQuery(req.query);
+
+    let filterName = req.query.filterName, filterVal = req.query.filterVal;
+    let filter = {};
+
+    if (filterName && filterVal) {
+      filter[`${filterName}`] = filterVal;
+    }
+
     const { docs, paginationData } = await this.ingredientsService.list(
-      {},
+      filter,
       paginationQuery
     );
 
