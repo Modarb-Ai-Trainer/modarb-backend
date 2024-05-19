@@ -34,11 +34,21 @@ export class UsersExerciseController extends BaseController {
   @SwaggerQuery({
     limit: "number",
     skip: "number",
+    filterName: "string",
+    filterVal: "string"
   })
   list = async (req: Request, res: Response): Promise<Response> => {
     const paginationQuery = parsePaginationQuery(req.query);
+
+    let filterName = req.query.filterName, filterVal = req.query.filterVal;
+    let filter = {};
+
+    if (filterName && filterVal) {
+      filter[`${filterName}`] = filterVal;
+    }
+
     const { docs, paginationData } = await this.exercisesService.list(
-      {},
+      filter,
       paginationQuery,
       {
         populateArray: [
@@ -47,7 +57,7 @@ export class UsersExerciseController extends BaseController {
           { path: "equipments" }
         ]
       }
-    );    
+    );
 
     return JsonResponse.success(
       {
@@ -86,8 +96,12 @@ export class UsersExerciseController extends BaseController {
 
   @SwaggerGet('/search')
   @SwaggerResponse([ExercisePopulateSerialization])
-  @SwaggerSummary("Search")
-  @SwaggerDescription("Search for exercises")
+  @SwaggerSummary("Search for exercises")
+  @SwaggerDescription("You can use filters in search like category")
+  @SwaggerQuery({
+    searchTerm: "string",
+    filter: "string"
+  })
   search = async (req: Request, res: Response): Promise<Response> => {
     const paginationQuery = parsePaginationQuery(req.query);
     let query = {};
