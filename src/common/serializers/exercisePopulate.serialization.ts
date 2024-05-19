@@ -77,7 +77,7 @@ export class ExercisePopulateSerialization {
   benefits: string;
 
   @Expose()
-  @SwaggerResponseProperty({ type: [TargetMusclesPopulate] })
+  @SwaggerResponseProperty({ type: TargetMusclesPopulate })
   targetMuscles: any;
 
   @Expose()
