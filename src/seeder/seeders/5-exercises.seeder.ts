@@ -18,6 +18,7 @@ export default seederWrapper(Exercise, async () => {
         {
           reps: Math.floor(Math.random() * 10),
           sets: e.sets,
+          duration: 0,
         } 
         ||
         {
