@@ -12,7 +12,6 @@ import { MealPlansService } from "../services/meal-plans.service";
 import { CreateMealPlan } from "../validations/create-meal-plan.validation";
 import { UpdateMealPlan } from "../validations/update-meal-plan.validation";
 import { MealPlanSerialization } from "@common/serializers/meal-plan.serialization";
-import { MealPlanPopulateSerialization } from "@common/serializers/meal-planPopulate.serialization";
 import { SwaggerRequest } from "@lib/decorators/swagger-request.decorator";
 import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
 import { SwaggerGet, SwaggerPost, SwaggerPatch, SwaggerDelete } from "@lib/decorators/swagger-routes.decorator";
@@ -45,7 +44,7 @@ export class AdminsMealPlansController extends BaseController {
     }
 
     @SwaggerGet()
-    @SwaggerResponse([MealPlanPopulateSerialization])
+    @SwaggerResponse([MealPlanSerialization])
     @SwaggerSummary("List meal plans")
     @SwaggerDescription("List all meal plans in the system")
     @SwaggerQuery({
@@ -57,11 +56,6 @@ export class AdminsMealPlansController extends BaseController {
         const { docs, paginationData } = await this.mealPlansService.list(
             {},
             paginationQuery,
-            {
-                populateArray: [
-                    { path: "days.meals" }
-                ],
-            }
         );
 
         return JsonResponse.success(
@@ -74,7 +68,7 @@ export class AdminsMealPlansController extends BaseController {
     };
 
     @SwaggerGet('/:id')
-    @SwaggerResponse(MealPlanPopulateSerialization)
+    @SwaggerResponse(MealPlanSerialization)
     @SwaggerSummary('Get meal plan')
     @SwaggerDescription('Get meal plan by id')
     get = async (req: Request, res: Response) => {
@@ -82,11 +76,6 @@ export class AdminsMealPlansController extends BaseController {
             {
                 _id: req.params.id,
             },
-            {
-                populateArray: [
-                    { path: "days.meals" }
-                ],
-            }
         );
         return JsonResponse.success(
             {

@@ -12,7 +12,6 @@ import { MealsService } from "../services/meals.service";
 import { createMealSchema } from "../validations/create-meals.validation";
 import { updateMealSchema } from "../validations/update-meals.validation";
 import { MealSerialization } from "@common/serializers/meal.serialization";
-import { MealPopulateSerialization } from "@common/serializers/mealPopulate.serialization";
 import { SwaggerRequest } from "@lib/decorators/swagger-request.decorator";
 import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
 import { SwaggerGet, SwaggerPost, SwaggerPatch, SwaggerDelete } from "@lib/decorators/swagger-routes.decorator";
@@ -45,7 +44,7 @@ export class AdminsMealsController extends BaseController {
     }
 
     @SwaggerGet()
-    @SwaggerResponse([MealPopulateSerialization])
+    @SwaggerResponse([MealSerialization])
     @SwaggerSummary("List meals")
     @SwaggerDescription("List all meals in the system")
     @SwaggerQuery({
@@ -57,16 +56,11 @@ export class AdminsMealsController extends BaseController {
         const { docs, paginationData } = await this.mealsService.list(
             {},
             paginationQuery,
-            {
-                populateArray: [
-                    { path: "ingredients" }
-                ],
-            }
         );
 
         return JsonResponse.success(
             {
-                data: serialize(docs, MealPopulateSerialization),
+                data: serialize(docs, MealSerialization),
                 meta: paginationData,
             },
             res
@@ -74,7 +68,7 @@ export class AdminsMealsController extends BaseController {
     };
 
     @SwaggerGet('/:id')
-    @SwaggerResponse(MealPopulateSerialization)
+    @SwaggerResponse(MealSerialization)
     @SwaggerSummary('Get meal')
     @SwaggerDescription('Get meal by id')
     get = async (req: Request, res: Response) => {
@@ -82,15 +76,10 @@ export class AdminsMealsController extends BaseController {
             {
                 _id: req.params.id,
             },
-            {
-                populateArray: [
-                    { path: "ingredients" }
-                ],
-            }
         );
         return JsonResponse.success(
             {
-                data: serialize(data.toJSON(), MealPopulateSerialization),
+                data: serialize(data.toJSON(), MealSerialization),
             },
             res
         );

@@ -10,7 +10,6 @@ import { BaseController } from "@lib/controllers/controller.base";
 import { Controller } from "@lib/decorators/controller.decorator";
 import { serialize } from "@helpers/serialize";
 import { WorkoutSerialization } from "@common/serializers/workout.serialization";
-import { WorkoutSerializationPopulate } from "@common/serializers/workoutPopulate.serialization";
 import { ControllerMiddleware } from "@lib/decorators/controller-middleware.decorator";
 import { AdminGuardMiddleware } from "modules/console/common/guards/admins.guard";
 import {
@@ -52,7 +51,7 @@ export class WorkoutController extends BaseController {
   }
 
   @SwaggerGet()
-  @SwaggerResponse([WorkoutSerializationPopulate])
+  @SwaggerResponse([WorkoutSerialization])
   @SwaggerSummary("List workouts")
   @SwaggerDescription("List all workouts in the system")
   @SwaggerQuery({
@@ -64,14 +63,11 @@ export class WorkoutController extends BaseController {
     const { docs, paginationData } = await this.workoutsService.list(
       {},
       paginationQuery,
-      {
-        populateArray: [{ path: "template_weeks.days.exercises" }],
-      }
     );
 
     return JsonResponse.success(
       {
-        data: serialize(docs, WorkoutSerializationPopulate),
+        data: serialize(docs, WorkoutSerialization),
         meta: paginationData,
       },
       res
@@ -79,7 +75,7 @@ export class WorkoutController extends BaseController {
   };
 
   @SwaggerGet("/:id")
-  @SwaggerResponse(WorkoutSerializationPopulate)
+  @SwaggerResponse(WorkoutSerialization)
   @SwaggerSummary("Get workout")
   @SwaggerDescription("Get workout by id")
   get = async (req: Request, res: Response) => {
@@ -87,13 +83,10 @@ export class WorkoutController extends BaseController {
       {
         _id: req.params.id,
       },
-      {
-        populateArray: [{ path: "template_weeks.days.exercises" }],
-      }
     );
     return JsonResponse.success(
       {
-        data: serialize(data.toJSON(), WorkoutSerializationPopulate),
+        data: serialize(data.toJSON(), WorkoutSerialization),
       },
       res
     );

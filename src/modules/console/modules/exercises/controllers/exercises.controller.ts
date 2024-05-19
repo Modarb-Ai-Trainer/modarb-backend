@@ -8,7 +8,6 @@ import { Controller } from "@lib/decorators/controller.decorator";
 import { JsonResponse } from "@lib/responses/json-response";
 import { AdminGuardMiddleware } from "modules/console/common/guards/admins.guard";
 import { ExercisesService } from "../services/exercises.service";
-import { ExercisePopulateSerialization } from "@common/serializers/exercisePopulate.serialization";
 import { Request, Response } from "express";
 import { serialize } from "@helpers/serialize";
 import { createExerciseSchema } from "../validations/create-excercise.validation";
@@ -47,7 +46,7 @@ export class ExercisesController extends BaseController {
   }
 
   @SwaggerGet()
-  @SwaggerResponse([ExercisePopulateSerialization])
+  @SwaggerResponse([ExerciseSerialization])
   @SwaggerSummary("List exercises")
   @SwaggerDescription("List all exercises in the system")
   @SwaggerQuery({
@@ -59,13 +58,6 @@ export class ExercisesController extends BaseController {
     const { docs, paginationData } = await this.exercisesService.list(
       {},
       paginationQuery,
-      {
-        populateArray: [
-          { path: "targetMuscles.primary" },
-          { path: "targetMuscles.secondary" },
-          { path: "equipments" },
-        ],
-      }
     );
 
     return JsonResponse.success(
@@ -78,7 +70,7 @@ export class ExercisesController extends BaseController {
   };
 
   @SwaggerGet("/:id")
-  @SwaggerResponse(ExercisePopulateSerialization)
+  @SwaggerResponse(ExerciseSerialization)
   @SwaggerSummary("Get exercise")
   @SwaggerDescription("Get a single exercise by id")
   get = async (req: Request, res: Response) => {
@@ -86,13 +78,6 @@ export class ExercisesController extends BaseController {
       {
         _id: req.params.id,
       },
-      {
-        populateArray: [
-          { path: "targetMuscles.primary" },
-          { path: "targetMuscles.secondary" },
-          { path: "equipments" },
-        ],
-      }
     );
     return JsonResponse.success(
       {
