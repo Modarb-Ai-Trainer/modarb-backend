@@ -7,12 +7,26 @@ const parseToSchema = (schema: any, joiSchema: any) => {
   properties.forEach((property) => {
     const type = joiSchema[property].type;
     if (type === "array") {
-      schema.properties[property] = {
-        type: "array",
-        items: {
-          type: joiSchema[property].items.type,
-        },
-      };
+      const at = joiSchema[property].items[0].type;
+      // recursively parse array
+      if (at === "object" || at === "array") {
+        schema.properties[property] = {
+          type: "array",
+          items: {
+            type: "object",
+            properties: {},
+          },
+        };
+        parseToSchema(schema.properties[property].items, joiSchema[property].items[0]);
+      } else {
+        schema.properties[property] = {
+          type: "array",
+          items: {
+            type: at,
+          },
+        };
+      }
+
     } else if (type === "object") {
       schema.properties[property] = {
         type: "object",
