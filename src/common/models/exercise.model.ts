@@ -30,7 +30,7 @@ export interface IExercise {
 const exerciseSchema = new Schema<IExercise>({
   name: { type: String, required: true, unique: true, dropDups: true },
   category: { type: String, required: true },
-  duration: { type: Number, required: false },
+  duration: { type: Number, required: false, default: 0 },
   exerciseType: {
     type: String,
     required: false,
