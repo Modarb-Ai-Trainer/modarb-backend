@@ -11,7 +11,7 @@ export default seederWrapper(Exercise, async () => {
   const data = await Promise.all(dbStore.excerisesDataset.map(async function (e: IExerciseCSV) {
     return {
       name: e.name,
-      category: "unknown",
+      category: e.bodyPart,
       exerciseType: e.type,
       ...(
         e.type === ExerciseType.WEIGHT && 
