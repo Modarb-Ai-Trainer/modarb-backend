@@ -16,7 +16,7 @@ export interface Config {
 }
 
 export const config: Config = {
-  port: Env.get("PORT", 4000).toNumber(),
+  port: Env.get("PORT", 7860).toNumber(),
   host: Env.get("HOST", "http://localhost").toString(),
   db: {
     uri: Env.get("DB_URI").toString(),
