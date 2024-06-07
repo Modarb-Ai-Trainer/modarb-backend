@@ -20,7 +20,7 @@ RUN rm -f -- .env
 RUN npm run build
 
 # Set the PORT environment variable
-ENV PORT=3000
+ENV PORT=7860
 
 # Expose the port on which your application will run
 EXPOSE $PORT
