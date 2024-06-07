@@ -21,6 +21,9 @@ RUN npm run build
 
 # Set the PORT environment variable
 ENV PORT=7860
+ENV JWT_SECRET
+ENV JWT_EXPIRES_IN
+ENV DB_URI
 
 # Expose the port on which your application will run
 EXPOSE $PORT
