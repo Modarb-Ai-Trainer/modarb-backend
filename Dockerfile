@@ -17,7 +17,7 @@ COPY . .
 RUN rm -f -- .env
 
 # Build the TypeScript code
-RUN npm run build
+#RUN npm run build
 
 # Set the PORT environment variable
 ENV PORT=7860
@@ -29,4 +29,5 @@ ARG DB_URI
 EXPOSE $PORT
 
 # Command to run the application
-CMD ["node", "dist/index.js"]
+#CMD ["node", "dist/index.js"]
+CMD ["npm", "run", "start:dev"]
