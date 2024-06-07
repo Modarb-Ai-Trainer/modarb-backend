@@ -1,10 +1,7 @@
 ---
-title: {{title}}
-emoji: {{emoji}}
-colorFrom: {{colorFrom}}
-colorTo: {{colorTo}}
-sdk: {{sdk}}
-sdk_version: "{{sdkVersion}}"
-app_file: app.py
+title: modarb
+colorFrom: yellow
+colorTo: red
+sdk: docker
 pinned: false
 ---
