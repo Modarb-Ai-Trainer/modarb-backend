@@ -2,6 +2,7 @@ import { HomeStreakSerialization } from "../responses/home-streak.serialization"
 import { faker } from '@faker-js/faker';
 import { UserHomeYourDailyIntakeSerialization } from "../responses/user-home-your-daily-intake.serialization";
 import { UserHomeDailyGoalsSerialization } from "../responses/user-home-daily-goals.serialization";
+import { UserNutriHomeDailyGoalsSerialization } from "../responses/user-nutri-home-daily-goals.serialization";
 
 export class UserHomeService {
   private getDaysArray(startDate: Date, endDate: Date): string[] {
@@ -68,6 +69,17 @@ export class UserHomeService {
         day: day,
         points: faker.number.int({ min: 0, max: 100 }),
       })),
+    }
+  }
+
+  async getNutriHomeDailyGoals(userId: string): Promise<UserNutriHomeDailyGoalsSerialization> {
+    const sleepGoal = faker.number.int({ min:29, max: 100 })
+    const sleepDone = faker.number.int({ min:0, max: sleepGoal })
+
+    return {
+      ...(await this.getDailyGoals(userId)),
+      sleepGoal,
+      sleepDone,
     }
   }
 }
