@@ -19,6 +19,7 @@ import { queryValidator } from "@helpers/validation.helper";
 import { homeStreakQueryValidation } from "../validations/home-streak.query.validation";
 import { UserHomeService } from "../services/user-home.service";
 import { IUserRequest } from "@common/interfaces/user-request.interface";
+import { UserHomeYourDailyIntakeSerialization } from "../responses/user-home-your-daily-intake.serialization";
 
 
 @Controller("/user/homePage")
@@ -31,6 +32,7 @@ export class homePageController extends BaseController {
   setRoutes(): void {
     this.router.get("/", asyncHandler(this.getHomePage));
     this.router.get("/streak", queryValidator(homeStreakQueryValidation), asyncHandler(this.getHomePageStreak));
+    this.router.get("/your-daily-intake", asyncHandler(this.getHomePageYourDailyIntake));
   }
 
   @SwaggerGet('/streak')
@@ -59,6 +61,23 @@ export class homePageController extends BaseController {
     return JsonResponse.success(
       {
         data: serialize(streak, HomeStreakSerialization)
+      },
+      res
+    );
+  };
+
+  @SwaggerGet('/your-daily-intake')
+  @SwaggerResponse(UserHomeYourDailyIntakeSerialization)
+  @SwaggerSummary("Home Your Daily Intake")
+  @SwaggerDescription("Get home page your daily intake")
+  getHomePageYourDailyIntake = async (req: IUserRequest, res: Response) => {
+    // getting the daily intake
+    const dailyIntake = await this.userHomeService.getHomePageYourDailyIntake(req.jwtPayload.id);
+
+    // return response
+    return JsonResponse.success(
+      {
+        data: serialize(dailyIntake, UserHomeYourDailyIntakeSerialization)
       },
       res
     );
