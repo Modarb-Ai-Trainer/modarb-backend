@@ -4,7 +4,7 @@ import { MealType } from "@common/enums/meal-type.enum";
 export interface IMeal {
   name: string;
   created_at: Date;
-  ingredients: [string];
+  ingredients: string[];
   calories: number;
   carbs: number;
   proteins: number;
