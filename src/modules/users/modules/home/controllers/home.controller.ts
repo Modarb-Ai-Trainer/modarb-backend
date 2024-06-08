@@ -68,6 +68,7 @@ export class homePageController extends BaseController {
     );
   };
 
+
   @SwaggerGet('/your-daily-intake')
   @SwaggerResponse(UserHomeYourDailyIntakeSerialization)
   @SwaggerSummary("Home Your Daily Intake")
@@ -84,6 +85,7 @@ export class homePageController extends BaseController {
       res
     );
   };
+
 
   @SwaggerGet('/daily-goals')
   @SwaggerResponse(UserHomeDailyGoalsSerialization)
@@ -106,7 +108,6 @@ export class homePageController extends BaseController {
   @SwaggerSummary("Home")
   @SwaggerDescription("Get home page")
   getHomePage = async (req: IUserRequest, res: Response) => {
-
     const user = await this.userService.findOneOrFail(
       { _id: req.jwtPayload.id },
       { selectArray: ["preferences", "name", "fitness_level", "injuries"] }
@@ -134,5 +135,4 @@ export class homePageController extends BaseController {
       res
     );
   };
-
 }
