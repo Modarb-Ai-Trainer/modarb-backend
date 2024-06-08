@@ -118,7 +118,6 @@ class UserHome {
 }
 
 export class HomeSerialization {
-
   @Expose()
   @SwaggerResponseProperty({ type: UserHome })
   @Transform(({ value }) => serialize(value, UserHome))
