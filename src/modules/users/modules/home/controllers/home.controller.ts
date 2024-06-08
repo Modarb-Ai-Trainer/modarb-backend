@@ -20,6 +20,7 @@ import { homeStreakQueryValidation } from "../validations/home-streak.query.vali
 import { UserHomeService } from "../services/user-home.service";
 import { IUserRequest } from "@common/interfaces/user-request.interface";
 import { UserHomeYourDailyIntakeSerialization } from "../responses/user-home-your-daily-intake.serialization";
+import { UserHomeDailyGoalsSerialization } from "../responses/user-home-daily-goals.serialization";
 
 
 @Controller("/user/homePage")
@@ -33,6 +34,7 @@ export class homePageController extends BaseController {
     this.router.get("/", asyncHandler(this.getHomePage));
     this.router.get("/streak", queryValidator(homeStreakQueryValidation), asyncHandler(this.getHomePageStreak));
     this.router.get("/your-daily-intake", asyncHandler(this.getHomePageYourDailyIntake));
+    this.router.get("/daily-goals", asyncHandler(this.getHomePageDailyGoals));
   }
 
   @SwaggerGet('/streak')
@@ -82,6 +84,22 @@ export class homePageController extends BaseController {
       res
     );
   };
+
+  @SwaggerGet('/daily-goals')
+  @SwaggerResponse(UserHomeDailyGoalsSerialization)
+  @SwaggerSummary("Home Daily Goals")
+  @SwaggerDescription("Get daily goals for user home")
+  getHomePageDailyGoals = async (req: IUserRequest, res: Response) => {
+    const dailyGoals = await this.userHomeService.getDailyGoals(req.jwtPayload.id)
+
+    return JsonResponse.success(
+      {
+        data: serialize(dailyGoals, UserHomeDailyGoalsSerialization)
+      },
+      res
+    );
+  }
+  
 
   @SwaggerGet()
   @SwaggerResponse(HomeSerialization)
