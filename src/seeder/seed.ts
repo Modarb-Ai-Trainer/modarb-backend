@@ -11,15 +11,21 @@ import * as glob from "glob";
 import path from "path";
 import { loadExercisesDataset } from "./helpers/load-exercises-dataset";
 import { dbStore } from "./helpers/db-store";
+import { loadMealsDataset } from "./helpers/load-meals-dataset";
 
 const loadDatasets = async() => {
   const exercisesDataset = await loadExercisesDataset();
+  const mealsDataset = loadMealsDataset();
   const musclesDataset = Array.from(new Set(exercisesDataset.map((exercise) => exercise.target)));
-  const equipmentsDataset = Array.from(new Set(exercisesDataset.map((exercise) => exercise.equipment)))
+  const equipmentsDataset = Array.from(new Set(exercisesDataset.map((exercise) => exercise.equipment)));
+  const ingredientsArrays = mealsDataset.map(m=>m.RecipeIngredientParts);
+  const ingredientsNames = Array.from(new Set(ingredientsArrays.flat()))
   
   dbStore.excerisesDataset = exercisesDataset;
   dbStore.musclesDataset = musclesDataset;
   dbStore.equipmentsDataset = equipmentsDataset;
+  dbStore.mealsDataset = mealsDataset;
+  dbStore.ingredientsNames = ingredientsNames;
 }
 
 const main = async () => {
@@ -44,7 +50,7 @@ const main = async () => {
         return true;
       }
 
-      return seederNames.includes(path.basename(file));
+      return seederNames.some(name => path.basename(file).includes(name));
     })
     .sort();
 
