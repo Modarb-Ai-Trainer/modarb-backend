@@ -5,10 +5,10 @@ import { createSchema } from "@helpers/create-schema";
 export interface ICreateMealPlan {
   image: string;
   description: string;
-  Duration: number;
-  Level: FitnessLevel;
-  your_Journey: string;
-  key_Features: {
+  duration: number;
+  level: FitnessLevel;
+  your_journey: string;
+  key_features: {
     title: string;
     description: string;
   }[];
@@ -29,22 +29,22 @@ export const CreateMealPlanKeys = {
     "any.required": "description is required",
     "string.empty": "description can not be empty",
   }),
-  Duration: joi.number().empty().required().messages({
+  duration: joi.number().empty().required().messages({
     "number.base": "please enter a valid Duration",
     "any.required": "Duration is required",
     "number.empty": "Duration can not be empty",
   }),
-  Level: joi.string().empty().required().messages({
+  level: joi.string().empty().required().messages({
     "string.base": "please enter a valid Level",
     "any.required": "Level is required",
     "string.empty": "Level can not be empty",
   }),
-  your_Journey: joi.string().empty().required().messages({
+  your_journey: joi.string().empty().required().messages({
     "string.base": "please enter a valid your_Journey",
     "any.required": "your_Journey is required",
     "string.empty": "your_Journey can not be empty",
   }),
-  key_Features: joi.array().required().items(
+  key_features: joi.array().required().items(
     joi.object({
       title: joi.string().empty().required().messages({
         "string.base": "please enter a valid title",

@@ -6,10 +6,10 @@ import { UpdateUserRegisteredMealPlan } from "modules/users/modules/user-registe
 export interface IUpdateMealPlan {
   image?: string;
   description?: string;
-  Duration?: number;
-  Level?: FitnessLevel;
-  your_Journey?: string;
-  key_Features?: {
+  duration?: number;
+  level?: FitnessLevel;
+  your_journey?: string;
+  key_features?: {
     title?: string;
     description?: string;
   }[];
@@ -30,22 +30,22 @@ export const UpdateMealPlanKeys = {
     "any.required": "description is required",
     "string.empty": "description can not be empty",
   }),
-  Duration: joi.number().empty().optional().messages({
+  duration: joi.number().empty().optional().messages({
     "number.base": "please enter a valid Duration",
     "any.required": "Duration is required",
     "number.empty": "Duration can not be empty",
   }),
-  Level: joi.string().empty().optional().messages({
+  level: joi.string().empty().optional().messages({
     "string.base": "please enter a valid Level",
     "any.required": "Level is required",
     "string.empty": "Level can not be empty",
   }),
-  your_Journey: joi.string().empty().optional().messages({
+  your_journey: joi.string().empty().optional().messages({
     "string.base": "please enter a valid your_Journey",
     "any.required": "your_Journey is required",
     "string.empty": "your_Journey can not be empty",
   }),
-  key_Features: joi.array().optional().items(
+  key_features: joi.array().optional().items(
     joi.object({
       title: joi.string().empty().optional().messages({
         "string.base": "please enter a valid title",
