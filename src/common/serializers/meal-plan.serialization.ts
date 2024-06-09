@@ -38,22 +38,22 @@ export class MealPlanSerialization {
 
   @Expose()
   @SwaggerResponseProperty({ type: "string" })
-  Duration: string;
+  duration: string;
 
   @Expose()
   @SwaggerResponseProperty({ type: "string" })
-  Level: string;
+  level: string;
 
   @Expose()
   @SwaggerResponseProperty({ type: "string" })
-  your_Journey: string;
+  your_journey: string;
 
-  @Expose({ name: "key_Features" })
+  @Expose({ name: "key_features" })
   @SwaggerResponseProperty({ type: [MealPlanKeyFeatures] })
   @Transform(
     ({ value }) => serialize(value, MealPlanKeyFeatures)
   )
-  key_Features: any;
+  key_features: any;
 
   @Expose({ name: "days" })
   @SwaggerResponseProperty({ type: [MealPlanDays] })
