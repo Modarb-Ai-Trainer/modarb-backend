@@ -5,10 +5,10 @@ import { FitnessLevel } from "@common/enums/fitness-level.enum";
 export interface IMealPlan {
   image: string;
   description: string;
-  Duration: number;
-  Level: FitnessLevel;
-  your_Journey: string;
-  key_Features: {
+  duration: number;
+  level: FitnessLevel;
+  your_journey: string;
+  key_features: {
     title: string;
     description: string;
   }[];
@@ -19,12 +19,12 @@ export interface IMealPlan {
 }
 
 const mealPlanSchema = new Schema({
-  Image: { type: String, required: true },
+  image: { type: String, required: true },
   description: { type: String, required: true },
-  Duration: { type: Number, required: true },
-  Level: { type: String, enum: FitnessLevel, required: true },
-  your_Journey: { type: String, required: true },
-  key_Features: [{
+  duration: { type: Number, required: true },
+  level: { type: String, enum: FitnessLevel, required: true },
+  your_journey: { type: String, required: true },
+  key_features: [{
     title: { type: String, required: true },
     description: { type: String, required: true },
   }],
