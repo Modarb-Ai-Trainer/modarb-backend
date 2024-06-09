@@ -25,4 +25,14 @@ export class Env {
 
     return new EnvValue(value);
   }
+
+  static getOptional(key: string, defaultValue?: string | number | boolean): EnvValue {
+    const value = process.env[key] || defaultValue;
+
+    if (!value) {
+      return new EnvValue("");
+    }
+
+    return new EnvValue(value);
+  }
 }

@@ -186,7 +186,7 @@ class SwaggerRegistry {
       },
       servers: [
         {
-          url: `${config.host}:${config.port}`,
+          url: config.swaggerServer || `${config.host}:${config.port}`,
         },
       ],
       security: [
