@@ -6,7 +6,30 @@ import { FitnessLevel } from "@common/enums/fitness-level.enum";
 export default seederWrapper(MealPlan, async () => {
   // 10 mealPlans
   await Promise.all(Array.from({ length: 10 }, (_, i) => i).map(async function (i) {
-    const meals = await Meal.find().limit(35).lean();
+    // Fetch all meals
+    const meals = await Meal.find().lean();
+
+    // Categorize meals by type
+    const categorizedMeals = {
+      'breakfast': [],
+      'dinner': [],
+      'snacks': [],
+      'lunch': [],
+    };
+
+
+    meals.forEach(meal => {
+      if (meal.type in categorizedMeals) {
+        categorizedMeals[meal.type].push(meal);
+      }
+    });
+
+    // Check if we have enough meals of each type
+    for (const type in categorizedMeals) {
+      if (categorizedMeals[type].length < 7) {
+        throw new Error(`Not enough meals of type ${type}`);
+      }
+    }
 
     let o = {
       image: `https://placehold.co/300x400`,
@@ -20,10 +43,15 @@ export default seederWrapper(MealPlan, async () => {
       ],
       days: Array.from({ length: 7 }, (_, i) => ({
         day_number: i + 1,
-        meals: meals.slice(i * 5, i * 5 + 5),
+        meals: [
+          categorizedMeals['breakfast'][i],
+          categorizedMeals['lunch'][i],
+          categorizedMeals['dinner'][i],
+          categorizedMeals['snacks'][i],
+        ],
       })),
     }
 
     await MealPlan.create(o);
-  }))
-})
+  }));
+});

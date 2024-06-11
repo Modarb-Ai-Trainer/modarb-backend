@@ -16,8 +16,8 @@ class MealPlanDaysPopulate {
 
 class MealPlanKeyFeaturesPopulate {
   @Expose()
-  @SwaggerResponseProperty({ type: "number" })
-  day_number: number;
+  @SwaggerResponseProperty({ type: "string" })
+  title: string;
 
   @Expose({ name: "description" })
   @SwaggerResponseProperty({ type: "string" })
@@ -62,5 +62,39 @@ export class MealPlanPopulateSerialization {
     ({ value }) => serialize(value, MealPlanDaysPopulate)
   )
   days: any;
+
+}
+
+export class ListMealPlanSerialization {
+  @Expose({ name: "_id" })
+  @SwaggerResponseProperty({ type: "string" })
+  id: string;
+
+  @Expose()
+  @SwaggerResponseProperty({ type: "string" })
+  image: string;
+
+  @Expose()
+  @SwaggerResponseProperty({ type: "string" })
+  description: string;
+
+  @Expose()
+  @SwaggerResponseProperty({ type: "string" })
+  duration: string;
+
+  @Expose()
+  @SwaggerResponseProperty({ type: "string" })
+  level: string;
+
+  @Expose()
+  @SwaggerResponseProperty({ type: "string" })
+  your_journey: string;
+
+  @Expose({ name: "key_features" })
+  @SwaggerResponseProperty({ type: [MealPlanKeyFeaturesPopulate] })
+  @Transform(
+    ({ value }) => serialize(value, MealPlanKeyFeaturesPopulate)
+  )
+  key_features: any;
 
 }
