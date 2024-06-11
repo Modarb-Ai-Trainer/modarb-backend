@@ -15,8 +15,8 @@ class MealPlanDays {
 
 class MealPlanKeyFeatures {
   @Expose()
-  @SwaggerResponseProperty({ type: "number" })
-  day_number: number;
+  @SwaggerResponseProperty({ type: "string" })
+  title: string;
 
   @Expose({ name: "description" })
   @SwaggerResponseProperty({ type: "string" })
