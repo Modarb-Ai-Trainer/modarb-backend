@@ -99,6 +99,8 @@ export class UsersExerciseController extends BaseController {
   @SwaggerSummary("Search for exercises")
   @SwaggerDescription("You can use filters in search like category")
   @SwaggerQuery({
+    limit: "number",
+    skip: "number",
     searchTerm: "string",
     filter: "string"
   })
@@ -107,6 +109,8 @@ export class UsersExerciseController extends BaseController {
     let query = {};
     let searchTerm = req.query.searchTerm;
     let isNum = !isNaN(parseInt(String(searchTerm)));
+
+    let filterVal = req.query.filter;
 
     if (isNum) {
       query =
@@ -120,19 +124,15 @@ export class UsersExerciseController extends BaseController {
     }
 
     else {
-      if (req.query.filter === "category") {
-        query = { category: { $regex: searchTerm, $options: "i" } };
+      if (filterVal) {
+        query = {
+          category: filterVal,
+          name: { $regex: searchTerm, $options: "i" }
+        };
       }
       else {
         query = {
-          $or: [
-            { name: { $regex: searchTerm, $options: "i" } },
-            { category: { $regex: searchTerm, $options: "i" } },
-            { benefits: { $regex: searchTerm, $options: "i" } },
-            { description: { $regex: searchTerm, $options: "i" } },
-            { instructions: { $regex: searchTerm, $options: "i" } },
-            { url: { $regex: searchTerm, $options: "i" } }
-          ],
+          name: { $regex: searchTerm, $options: "i" }
         };
       }
     }
