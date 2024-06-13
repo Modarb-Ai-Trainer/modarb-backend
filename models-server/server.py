@@ -1,16 +1,16 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from dotenv import load_dotenv
 import os
-import json
-from models.fitness_model import FModel
+from models.fitness_model import FitnessModel
 
 load_dotenv()
+
 
 HOST = os.getenv("MODELS_HOST") or "127.0.0.1"
 PORT = os.getenv("MODELS_PORT") or "3030"
 
-fitness_model = FModel()
 
+fitness_model = FitnessModel.load()
 app = Flask("model-server")
 
 
@@ -36,10 +36,10 @@ def fitness_predict():
     for paramName in paramNames:
         value = request.json.get(paramName)
         if value is None:
-            return json.dumps({"error": f"{paramName} is missing"}), 399
+            return jsonify({"error": f"{paramName} is missing"}), 399
         params[paramName] = value
 
-    return json.dump({"result": fitness_model.predict(**params)})
+    return jsonify({"result": fitness_model.predict(**params)})
 
 
 if __name__ == "__main__":
