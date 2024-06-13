@@ -98,3 +98,14 @@ export class ListMealPlanSerialization {
   key_features: any;
 
 }
+
+
+export class MSerialization {
+  @Expose({ name: "_id" })
+  @SwaggerResponseProperty({ type: "string" })
+  id: string;
+
+  @Expose()
+  @SwaggerResponseProperty({ type: "string" })
+  image: string;
+}
