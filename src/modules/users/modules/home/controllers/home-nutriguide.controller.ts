@@ -15,7 +15,7 @@ import { UserHomeService } from "../services/user-home.service";
 import { IUserRequest } from "@common/interfaces/user-request.interface";
 import { UserHomeYourDailyIntakeSerialization } from "../responses/user-home-your-daily-intake.serialization";
 import { UserNutriHomeDailyGoalsSerialization } from "../responses/user-nutri-home-daily-goals.serialization";
-import { UserRegisteredMealPlansPopulateSerialization } from "@common/serializers/user-registered-meal-planPopulate.serialization";
+import { GetMyMealPlanSerialization } from "@common/serializers/user-registered-meal-planPopulate.serialization";
 import { UserRegisteredMealPlansService } from "../../user-registered-meal-plans/services/user-registered-meal-plans.service";
 import { SwaggerRequest } from "@lib/decorators/swagger-request.decorator";
 
@@ -37,7 +37,7 @@ export class homeNutriGuideController extends BaseController {
   }
 
   @SwaggerGet("/today-meals")
-  @SwaggerResponse(UserRegisteredMealPlansPopulateSerialization)
+  @SwaggerResponse(GetMyMealPlanSerialization)
   @SwaggerSummary("Get today's meals")
   @SwaggerDescription("Get today's meals for the user.")
   getTodayMeals = async (req: IUserRequest, res: Response): Promise<Response> => {
@@ -48,11 +48,13 @@ export class homeNutriGuideController extends BaseController {
         {
           populateArray: [
             { path: "meal_plan", select: "-days" },
-            { path: "days.meals" }
+            {
+              path: "days.meals",
+              populate: { path: "ingredients" }
+            }
           ],
         }
       );
-      console.log(data);
       
 
       const dayToEat = data.days.find(day => day.is_eaten === false);
@@ -61,7 +63,7 @@ export class homeNutriGuideController extends BaseController {
         data.days = [dayToEat];
         return JsonResponse.success(
           {
-            data: serialize(data, UserRegisteredMealPlansPopulateSerialization),
+            data: serialize(data, GetMyMealPlanSerialization),
           },
           res
         );

@@ -34,8 +34,8 @@ export class UsersRegisteredMealPlansController extends BaseController {
       { user: req.jwtPayload.id, isActive: true },
       {
         populateArray: [
-          { path: "meal_plan", select: "-days"},
-          { path: "days.meals"}
+          { path: "meal_plan", select: "-days" },
+          { path: "days.meals", populate: { path: "ingredients" } }
         ],
       });
 
