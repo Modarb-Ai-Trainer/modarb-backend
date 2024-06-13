@@ -1,8 +1,8 @@
-import pickle
-import os
 from sklearn.preprocessing import OneHotEncoder
 import random
 import pandas as pd
+import os
+import pickle
 
 SERVER_FILE_DIR = os.path.dirname(os.path.abspath(__file__))
 FITNESS_MODEL_PATH = os.path.join(
@@ -250,24 +250,9 @@ class FitnessModel:
 
         return all_recommendations  # Trim to ensure exactly 30 elements
 
-
-class FModel:
-    def __init__(self):
+    @classmethod
+    def load(cls):
         with open(FITNESS_MODEL_PATH, "rb") as f:
-            self.model = pickle.load(f)
+            fitness_model = pickle.load(f)
 
-    def predict(
-        self,
-        home_or_gym: int,
-        level: str,
-        goal: str,
-        gender: str,
-        age: int,
-        feedback: bool,
-        old_weight: int,
-        equipments: list,
-    ):
-        print("model", self.model)
-        return self.model.predict(
-            home_or_gym, level, goal, gender, age, feedback, old_weight, equipments
-        )
+        return fitness_model
