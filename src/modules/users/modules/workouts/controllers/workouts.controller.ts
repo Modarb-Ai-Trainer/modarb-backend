@@ -15,6 +15,7 @@ import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
 import { SwaggerSummary } from "@lib/decorators/swagger-summary.decorator";
 import { SwaggerDescription } from "@lib/decorators/swagger-description.decorator";
 import { SwaggerQuery } from "@lib/decorators/swagger-query.decorator";
+import { IUserRequest } from "@common/interfaces/user-request.interface";
 
 
 @Controller("/user/workouts")
@@ -37,7 +38,7 @@ export class UsersWorkoutController extends BaseController {
     filterName: "string",
     filterVal: "string",
   })
-  list = async (req: Request, res: Response): Promise<Response> => {
+  list = async (req: IUserRequest, res: Response): Promise<Response> => {
     const paginationQuery = parsePaginationQuery(req.query);
     
     let filterName = req.query.filterName, filterVal = req.query.filterVal;
@@ -48,7 +49,13 @@ export class UsersWorkoutController extends BaseController {
     }
 
     const { docs, paginationData } = await this.workoutsService.list(
-      filter,
+      {
+        ...filter,
+        $or: [
+          { aiGenerated: true, created_by: req.jwtPayload.id },
+          { aiGenerated: false },
+        ],
+      },
       paginationQuery
     );
 

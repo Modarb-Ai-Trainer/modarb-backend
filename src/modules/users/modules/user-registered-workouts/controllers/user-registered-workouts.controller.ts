@@ -1,5 +1,5 @@
 import { UserRegisteredWorkoutsService } from "../services/user-registered-workouts.service";
-import { Request, Response } from "express";
+import { Response } from "express";
 import { JsonResponse } from "@lib/responses/json-response";
 import { parsePaginationQuery } from "@helpers/pagination";
 import { bodyValidator } from "@helpers/validation.helper";
@@ -21,12 +21,9 @@ import { SwaggerSummary } from "@lib/decorators/swagger-summary.decorator";
 import { SwaggerDescription } from "@lib/decorators/swagger-description.decorator";
 import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
 import { SwaggerRequest } from "@lib/decorators/swagger-request.decorator";import { updateUserRegisteredWorkoutsSchema } from "../validations/update-user-registered-workouts.validation";
+import { IUserRequest } from "@common/interfaces/user-request.interface";
  4
 
-
-interface userRequest extends Request {
-  jwtPayload?: any;
-}
 
 @Controller("/user/myWorkouts")
 @ControllerMiddleware(UsersGuardMiddleware())
@@ -52,7 +49,7 @@ export class userRegisteredWorkoutsController extends BaseController {
   @SwaggerResponse([UserRegisteredWorkoutsPopulateSerialization])
   @SwaggerSummary("List my workouts")
   @SwaggerDescription("List all user registered workouts (workouts that the user had started)")
-  list = async (req: userRequest, res: Response) => {
+  list = async (req: IUserRequest, res: Response) => {
     const paginationQuery = parsePaginationQuery(req.query);
     const { docs, paginationData } =
       await this.userRegisteredWorkoutsService.list(
@@ -79,7 +76,7 @@ export class userRegisteredWorkoutsController extends BaseController {
   @SwaggerResponse(UserRegisteredWorkoutsPopulateSerialization)
   @SwaggerSummary("today's workout && my trainer --> my plan && weekly")
   @SwaggerDescription("Get a single workout from user registered workouts (workouts that the user had started)")
-  get = async (req: userRequest, res: Response) => {
+  get = async (req: IUserRequest, res: Response) => {
     const data = await this.userRegisteredWorkoutsService.findOneOrFail(
       { _id: req.params.id },
       {
@@ -107,7 +104,7 @@ export class userRegisteredWorkoutsController extends BaseController {
   @SwaggerRequest(createUserRegisteredWorkoutsSchema)
   @SwaggerSummary("Create workout")
   @SwaggerDescription("Create a new workout for the user")
-  create = async (req: userRequest, res: Response) => {
+  create = async (req: IUserRequest, res: Response) => {
     const data = await this.userRegisteredWorkoutsService.createForUser(req.body, req.jwtPayload.id);
     return JsonResponse.success(
       {
@@ -123,7 +120,7 @@ export class userRegisteredWorkoutsController extends BaseController {
   @SwaggerRequest(updateUserRegisteredWorkoutsSchema)
   @SwaggerSummary("Update Workout Progress")
   @SwaggerDescription("Update the progress of a workout")
-  updateProgress = async (req: userRequest, res: Response) => {
+  updateProgress = async (req: IUserRequest, res: Response) => {
     const urwId: string = req.params.id;
     const weekNumber: number = Number(req.params.week);
     const dayNumber: number = Number(req.params.day);
