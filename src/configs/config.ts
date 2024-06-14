@@ -14,6 +14,7 @@ export interface Config {
     expiresIn: string;
   };
   saltRounds: number;
+  modelsServerUrl: string;
 }
 
 export const config: Config = {
@@ -28,4 +29,5 @@ export const config: Config = {
     expiresIn: Env.get("JWT_EXPIRES_IN").toString(),
   },
   saltRounds: Env.get("SALT_ROUNDS", 5).toNumber(),
+  modelsServerUrl: `${Env.get("MODELS_HOST", 'http://127.0.0.1').toString()}:${Env.get("MODELS_PORT", '3030').toString()}`,
 };
