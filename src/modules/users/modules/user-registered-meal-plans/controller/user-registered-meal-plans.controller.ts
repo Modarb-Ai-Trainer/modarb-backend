@@ -9,6 +9,8 @@ import { GetMyMealPlanSerialization } from "@common/serializers/user-registered-
 import { ControllerMiddleware } from "@lib/decorators/controller-middleware.decorator";
 import { UsersGuardMiddleware } from "modules/users/common/guards/users.guard";
 import { SwaggerGet } from "@lib/decorators/swagger-routes.decorator";
+import { SwaggerPost } from "@lib/decorators/swagger-routes.decorator";
+import { SwaggerRequest } from "@lib/decorators/swagger-request.decorator";
 import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
 import { SwaggerSummary } from "@lib/decorators/swagger-summary.decorator";
 import { SwaggerDescription } from "@lib/decorators/swagger-description.decorator";
@@ -23,6 +25,10 @@ export class UsersRegisteredMealPlansController extends BaseController {
 
   setRoutes(): void {
     this.router.get("/", asyncHandler(this.get));
+    this.router.post(
+      "/",
+      asyncHandler(this.create)
+    );
   }
 
   @SwaggerGet()
@@ -42,6 +48,23 @@ export class UsersRegisteredMealPlansController extends BaseController {
     return JsonResponse.success(
       {
         data: serialize(data, GetMyMealPlanSerialization),
+      },
+      res
+    );
+  };
+
+
+  @SwaggerPost()
+  @SwaggerResponse(GetMyMealPlanSerialization)
+  @SwaggerRequest({ mealPlan: "string" })
+  @SwaggerSummary("create my meal plan")
+  @SwaggerDescription("Create a new meal plan for the user")
+  create = async (req: userRequest, res: Response) => {
+    const data = await this.userRegisteredMealPlansService.createForUser(req.body, req.jwtPayload.id);
+    return JsonResponse.success(
+      {
+        status: 201,
+        data: serialize(data.toJSON(), GetMyMealPlanSerialization),
       },
       res
     );
