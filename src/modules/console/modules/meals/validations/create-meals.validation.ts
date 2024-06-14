@@ -5,6 +5,7 @@ import { MealType } from "@common/enums/meal-type.enum";
 export interface ICreateMeal {
   name: string;
   created_at?: Date;
+  image: string;
   ingredients: string[];
   calories: number;
   carbs: number;
@@ -22,6 +23,12 @@ export const createMealSchema = createSchema<ICreateMeal>({
   created_at: joi.date().empty().optional().messages({
     "date.base": "please enter a valid created_at",
     "date.empty": "created_at can not be empty",
+  }),
+
+  image: joi.string().empty().required().messages({
+    "string.base": "please enter a valid image",
+    "any.required": "image is required",
+    "string.empty": "image can not be empty",
   }),
 
   calories: joi.number().empty().required().messages({
