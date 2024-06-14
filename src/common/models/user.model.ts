@@ -17,7 +17,7 @@ export interface IUser {
   password: string;
   image: string;
   role: AuthenticatableType;
-  gender: string;
+  gender: Gender;
   dob: Date;
   height: number;
   weight: number;
