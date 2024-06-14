@@ -252,6 +252,7 @@ class FitnessModel:
 
     @classmethod
     def load(cls):
+
         with open(FITNESS_MODEL_PATH, "rb") as f:
             fitness_model = pickle.load(f)
 
