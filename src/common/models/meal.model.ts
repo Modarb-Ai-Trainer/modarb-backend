@@ -4,6 +4,7 @@ import { MealType } from "@common/enums/meal-type.enum";
 export interface IMeal {
   name: string;
   created_at: Date;
+  image: string;
   ingredients: string[];
   calories: number;
   carbs: number;
@@ -15,6 +16,7 @@ export interface IMeal {
 const mealSchema = new Schema({
   name: { type: String, required: true, unique: true, dropDups: true },
   created_at: { type: Date, default: Date.now() },
+  image: { type: String, required: true },
   type: {
     type: String,
     enum: MealType,

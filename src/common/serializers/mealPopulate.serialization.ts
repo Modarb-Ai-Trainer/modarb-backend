@@ -18,6 +18,10 @@ export class MealPopulateSerialization {
   created_at: Date;
 
   @Expose()
+  @SwaggerResponseProperty({ type: "string" })
+  image: string;
+
+  @Expose()
   @SwaggerResponseProperty({ type: [IngredientSerialization] })
   @Transform(
     ({ value }) => serialize(value, IngredientSerialization)

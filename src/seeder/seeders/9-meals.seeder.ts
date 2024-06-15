@@ -21,6 +21,8 @@ export default seederWrapper(Meal, async () => {
   console.log('preping meals data...')
   const data = await Promise.all(dbStore.mealsDataset.map(async (mealJson) => ({
     name: mealJson.Name,
+    created_at: new Date(),
+    image: `https://placehold.co/300x400`,
     ingredients: mealJson.RecipeIngredientParts.map(name => ingredientsIds.find(i => i.name === name)._id),
     calories: mealJson.Calories,
     carbs: mealJson.CarbohydrateContent,
