@@ -1,8 +1,8 @@
 import { Expose, Transform } from "class-transformer";
 import { serialize } from "@helpers/serialize";
 import { SwaggerResponseProperty } from "@lib/decorators/swagger-response-property.decorator";
-import { ListMealPlanSerialization } from "./meal-planPopulate.serialization";
-import { MealSerialization } from "./meal.serialization";
+import { ListMealPlanSerialization } from "@common/serializers/meal-planPopulate.serialization";
+import { MealPopulateSerialization } from "./mealPopulate.serialization";
 import { MealPlanSerialization } from "./meal-plan.serialization";
 
 
@@ -13,9 +13,9 @@ class MealDaysPopulate {
   day_number: number;
 
   @Expose({ name: "meals" })
-  @SwaggerResponseProperty({ type: [MealSerialization] })
+  @SwaggerResponseProperty({ type: [MealPopulateSerialization] })
   @Transform(
-    ({ value }) => serialize(value, MealSerialization)
+    ({ value }) => serialize(value, MealPopulateSerialization)
   )
   meals: any;
 
@@ -65,7 +65,7 @@ export class GetMyMealPlanSerialization {
 
   @Expose()
   @SwaggerResponseProperty({ type: ListMealPlanSerialization })
-  meal_plan: string;
+  meal_plan: any;
 
   @Expose()
   @SwaggerResponseProperty({ type: "boolean" })

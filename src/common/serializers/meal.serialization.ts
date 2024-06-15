@@ -16,6 +16,10 @@ export class MealSerialization {
   created_at: Date;
 
   @Expose()
+  @SwaggerResponseProperty({ type: "string" })
+  image: string;
+
+  @Expose()
   @SwaggerResponseProperty({ type: ["string"] })
   ingredients: any;
 
