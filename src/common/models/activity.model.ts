@@ -5,24 +5,26 @@ import { WorkoutDocument } from "./workout.model";
 import { ExerciseDocument } from "./exercise.model";
 import { ActivityType } from "@common/enums/activity-type.enum";
 const { Schema } = mongoose;
-//related_item
-//meta_data
-//activity type
-//related id
-//user id
-//created_//at
-//
 
-export type RelatedItem = MealDocument | MealPlanDocument | WorkoutDocument | ExerciseDocument;
+export type RelatedItem = | MealDocument 
+                          | MealPlanDocument 
+                          | WorkoutDocument
+                          | ExerciseDocument 
+                          | { 
+                              ingredients: {
+                                id: string,
+                                noServings: number
+                              }[];
+                            }
 export type AMetaData = {};
 
 export interface IActivity {
   related_item?: RelatedItem;
-  meta_data: AMetaData;
+  meta_data?: AMetaData;
   activity_type: ActivityType;
-  related_id: string | Types.ObjectId;
+  related_id?: string | Types.ObjectId;
   user_id: string | Types.ObjectId;
-  created_at: Date;
+  created_at?: Date;
 }
 
 const activitySchema = new Schema({
@@ -40,7 +42,7 @@ const activitySchema = new Schema({
   },
   related_id: {
     type: Schema.Types.ObjectId,
-    required: true,
+    required: false,
   },
   user_id: {
     type: Schema.Types.ObjectId,
