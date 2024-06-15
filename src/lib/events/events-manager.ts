@@ -1,3 +1,4 @@
+import { asyncHandler } from '@helpers/async-handler';
 import EventEmitter from 'node:events';
 
 /**
@@ -12,7 +13,7 @@ export class EventsManager {
     this.emitter = new EventEmitter();
   }
 
-  private static getInstance(): EventsManager {
+  public static getInstance(): EventsManager {
     if (!EventsManager.instance) {
       EventsManager.instance = new EventsManager();
     }
@@ -25,8 +26,12 @@ export class EventsManager {
    * @param event The event name.
    * @param listener The listener function.
    */
-  public on(event: string, listener: (...args: any[]) => void): void {
-    this.emitter.on(event, listener);
+  public static on(event: string, listener: (...args: any[]) => void | Promise<void>): void {
+    try {
+      EventsManager.getInstance().emitter.on(event, asyncHandler(listener));
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   /**
@@ -34,13 +39,14 @@ export class EventsManager {
    * @param event The event name.
    * @param listener The listener function.
    */
-  public emit(event: string, ...args: any[]): void {
-    this.emitter.emit(event, ...args);
+  public static emit(event: string, ...args: any[]): void {
+    EventsManager.getInstance().emitter.emit(event, ...args);
   }
 
   /**
    * Create a queue to store events.
    * @returns An EventsQueue object.
+   * @see EventsQueue
    */
   public createQueue() {
     return new class EventsQueue {
@@ -56,7 +62,7 @@ export class EventsManager {
 
       public process() {
         this.queue.forEach((item) => {
-          EventsManager.getInstance().emit(item.event, ...item.args);
+          EventsManager.emit(item.event, ...item.args);
         });
 
         this.clear();
