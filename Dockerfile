@@ -20,7 +20,7 @@ COPY . .
 RUN rm -f -- .env
 
 # Build the TypeScript code
-RUN npm run build
+#RUN npm run build
 
 # Set the PORT environment variable
 ENV PORT=7860
@@ -35,4 +35,4 @@ RUN pip3 install -r requirements.txt
 EXPOSE $PORT
 
 # Command to run the application
-CMD "python3 models-server/server.py & node dist/index.js"
+CMD "python3 models-server/server.py & npm run start:dev"
