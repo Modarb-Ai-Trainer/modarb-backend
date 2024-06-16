@@ -35,4 +35,4 @@ RUN pip3 install -r requirements.txt --break-system-packages
 EXPOSE $PORT
 
 # Command to run the application
-CMD "python3 models-server/server.py & npm run start:dev"
+CMD ["./run-script.sh"]
