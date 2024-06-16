@@ -29,7 +29,7 @@ ARG JWT_EXPIRES_IN
 ARG DB_URI
 
 # install python dependencies
-RUN pip3 install -r requirements.txt
+RUN pip3 install -r requirements.txt --break-system-packages
 
 # Expose the port on which your application will run
 EXPOSE $PORT
