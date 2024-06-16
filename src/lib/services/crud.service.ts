@@ -3,7 +3,10 @@ import { AnyKeys, Document, FilterQuery, Model } from "mongoose";
 
 
 export const CrudService = <ModelDoc extends Document>(
-  model: Model<ModelDoc>
+  model: Model<ModelDoc>,
+  crudOptions?: {
+    defaultFilter?: FilterQuery<ModelDoc>;
+  }
 ) => {
   return class CrudServiceClass {
     protected model: Model<ModelDoc> = model;
@@ -16,6 +19,7 @@ export const CrudService = <ModelDoc extends Document>(
       filter: FilterQuery<ModelDoc>,
       data: AnyKeys<ModelDoc>
     ): Promise<ModelDoc> {
+      filter = { ...crudOptions?.defaultFilter, ...filter };
       await this.existsOrThrow(filter);
       await this.model.updateOne(filter, data);
       return this.findOneOrFail(filter);
@@ -25,12 +29,14 @@ export const CrudService = <ModelDoc extends Document>(
       filter: FilterQuery<ModelDoc>,
       data: AnyKeys<ModelDoc>
     ): Promise<ModelDoc[]> {
+      filter = { ...crudOptions?.defaultFilter, ...filter };
       await this.existsOrThrow(filter);
       await this.model.updateMany(filter, data);
       return this.model.find(filter);
     }
 
     async deleteOne(filter: FilterQuery<ModelDoc>): Promise<ModelDoc> {
+      filter = { ...crudOptions?.defaultFilter, ...filter };
       await this.existsOrThrow(filter);
       return this.model.findOneAndDelete(filter);
     }
@@ -57,6 +63,8 @@ export const CrudService = <ModelDoc extends Document>(
       };
     }> {
       if (options?.filterOptions) filter = { ...filter, ...options.filterOptions };
+      filter = { ...crudOptions?.defaultFilter, ...filter };
+      
       const queryInstruction = this.model
         .find(filter)
         .limit(paginationOptions.limit)
@@ -72,6 +80,18 @@ export const CrudService = <ModelDoc extends Document>(
       };
 
       return { docs, paginationData };
+    }
+
+    async listAll(
+      filter: FilterQuery<ModelDoc>,
+      options?: {
+        populateArray: any
+      },
+    ): Promise<ModelDoc[]> {
+      filter = { ...crudOptions?.defaultFilter, ...filter };
+      const queryInstruction = this.model.find(filter);
+      if (options?.populateArray) queryInstruction.populate(options.populateArray);
+      return queryInstruction;
     }
 
     async search(
@@ -94,6 +114,7 @@ export const CrudService = <ModelDoc extends Document>(
         perPage: number;
       };
     }> {
+      filter = { ...crudOptions?.defaultFilter, ...filter };
       const queryInstruction = this.model
         .find(filter)
         .limit(paginationOptions.limit)
@@ -116,7 +137,7 @@ export const CrudService = <ModelDoc extends Document>(
       options?: {
         populateArray: any
       }): Promise<ModelDoc | null> {
-      const queryInstruction = this.model.findOne(filter);
+      const queryInstruction = this.model.findOne();
       if (options?.populateArray) queryInstruction.populate(options.populateArray);
       const document = await queryInstruction
       return document;

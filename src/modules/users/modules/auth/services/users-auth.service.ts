@@ -5,13 +5,18 @@ import { JwtHelper } from "@helpers/jwt.helper";
 import { User } from "@common/models/user.model";
 import { IUserRegister } from "@common/validations/user-register.validation";
 import { CrudService } from "@lib/services/crud.service";
+import { WorkoutService } from "../../workouts/services/workouts.service";
 
 export class UsersAuthService extends CrudService(User) {
+  private workoutsService = new WorkoutService();
+
   async register(createParams: IUserRegister) {
     if (createParams.password !== createParams.confirmPassword) {
       throw new HttpError(400, "passwords do not match");
     }
-    return this.create(createParams);
+    const user = await this.create(createParams);
+    await this.workoutsService.createModelWorkout(user);
+    return user;
   }
 
   async login(loginRequest: ILogin) {
