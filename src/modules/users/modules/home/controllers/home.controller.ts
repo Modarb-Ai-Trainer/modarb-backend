@@ -21,7 +21,9 @@ import { UserHomeService } from "../services/user-home.service";
 import { IUserRequest } from "@common/interfaces/user-request.interface";
 import { UserHomeYourDailyIntakeSerialization } from "../responses/user-home-your-daily-intake.serialization";
 import { UserHomeDailyGoalsSerialization } from "../responses/user-home-daily-goals.serialization";
-
+import { GetMyMealPlanSerialization } from "@common/serializers/user-registered-meal-planPopulate.serialization";
+import { UserRegisteredMealPlansService } from "../../user-registered-meal-plans/services/user-registered-meal-plans.service";
+import { number } from "joi";
 
 @Controller("/user/homePage")
 @ControllerMiddleware(UsersGuardMiddleware())
@@ -29,6 +31,7 @@ export class homePageController extends BaseController {
   private userRegisteredWorkoutsService = new UserRegisteredWorkoutsService();
   private userService = new UserService();
   private userHomeService = new UserHomeService();
+  private userRegisteredMealPlansService = new UserRegisteredMealPlansService();
 
   setRoutes(): void {
     this.router.get("/", asyncHandler(this.getHomePage));
@@ -101,7 +104,7 @@ export class homePageController extends BaseController {
       res
     );
   }
-  
+
 
   @SwaggerGet()
   @SwaggerResponse(HomeSerialization)
@@ -122,11 +125,49 @@ export class homePageController extends BaseController {
         selectArray: ["-weeks.week_description", "-weeks.week_name", "-weeks.days.exercises", "-user"],
       },
     )
+
+    let myMealPlan = await this.userRegisteredMealPlansService.findOneOrFail(
+      {
+        user: req.jwtPayload.id, isActive: true
+      },
+      {
+        populateArray: [
+          { path: "meal_plan", select: "-days" },
+          {
+            path: "days.meals",
+            populate: { path: "ingredients" }
+          }
+        ],
+      }
+    );
+
+
+    const dayToEat = myMealPlan.days.find(day => day.is_eaten === false);
+    const totalCalories = dayToEat.meals.reduce((sum, meal: any) => sum + meal.calories, 0);
+
+    const totals = dayToEat.meals.reduce((totals, meal: any) => {
+      if (meal.type === "breakfast" || meal.type === "lunch" || meal.type === "dinner") {
+        totals.meals += 1;
+      } else if (meal.type === "snacks") {
+        totals.snacks += 1;
+      }
+      return totals;
+    }, { meals: 0, snacks: 0 });
+
     const data = {
       user: user,
       myWorkout: myWorkout,
-      myMealPlan: {}
+      myMealPlan: {
+        id: myMealPlan._id,
+        today: {
+          numberOfMeals: totals.meals,
+          numberOfSnacks: totals.snacks,
+          totalCalories: totalCalories,
+        },
+      }
     }
+
+
 
     return JsonResponse.success(
       {

@@ -117,6 +117,31 @@ class UserHome {
   injuries: any;
 }
 
+class TodayMealPlanHome {
+  @Expose()
+  @SwaggerResponseProperty({ type: "number" })
+  numberOfMeals: number;
+
+  @Expose()
+  @SwaggerResponseProperty({ type: "number" })
+  numberOfSnacks: number;
+
+  @Expose()
+  @SwaggerResponseProperty({ type: "number" })
+  totalCalories: number;
+}
+
+class MyMealPlanHome {
+  @Expose({ name: "id" })
+  @SwaggerResponseProperty({ type: "string" })
+  id: string;
+
+  @Expose()
+  @SwaggerResponseProperty({ type: TodayMealPlanHome })
+  @Transform(({ value }) => serialize(value, TodayMealPlanHome))
+  today: any;
+}
+
 export class HomeSerialization {
   @Expose()
   @SwaggerResponseProperty({ type: UserHome })
@@ -129,6 +154,9 @@ export class HomeSerialization {
   myWorkout: any;
 
   @Expose({ name: "myMealPlan" })
-  @SwaggerResponseProperty({ type: {} })
+  @SwaggerResponseProperty({ type: MyMealPlanHome })
+  @Transform(({ value }) => serialize(value, MyMealPlanHome))
   myMealPlan: any;
 }
+
+
