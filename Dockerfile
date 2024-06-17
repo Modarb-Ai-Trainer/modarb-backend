@@ -1,6 +1,9 @@
 # Use the official Node.js v18 image as the base image
 FROM node:18
 
+# install python3 and pip
+RUN apt-get update && apt-get install -y python3 python3-pip
+
 # Set the working directory inside the container
 WORKDIR /app
 
@@ -25,9 +28,11 @@ ARG JWT_SECRET
 ARG JWT_EXPIRES_IN
 ARG DB_URI
 
+# install python dependencies
+RUN pip3 install -r requirements.txt --break-system-packages
+
 # Expose the port on which your application will run
 EXPOSE $PORT
 
 # Command to run the application
-#CMD ["node", "dist/index.js"]
-CMD ["npm", "run", "start:dev"]
+CMD ["./run-script.sh"]
