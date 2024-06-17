@@ -7,11 +7,7 @@ import { calcAge } from "@lib/utils/age";
 import { ExerciseService } from "../../exercises/services/exercises.service";
 import { UserRegisteredWorkoutsService } from "../../user-registered-workouts/services/user-registered-workouts.service";
 
-export class WorkoutService extends CrudService(Workout, {
-  defaultFilter: {
-    aiGenerated: false,
-  },
-}) {
+export class WorkoutService extends CrudService(Workout) {
   private exerciseService = new ExerciseService();
   private userRegisteredWorkoutsService = new UserRegisteredWorkoutsService();
 

@@ -49,13 +49,7 @@ export class UsersWorkoutController extends BaseController {
     }
 
     const { docs, paginationData } = await this.workoutsService.list(
-      {
-        ...filter,
-        $or: [
-          { aiGenerated: true, created_by: req.jwtPayload.id },
-          { aiGenerated: false },
-        ],
-      },
+      filter,
       paginationQuery
     );
 

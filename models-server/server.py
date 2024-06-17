@@ -55,8 +55,7 @@ def nutrition_predict():
         if value is None:
             return jsonify({"error": f"{paramName} is missing"}), 400
         params[paramName] = value
-    print("nutrition_model", nutrition_model.generate_plan(**params), type(nutrition_model.generate_plan(**params)))
-    return jsonify({"result": list(nutrition_model.generate_plan(**params))})
+    return jsonify({"result": nutrition_model.generate_plan(**params)})
 
 
 if __name__ == "__main__":

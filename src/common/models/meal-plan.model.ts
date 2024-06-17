@@ -16,6 +16,7 @@ export interface IMealPlan {
     day_number: number;
     meals: mongoose.Types.ObjectId[];
   }[];
+  aiGenerated: boolean;
 }
 
 const mealPlanSchema = new Schema({
@@ -36,6 +37,7 @@ const mealPlanSchema = new Schema({
       ],
     },
   ],
+  aiGenerated: { type: Boolean, required: true, default: false },
 });
 
 

@@ -2,10 +2,12 @@ import { UserRegisteredMealPlan } from "@common/models/user-registered-meal-plan
 import { CrudService } from "@lib/services/crud.service";
 import { MealPlansService } from "../../meal-plans/services/meal-plans.service";
 import { HttpError } from "@lib/error-handling/http-error";
+import { MealPlan } from "@common/models/meal-plan.model";
+
 
 
 export class UserRegisteredMealPlansService extends CrudService(UserRegisteredMealPlan) {
-  private mealPlansService: MealPlansService = new MealPlansService();
+  private mealPlansService = new (CrudService(MealPlan))()
 
   async unregisterCurrentMealPlan(userId: string) {
     return await this.updateMany({
