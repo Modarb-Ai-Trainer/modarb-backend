@@ -15,7 +15,7 @@ export class UserRegisteredMealPlansService extends CrudService(UserRegisteredMe
       isActive: true,
     }, {
       isActive: false,
-    });
+    }, false);
   }
 
   async createForUser(data: any, userId: string) {
@@ -24,7 +24,7 @@ export class UserRegisteredMealPlansService extends CrudService(UserRegisteredMe
     });
 
     await this.unregisterCurrentMealPlan(userId);
-    
+
     return await this.create({
       ...data,
       user: userId,
@@ -32,25 +32,34 @@ export class UserRegisteredMealPlansService extends CrudService(UserRegisteredMe
       isActive: true,
     });
   }
-    async updateForUser(mealPlanProps: {urwId: string; dayNumber: number}, data: any, userId: string) {
-        // find workout
-        const mealPlan = await this.findOneOrFail({
-          _id: mealPlanProps.urwId,
-          user: userId,
-        });
+  async updateForUser(mealPlanProps: { urwId: string; dayNumber: number }, data: any, userId: string) {
+    // find mealPlan
     
+    const mealPlan = await this.findOneOrFail({
+      _id: mealPlanProps.urwId,
+      user: userId,
+    });
     
-        // find day
-        const day = mealPlan.days.find(d => d.day_number === mealPlanProps.dayNumber);
-        if(!day) throw new HttpError(404, 'Workout Day Not Found');
-        const dayIndex = mealPlan.days.indexOf(day)
-    
-        // update day and week
-        day.is_eaten = true;
-        mealPlan.days[dayIndex] = day;
-        
-        // save changes
-        mealPlan.markModified('days');
-        return mealPlan.save()
-      }
+    // find day
+    const day = mealPlan.days.find(d => d.day_number === mealPlanProps.dayNumber);
+    if (!day) throw new HttpError(404, 'Workout Day Not Found');
+    const dayIndex = mealPlan.days.indexOf(day)
+
+    // update day
+    day.is_eaten = true;
+    mealPlan.days[dayIndex] = day;
+
+    // save changes
+    mealPlan.markModified('days');
+
+    const updatedMealPlan = await mealPlan.save();
+
+    // check if it's the last day
+    const lastDay = mealPlan.days[mealPlan.days.length - 1];
+    if (lastDay.day_number === mealPlanProps.dayNumber) {
+      console.log('This is the last day that was updated.');
+    }
+
+    return updatedMealPlan;
+  }
 }

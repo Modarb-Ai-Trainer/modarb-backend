@@ -24,10 +24,10 @@ const mealPlanSchema = new Schema({
   description: { type: String, required: true },
   duration: { type: Number, required: true },
   level: { type: String, enum: FitnessLevel, required: true },
-  your_journey: { type: String, required: true },
+  your_journey: { type: String, required: false },
   key_features: [{
-    title: { type: String, required: true },
-    description: { type: String, required: true },
+    title: { type: String, required: false },
+    description: { type: String, required: false },
   }],
   days: [
     {

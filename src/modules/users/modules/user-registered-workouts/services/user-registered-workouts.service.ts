@@ -18,7 +18,7 @@ export class UserRegisteredWorkoutsService extends CrudService(UserRegisteredWor
       is_active: true,
     }, {
       is_active: false,
-    });
+    }, false);
   }
   
   async createForUser(data: ICreateUserRegisteredWorkouts, userId: string) {

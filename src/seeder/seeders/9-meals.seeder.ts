@@ -22,7 +22,7 @@ export default seederWrapper(Meal, async () => {
   const data = await Promise.all(dbStore.mealsDataset.map(async (mealJson) => ({
     name: mealJson.Name,
     created_at: new Date(),
-    image: `https://placehold.co/300x400`,
+    image: mealJson.Images[0],
     ingredients: mealJson.RecipeIngredientParts.map(name => ingredientsIds.find(i => i.name === name)._id),
     calories: mealJson.Calories,
     carbs: mealJson.CarbohydrateContent,

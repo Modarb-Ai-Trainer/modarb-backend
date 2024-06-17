@@ -1,6 +1,7 @@
 import { AuthenticatableType } from "@common/enums/authenticatable-type.enum";
 import { FitnessGoal } from "@common/enums/fitness-goal.enum";
 import { FitnessLevel } from "@common/enums/fitness-level.enum";
+import { Gender } from "@common/enums/gender.enum";
 import { Injury } from "@common/enums/injury.enum";
 import { PreferredDay } from "@common/enums/preferred-day.enum";
 import { PreferredEquipment } from "@common/enums/preferred-equipment.enum";
@@ -16,9 +17,9 @@ export default seederWrapper(User, async () => {
       email: `user-${i}@app.com`,
       password: "password",
       image: `https://placehold.co/300x400`,
-        gender: (i as number % 2 === 0) ?
-        'male' :
-        'female',
+      gender: (i as number % 2 === 0) ?
+        Gender.MALE :
+        Gender.FEMALE,
       height: 170,
       weight: 70,
       fitness_level: [FitnessLevel.BEGINNER, FitnessLevel.INTERMEDIATE, FitnessLevel.ADVANCED][i % 3],

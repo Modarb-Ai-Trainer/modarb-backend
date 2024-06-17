@@ -13,14 +13,14 @@ import { loadExercisesDataset } from "./helpers/load-exercises-dataset";
 import { dbStore } from "./helpers/db-store";
 import { loadMealsDataset } from "./helpers/load-meals-dataset";
 
-const loadDatasets = async() => {
+const loadDatasets = async () => {
   const exercisesDataset = await loadExercisesDataset();
   const mealsDataset = loadMealsDataset();
   const musclesDataset = Array.from(new Set(exercisesDataset.map((exercise) => exercise.target)));
   const equipmentsDataset = Array.from(new Set(exercisesDataset.map((exercise) => exercise.equipment)));
-  const ingredientsArrays = mealsDataset.map(m=>m.RecipeIngredientParts);
+  const ingredientsArrays = mealsDataset.map(m => m.RecipeIngredientParts);
   const ingredientsNames = Array.from(new Set(ingredientsArrays.flat()))
-  
+
   dbStore.excerisesDataset = exercisesDataset;
   dbStore.musclesDataset = musclesDataset;
   dbStore.equipmentsDataset = equipmentsDataset;
@@ -53,6 +53,7 @@ const main = async () => {
       return seederNames.some(name => path.basename(file).includes(name));
     })
     .sort();
+  console.log(seedersFiles);
 
   // load datasets
   await loadDatasets();

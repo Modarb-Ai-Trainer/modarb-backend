@@ -27,10 +27,12 @@ export const CrudService = <ModelDoc extends Document>(
 
     async updateMany(
       filter: FilterQuery<ModelDoc>,
-      data: AnyKeys<ModelDoc>
+      data: AnyKeys<ModelDoc>,
+      checkExists: boolean = true
     ): Promise<ModelDoc[]> {
       filter = { ...crudOptions?.defaultFilter, ...filter };
-      await this.existsOrThrow(filter);
+      if(checkExists)
+        await this.existsOrThrow(filter);
       await this.model.updateMany(filter, data);
       return this.model.find(filter);
     }
@@ -137,7 +139,7 @@ export const CrudService = <ModelDoc extends Document>(
       options?: {
         populateArray: any
       }): Promise<ModelDoc | null> {
-      const queryInstruction = this.model.findOne();
+      const queryInstruction = this.model.findOne(filter);
       if (options?.populateArray) queryInstruction.populate(options.populateArray);
       const document = await queryInstruction
       return document;

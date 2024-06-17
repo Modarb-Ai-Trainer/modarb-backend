@@ -34,11 +34,15 @@ export class WorkoutService extends CrudService(Workout) {
 
     const exercisesNames = pworkout.flat().map((e) => e.name);
     const exercises = await this.exerciseService.listAll({ name: { $in: exercisesNames } });
-
+    const todayDate = new Date().toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
     const workout = await this.create({
       aiGenerated: true,
-      name: `AI Generated Workout for ${user.name} (${new Date().toLocaleDateString()})`,
-      description: `AI Generated Workout for ${user.name} (${new Date().toLocaleDateString()})`,
+      name: `AI Generated Workout (${user.preferences.fitness_goal} - ${user.fitness_level}) - ${todayDate}`,
+      description:  `This AI-generated workout plan, created on ${todayDate}, is tailored for your ${user.fitness_level.toLowerCase()} fitness level and ${user.preferences.fitness_goal.toLowerCase()} goal. It is designed to be performed ${user.preferences.workout_place === WorkoutPlace.GYM ? "at the gym" : "at home"} using your preferred equipment.`,
       type: "AI Generated",
       created_by: user._id,
       image: "https://placehold.co/300x400",

@@ -6,9 +6,11 @@ import { User } from "@common/models/user.model";
 import { IUserRegister } from "@common/validations/user-register.validation";
 import { CrudService } from "@lib/services/crud.service";
 import { WorkoutService } from "../../workouts/services/workouts.service";
+import { MealPlansService } from "../../meal-plans/services/meal-plans.service";
 
 export class UsersAuthService extends CrudService(User) {
   private workoutsService = new WorkoutService();
+  private mealPlanService = new MealPlansService();
 
   async register(createParams: IUserRegister) {
     if (createParams.password !== createParams.confirmPassword) {
@@ -16,6 +18,7 @@ export class UsersAuthService extends CrudService(User) {
     }
     const user = await this.create(createParams);
     await this.workoutsService.createModelWorkout(user);
+    await this.mealPlanService.createModelMealPlan(user);
     return user;
   }
 
