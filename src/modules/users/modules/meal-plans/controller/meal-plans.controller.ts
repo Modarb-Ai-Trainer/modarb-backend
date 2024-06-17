@@ -23,7 +23,6 @@ export class UsersMealPlansController extends BaseController {
 
   setRoutes(): void {
     this.router.get("/", asyncHandler(this.list));
-    this.router.get("/ss", asyncHandler(this.ss));
   }
 
   @SwaggerGet()
@@ -45,29 +44,6 @@ export class UsersMealPlansController extends BaseController {
       {
         data: serialize(docs, ListMealPlanSerialization),
         meta: paginationData,
-      },
-      res
-    );
-  };
-
-  @SwaggerGet("/ss")
-  ss = async (req: Request, res: Response) => {
-    let pMealPlan = await this.mealPlansService.createModelMealPlan({
-      id: "664a4b170da4e428849859a0",
-      name: "User 0",
-      email: "user-0@app.com",
-      image: "https://placehold.co/300x400",
-      role: "user" as any,
-      gender: "male" as any,
-      dob: new Date("1990-01-31T22:00:00.000+00:00"),
-      height: 170,
-      weight: 70,
-      fitness_level: "beginner" as any,
-    });
-  
-    return JsonResponse.success(
-      {
-        data: { pMealPlan: pMealPlan},
       },
       res
     );
