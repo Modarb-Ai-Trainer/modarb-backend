@@ -56,7 +56,7 @@ export class UsersRegisteredMealPlansController extends BaseController {
 
   @SwaggerPost()
   @SwaggerResponse(GetMyMealPlanSerialization)
-  @SwaggerRequest({ mealPlan: "string" })
+  @SwaggerRequest({ meal_plan: "string" })
   @SwaggerSummary("create my meal plan")
   @SwaggerDescription("Create a new meal plan for the user")
   create = async (req: userRequest, res: Response) => {
