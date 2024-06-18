@@ -30,16 +30,26 @@ export class MealPlansService extends CrudService(MealPlan) {
 
         const mealsNames = pMealPlan.flat().map((meal) => meal.Name);
         const meals = await this.mealsService.listAll({ name: { $in: mealsNames } });
-        const todayDate = new Date().toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-          });
+        const today = new Date();
+        const todayDate = today.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+        const currentTime = today.toLocaleTimeString('en-US', {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false
+        });
+        const milliseconds = today.getMilliseconds();
+        
+
         const mealPlan = await this.create({
             aiGenerated: true,
             image: "https://placehold.co/300x400",
             description: `This AI-generated meal plan is designed specifically for you, considering your personal fitness goal of ${user.preferences.fitness_goal}. 
-            Created on ${todayDate}, this plan is tailored to provide a balanced and nutritious diet that supports your workout frequency of ${user.preferences.workout_frequency} times per week.
+            Created on ${todayDate} at ${currentTime}.${milliseconds}, this plan is tailored to provide a balanced and nutritious diet that supports your workout frequency of ${user.preferences.workout_frequency} times per week.
             Whether you prefer working out on ${user.preferences.preferred_days.join(", ")}, at ${user.preferences.workout_place}, or using ${user.preferences.preferred_equipment.join(", ")}, this meal plan will help you achieve your health and fitness goals. Enjoy a variety of delicious and nutritious meals selected just for you.`,
             duration: 28,
             level: user.fitness_level,
@@ -48,6 +58,7 @@ export class MealPlansService extends CrudService(MealPlan) {
                 meals: day.map((m) => meals.find((meal) => meal.name === m.Name)?._id),
             })),
         });
+        
         
         
 

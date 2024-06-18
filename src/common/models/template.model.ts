@@ -9,7 +9,7 @@ export interface ITemplate {
 }
 
 const templateSchema = new Schema({
-  name: { type: String, required: true, unique: true, dropDups: true },
+  name: { type: String, required: true },
   user: { type: mongoose.Types.ObjectId, ref: "users" },
   creationDate: { type: Date, default: Date.now() },
   exercises: [{ type: mongoose.Types.ObjectId, ref: "exercises" }],

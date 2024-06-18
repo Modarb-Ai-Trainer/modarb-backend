@@ -6,6 +6,7 @@ import { CrudService } from "@lib/services/crud.service";
 import { calcAge } from "@lib/utils/age";
 import { ExerciseService } from "../../exercises/services/exercises.service";
 import { UserRegisteredWorkoutsService } from "../../user-registered-workouts/services/user-registered-workouts.service";
+import { v4 as uuidv4 } from 'uuid';
 
 export class WorkoutService extends CrudService(Workout) {
   private exerciseService = new ExerciseService();
@@ -34,15 +35,25 @@ export class WorkoutService extends CrudService(Workout) {
 
     const exercisesNames = pworkout.flat().map((e) => e.name);
     const exercises = await this.exerciseService.listAll({ name: { $in: exercisesNames } });
-    const todayDate = new Date().toLocaleDateString('en-US', {
+    const today = new Date();
+    const todayDate = today.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
     });
+    const currentTime = today.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    });
+    const milliseconds = today.getMilliseconds();
+    const uuid = uuidv4();
+    
     const workout = await this.create({
       aiGenerated: true,
-      name: `AI Generated Workout (${user.preferences.fitness_goal} - ${user.fitness_level}) - ${todayDate}`,
-      description:  `This AI-generated workout plan, created on ${todayDate}, is tailored for your ${user.fitness_level.toLowerCase()} fitness level and ${user.preferences.fitness_goal.toLowerCase()} goal. It is designed to be performed ${user.preferences.workout_place === WorkoutPlace.GYM ? "at the gym" : "at home"} using your preferred equipment.`,
+      name: `AI Generated Workout (${user.preferences.fitness_goal} - ${user.fitness_level}) - ${todayDate} ${currentTime}.${milliseconds} - ${uuid}`,
+      description: `This AI-generated workout plan, created on ${todayDate} at ${currentTime}.${milliseconds}, is tailored for your ${user.fitness_level.toLowerCase()} fitness level and ${user.preferences.fitness_goal.toLowerCase()} goal. It is designed to be performed ${user.preferences.workout_place === WorkoutPlace.GYM ? "at the gym" : "at home"} using your preferred equipment.`,
       type: "AI Generated",
       created_by: user._id,
       image: "https://placehold.co/300x400",
