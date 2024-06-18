@@ -13,7 +13,7 @@ COPY --chown=user package*.json ./
 RUN npm install
 
 # Copy the entire application code to the working directory
-COPY --chown . .
+COPY --chown=user . .
 
 # Build the TypeScript code
 #RUN npm run build
