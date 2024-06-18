@@ -53,7 +53,7 @@ export class MealPlansService extends CrudService(MealPlan) {
 
         await this.userRegisteredMealPlansService.createForUser(
             {
-                mealPlan: mealPlan._id,
+                meal_plan: mealPlan._id,
             },
             user._id
         );

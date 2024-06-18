@@ -20,7 +20,7 @@ export class UserRegisteredMealPlansService extends CrudService(UserRegisteredMe
 
   async createForUser(data: any, userId: string) {
     const mealPlan = await this.mealPlansService.findOneOrFail({
-      _id: data.mealPlan,
+      _id: data.meal_plan,
     });
 
     await this.unregisterCurrentMealPlan(userId);
