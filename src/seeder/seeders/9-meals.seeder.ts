@@ -28,7 +28,7 @@ export default seederWrapper(Meal, async () => {
     carbs: mealJson.CarbohydrateContent,
     proteins: mealJson.ProteinContent,
     fats: mealJson.FatContent,
-    type: mealJson.type?.toLowerCase() as MealType,
+    type: mealJson.Category?.toLowerCase() as MealType,
   } satisfies Partial<IMeal>)));
 
   console.log('inserting meals...')

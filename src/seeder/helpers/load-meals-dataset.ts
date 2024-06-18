@@ -9,7 +9,7 @@ export interface IMealJson {
     ProteinContent: number;
     FatContent: number;
     Images: string[];
-    type: string;
+    Category: string;
 }
 
 const filePath = path.join(__dirname, '../../resources/meals.json');
