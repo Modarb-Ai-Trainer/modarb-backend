@@ -1,6 +1,8 @@
 # Use the official Node.js v18 image as the base image
 FROM node:18
 
+USER user
+
 RUN useradd -m -u 1000 user
 
 # Set the working directory inside the container
