@@ -20,7 +20,7 @@ const main = async () => {
   await setAppRoutes(app);
 
   // start server
-  app.listen(config.port, () => {
+  app.listen(config.port, '0.0.0.0', () => {
     console.log(`Server is up and running on port ${config.port}!`);
   });
 };
