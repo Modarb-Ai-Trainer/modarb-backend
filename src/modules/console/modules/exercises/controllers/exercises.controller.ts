@@ -56,7 +56,7 @@ export class ExercisesController extends BaseController {
   list = async (req: Request, res: Response) => {
     const paginationQuery = parsePaginationQuery(req.query);
     const { docs, paginationData } = await this.exercisesService.list(
-      {},
+      { isDeleted: false },
       paginationQuery,
     );
 
@@ -77,6 +77,7 @@ export class ExercisesController extends BaseController {
     const data = await this.exercisesService.findOneOrFail(
       {
         _id: req.params.id,
+        isDeleted: false
       },
     );
     return JsonResponse.success(
@@ -125,7 +126,7 @@ export class ExercisesController extends BaseController {
   @SwaggerSummary("Delete exercise")
   @SwaggerDescription("Delete a single exercise by id")
   delete = async (req: Request, res: Response) => {
-    await this.exercisesService.deleteOne({ _id: req.params.id });
+    await this.exercisesService.softDelete({ _id: req.params.id });
     return JsonResponse.success({}, res);
   };
 }

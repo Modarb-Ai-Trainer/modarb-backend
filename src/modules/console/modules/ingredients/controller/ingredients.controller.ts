@@ -50,11 +50,11 @@ export class AdminsIngredientsController extends BaseController {
     @SwaggerQuery({
         limit: "number",
         skip: "number",
-      })
+    })
     list = async (req: Request, res: Response) => {
         const paginationQuery = parsePaginationQuery(req.query);
         const { docs, paginationData } = await this.ingredientsService.list(
-            {},
+            { isDeleted: false },
             paginationQuery
         );
 
@@ -74,6 +74,7 @@ export class AdminsIngredientsController extends BaseController {
     get = async (req: Request, res: Response) => {
         const data = await this.ingredientsService.findOneOrFail({
             _id: req.params.id,
+            isDeleted: false
         });
         return JsonResponse.success(
             {
@@ -122,7 +123,7 @@ export class AdminsIngredientsController extends BaseController {
     @SwaggerSummary('Delete ingredient')
     @SwaggerDescription('Delete an ingredient by id')
     delete = async (req: Request, res: Response) => {
-        const data = await this.ingredientsService.deleteOne({ _id: req.params.id });
+        const data = await this.ingredientsService.softDelete({ _id: req.params.id });
         return JsonResponse.success(
             {
                 data: serialize(data.toJSON(), IngredientSerialization),

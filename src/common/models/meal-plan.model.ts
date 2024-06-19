@@ -17,6 +17,7 @@ export interface IMealPlan {
     meals: mongoose.Types.ObjectId[];
   }[];
   aiGenerated: boolean;
+  isDeleted: boolean;
 }
 
 const mealPlanSchema = new Schema({
@@ -38,6 +39,7 @@ const mealPlanSchema = new Schema({
     },
   ],
   aiGenerated: { type: Boolean, required: true, default: false },
+  isDeleted: { type: Boolean, default: false },
 });
 
 

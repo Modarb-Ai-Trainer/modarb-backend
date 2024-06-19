@@ -11,6 +11,7 @@ export interface IIngredient {
   carbs: number;
   proteins: number;
   fats: number;
+  isDeleted: boolean;
 }
 
 const ingredientSchema = new Schema({
@@ -23,6 +24,7 @@ const ingredientSchema = new Schema({
   carbs: { type: Number, required: true },
   proteins: { type: Number, required: true },
   fats: { type: Number, required: true },
+  isDeleted: { type: Boolean, default: false },
 });
 
 

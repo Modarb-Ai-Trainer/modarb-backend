@@ -11,6 +11,7 @@ export interface IMeal {
   proteins: number;
   fats: number;
   type: MealType;
+  isDeleted: boolean;
 }
 
 const mealSchema = new Schema({
@@ -27,6 +28,7 @@ const mealSchema = new Schema({
   carbs: { type: Number, required: true },
   proteins: { type: Number, required: true },
   fats: { type: Number, required: true },
+  isDeleted: { type: Boolean, default: false },
 });
 
 

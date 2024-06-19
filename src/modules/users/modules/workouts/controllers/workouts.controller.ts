@@ -40,9 +40,9 @@ export class UsersWorkoutController extends BaseController {
   })
   list = async (req: IUserRequest, res: Response): Promise<Response> => {
     const paginationQuery = parsePaginationQuery(req.query);
-    
+
     let filterName = req.query.filterName, filterVal = req.query.filterVal;
-    let filter = {};
+    let filter = { isDeleted: false };
 
     if (filterName && filterVal) {
       filter[`${filterName}`] = filterVal;
@@ -68,7 +68,7 @@ export class UsersWorkoutController extends BaseController {
   @SwaggerDescription("Get a single workout")
   get = async (req: Request, res: Response): Promise<Response> => {
     const data = await this.workoutsService.findOneOrFail(
-      { _id: req.params.id },
+      { _id: req.params.id, isDeleted: false },
       {
         populateArray: [
           { path: "template_weeks.days.exercises", select: "name media reps sets" },

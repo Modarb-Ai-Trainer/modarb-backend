@@ -101,7 +101,7 @@ export class templateController extends BaseController {
   @SwaggerSummary("Create custom plan")
   @SwaggerDescription("Create a new custom plan")
   create = async (req: userRequest, res: Response) => {
-    const data = await this.templatesService.create(req.body);    
+    const data = await this.templatesService.createForUser(req.body);    
     return JsonResponse.success(
       {
         status: 201,

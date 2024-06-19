@@ -85,7 +85,8 @@ export default seederWrapper(Workout, async () => {
             },
           ]
         }
-      ]
+      ],
+      isDeleted: false,
     };
     await Workout.create(o);
   }))

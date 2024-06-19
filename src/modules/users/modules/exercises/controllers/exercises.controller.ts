@@ -41,7 +41,7 @@ export class UsersExerciseController extends BaseController {
     const paginationQuery = parsePaginationQuery(req.query);
 
     let filterName = req.query.filterName, filterVal = req.query.filterVal;
-    let filter = {};
+    let filter = { isDeleted: false };
 
     if (filterName && filterVal) {
       filter[`${filterName}`] = filterVal;
@@ -76,6 +76,7 @@ export class UsersExerciseController extends BaseController {
     const data = await this.exercisesService.findOneOrFail(
       {
         _id: req.params.id,
+        isDeleted: false
       },
       {
         populateArray: [
@@ -136,7 +137,7 @@ export class UsersExerciseController extends BaseController {
         };
       }
     }
-
+    query = { ...query, isDeleted: false }
     const { docs, paginationData } = await this.exercisesService.search(
       query,
       paginationQuery,

@@ -31,7 +31,7 @@ export const CrudService = <ModelDoc extends Document>(
       checkExists: boolean = true
     ): Promise<ModelDoc[]> {
       filter = { ...crudOptions?.defaultFilter, ...filter };
-      if(checkExists)
+      if (checkExists)
         await this.existsOrThrow(filter);
       await this.model.updateMany(filter, data);
       return this.model.find(filter);
@@ -42,9 +42,17 @@ export const CrudService = <ModelDoc extends Document>(
       await this.existsOrThrow(filter);
       return this.model.findOneAndDelete(filter);
     }
+    async softDelete(
+      filter: FilterQuery<ModelDoc>
+    ): Promise<ModelDoc> {
+      filter = { ...crudOptions?.defaultFilter, ...filter };
+      await this.existsOrThrow(filter);
+      await this.model.updateOne(filter, { isDeleted: true });
+      return this.findOneOrFail(filter);
+    }
 
     async list(
-      filter: FilterQuery<ModelDoc>, 
+      filter: FilterQuery<ModelDoc>,
       paginationOptions: {
         limit?: number;
         skip?: number;
@@ -66,7 +74,7 @@ export const CrudService = <ModelDoc extends Document>(
     }> {
       if (options?.filterOptions) filter = { ...filter, ...options.filterOptions };
       filter = { ...crudOptions?.defaultFilter, ...filter };
-      
+
       const queryInstruction = this.model
         .find(filter)
         .limit(paginationOptions.limit)

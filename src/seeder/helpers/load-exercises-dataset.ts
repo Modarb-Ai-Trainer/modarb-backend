@@ -21,6 +21,7 @@ export interface IExerciseCSV {
     bodyPart: EBodyPart;
     type: EType;
     sets: number;
+    instructions: string;
 }
 
 
