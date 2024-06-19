@@ -1,7 +1,12 @@
 # Use the official Node.js v18 image as the base image
 FROM node:18
 
-RUN useradd -m -u 1000 user
+RUN if id -u 1000 &> /dev/null; then \
+        uid=$(shuf -i 1001-65535 -n 1) \
+        && useradd -m -u $uid user; \
+    else \
+        useradd -m -u 1000 user; \
+    fi
 
 # Set the working directory inside the container
 WORKDIR /app
