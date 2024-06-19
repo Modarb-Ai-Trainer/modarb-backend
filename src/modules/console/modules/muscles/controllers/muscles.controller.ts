@@ -50,11 +50,11 @@ export class MusclesController extends BaseController {
     @SwaggerQuery({
         limit: "number",
         skip: "number",
-      })
+    })
     list = async (req: Request, res: Response) => {
         const paginationQuery = parsePaginationQuery(req.query);
         const { docs, paginationData } = await this.musclesService.list(
-            {},
+            { isDeleted: false },
             paginationQuery
         );
 
@@ -74,6 +74,7 @@ export class MusclesController extends BaseController {
     get = async (req: Request, res: Response) => {
         const data = await this.musclesService.findOneOrFail({
             _id: req.params.id,
+            isDeleted: false
         });
         return JsonResponse.success(
             {
@@ -122,7 +123,7 @@ export class MusclesController extends BaseController {
     @SwaggerSummary("Delete muscle")
     @SwaggerDescription("Delete a muscle by id")
     delete = async (req: Request, res: Response) => {
-        const data = await this.musclesService.deleteOne({ _id: req.params.id });
+        const data = await this.musclesService.softDelete({ _id: req.params.id });
         return JsonResponse.success(
             {
                 data: serialize(data.toJSON(), MuscleSerialization),

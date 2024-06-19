@@ -25,6 +25,7 @@ export interface IExercise {
     type: "image" | "video";
     url: string;
   };
+  isDeleted: boolean;
 }
 
 const exerciseSchema = new Schema<IExercise>({
@@ -58,6 +59,7 @@ const exerciseSchema = new Schema<IExercise>({
     },
     url: { type: String, required: true },
   },
+  isDeleted: { type: Boolean, default: false },
 });
 
 export type ExerciseDocument = IExercise & mongoose.Document;

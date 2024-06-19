@@ -41,7 +41,7 @@ export class UsersMealsController extends BaseController {
   list = async (req: Request, res: Response) => {
     const paginationQuery = parsePaginationQuery(req.query);
     const { docs, paginationData } = await this.mealsService.list(
-      {},
+      { isDeleted: false },
       paginationQuery,
       {
         populateArray: [

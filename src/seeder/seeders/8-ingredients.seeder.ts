@@ -14,6 +14,7 @@ export default seederWrapper(Ingredient, async () => {
     carbs: faker.number.int({ min: 10, max: 20 }),
     proteins: faker.number.int({ min: 10, max: 20 }),
     fats: faker.number.int({ min: 10, max: 20 }),
+    isDeleted: false,
   } satisfies Partial<IIngredient>)));
 
   await Ingredient.insertMany(data);

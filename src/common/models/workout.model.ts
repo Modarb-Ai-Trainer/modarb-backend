@@ -32,6 +32,7 @@ export interface IWorkout {
         },
     ],
     aiGenerated: boolean;
+    isDeleted: boolean;
 }
 
 const workoutSchema = new Schema({
@@ -63,6 +64,7 @@ const workoutSchema = new Schema({
         },
     ],
     aiGenerated: { type: Boolean, required: true, default: false },
+    isDeleted: { type: Boolean, default: false },
 });
 
 

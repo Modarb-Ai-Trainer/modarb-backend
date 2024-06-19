@@ -50,6 +50,7 @@ export default seederWrapper(MealPlan, async () => {
           categorizedMeals['snacks'][i],
         ],
       })),
+      isDeleted: false,
     }
 
     await MealPlan.create(o);

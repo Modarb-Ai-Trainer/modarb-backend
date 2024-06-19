@@ -60,7 +60,7 @@ export class EquipmentsController extends BaseController {
   list = async (req: Request, res: Response) => {
     const paginationQuery = parsePaginationQuery(req.query);
     const { docs, paginationData } = await this.equipmentsService.list(
-      {},
+      { isDeleted: false },
       paginationQuery
     );
 
@@ -80,6 +80,7 @@ export class EquipmentsController extends BaseController {
   get = async (req: Request, res: Response) => {
     const data = await this.equipmentsService.findOneOrFail({
       _id: req.params.id,
+      isDeleted: false
     });
     return JsonResponse.success(
       {
@@ -128,7 +129,7 @@ export class EquipmentsController extends BaseController {
   @SwaggerSummary("Delete equipment")
   @SwaggerDescription("Delete a equipment by id")
   delete = async (req: Request, res: Response) => {
-    const data = await this.equipmentsService.deleteOne({ _id: req.params.id });
+    const data = await this.equipmentsService.softDelete({ _id: req.params.id });
     return JsonResponse.success(
       {
         data: serialize(data.toJSON(), EquipmentSerialization),

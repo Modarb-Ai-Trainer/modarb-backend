@@ -50,11 +50,11 @@ export class AdminsMealsController extends BaseController {
     @SwaggerQuery({
         limit: "number",
         skip: "number",
-      })
+    })
     list = async (req: Request, res: Response) => {
         const paginationQuery = parsePaginationQuery(req.query);
         const { docs, paginationData } = await this.mealsService.list(
-            {},
+            { isDeleted: false },
             paginationQuery,
         );
 
@@ -75,6 +75,7 @@ export class AdminsMealsController extends BaseController {
         const data = await this.mealsService.findOneOrFail(
             {
                 _id: req.params.id,
+                isDeleted: false
             },
         );
         return JsonResponse.success(
@@ -124,7 +125,7 @@ export class AdminsMealsController extends BaseController {
     @SwaggerSummary('Delete meal')
     @SwaggerDescription('Delete a meal by id')
     delete = async (req: Request, res: Response) => {
-        const data = await this.mealsService.deleteOne({ _id: req.params.id });
+        const data = await this.mealsService.softDelete({ _id: req.params.id });
         return JsonResponse.success(
             {
                 data: serialize(data.toJSON(), MealSerialization),
