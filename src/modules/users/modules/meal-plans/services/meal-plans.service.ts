@@ -5,12 +5,19 @@ import { calcAge } from "@lib/utils/age";
 import { MealsService } from "../../meals/services/meals.service";
 import { UserRegisteredMealPlansService } from "../../user-registered-meal-plans/services/user-registered-meal-plans.service";
 import { UserDocument } from "@common/models/user.model";
+import { UsersService } from "modules/console/modules/users/services/users.service";
+import { Types } from "mongoose";
 
 export class MealPlansService extends CrudService(MealPlan) {
     private mealsService = new MealsService();
     private userRegisteredMealPlansService = new UserRegisteredMealPlansService();
+    private usersService = new UsersService();
 
-    public async createModelMealPlan(user: UserDocument) {
+    public async createModelMealPlan(userOrId: UserDocument | string) {
+        const user: UserDocument = typeof userOrId === 'string' ?
+                                  await this.usersService.findOneOrFail({_id: new Types.ObjectId(userOrId)}) :
+                                  userOrId;
+
         let caloriesPerDay = 0;
         if (user.gender === "male") {
             caloriesPerDay = 10 * user.weight + 6.25 * user.height - 5 * calcAge(user.dob) + 5;
