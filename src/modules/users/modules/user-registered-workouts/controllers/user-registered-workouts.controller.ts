@@ -22,6 +22,7 @@ import { SwaggerDescription } from "@lib/decorators/swagger-description.decorato
 import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
 import { SwaggerRequest } from "@lib/decorators/swagger-request.decorator";import { updateUserRegisteredWorkoutsSchema } from "../validations/update-user-registered-workouts.validation";
 import { IUserRequest } from "@common/interfaces/user-request.interface";
+import { WorkoutsProgressService } from "../services/workouts-progress.service";
  4
 
 
@@ -29,6 +30,7 @@ import { IUserRequest } from "@common/interfaces/user-request.interface";
 @ControllerMiddleware(UsersGuardMiddleware())
 export class userRegisteredWorkoutsController extends BaseController {
   private userRegisteredWorkoutsService = new UserRegisteredWorkoutsService();
+  private workoutsProgressService = new WorkoutsProgressService();
 
   setRoutes(): void {
     this.router.get("/:id", asyncHandler(this.get));
@@ -124,7 +126,7 @@ export class userRegisteredWorkoutsController extends BaseController {
     const urwId: string = req.params.id;
     const weekNumber: number = Number(req.params.week);
     const dayNumber: number = Number(req.params.day);
-    await this.userRegisteredWorkoutsService.updateForUser({
+    await this.workoutsProgressService.updateForUser({
       urwId, weekNumber, dayNumber
     }, req.body, req.jwtPayload.id);
     return JsonResponse.success(
