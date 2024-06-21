@@ -45,7 +45,16 @@ export default seederWrapper(Exercise, async () => {
           instructions: e.instructions,
         }
       ),
-      benefits: "You will get stronger",
+      ...(
+        e.benefits === "" &&
+        {
+          benefits: "You will get stronger",
+        }
+        ||
+        {
+          benefits: e.benefits,
+        }
+      ),
       targetMuscles: {
         primary: (await Muscle.findOne({ name: e.target }).exec())._id,
         secondary: (await Muscle.findOne({ name: e.target }).exec())._id,

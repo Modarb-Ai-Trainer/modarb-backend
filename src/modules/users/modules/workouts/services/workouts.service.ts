@@ -61,7 +61,7 @@ export class WorkoutService extends CrudService(Workout) {
       aiGenerated: true,
       name: `AI Generated Workout (${user.preferences.fitness_goal} - ${user.fitness_level}) - ${todayDate} ${currentTime}.${milliseconds}`,
       description: `This AI-generated workout plan, created on ${todayDate} at ${currentTime}.${milliseconds}, is tailored for your ${user.fitness_level.toLowerCase()} fitness level and ${user.preferences.fitness_goal.toLowerCase()} goal. It is designed to be performed ${user.preferences.workout_place === WorkoutPlace.GYM ? "at the gym" : "at home"} using your preferred equipment.`,
-      type: "AI Generated",
+      type: "Equipment Diversity",
       created_by: user._id,
       image: "https://placehold.co/300x400",
       fitness_level: user.fitness_level,

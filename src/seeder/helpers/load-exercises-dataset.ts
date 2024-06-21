@@ -22,6 +22,7 @@ export interface IExerciseCSV {
     type: EType;
     sets: number;
     instructions: string;
+    benefits: string;
 }
 
 
