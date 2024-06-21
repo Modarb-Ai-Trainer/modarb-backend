@@ -10,14 +10,13 @@ import { SwaggerGet, SwaggerPatch } from "@lib/decorators/swagger-routes.decorat
 import { SwaggerSummary } from "@lib/decorators/swagger-summary.decorator";
 import { SwaggerDescription } from "@lib/decorators/swagger-description.decorator";
 import { SwaggerResponse } from "@lib/decorators/swagger-response.decorator";
-import { SwaggerQuery } from "@lib/decorators/swagger-query.decorator";
 import { UserHomeService } from "../services/user-home.service";
 import { IUserRequest } from "@common/interfaces/user-request.interface";
 import { UserHomeYourDailyIntakeSerialization } from "../responses/user-home-your-daily-intake.serialization";
 import { UserNutriHomeDailyGoalsSerialization } from "../responses/user-nutri-home-daily-goals.serialization";
 import { GetMyMealPlanSerialization } from "@common/serializers/user-registered-meal-planPopulate.serialization";
 import { UserRegisteredMealPlansService } from "../../user-registered-meal-plans/services/user-registered-meal-plans.service";
-import { SwaggerRequest } from "@lib/decorators/swagger-request.decorator";
+import { MealPlansProgressService } from "../../user-registered-meal-plans/services/meal-plans-progress.service";
 
 
 @Controller("/user/nutri-guide")
@@ -25,6 +24,7 @@ import { SwaggerRequest } from "@lib/decorators/swagger-request.decorator";
 export class homeNutriGuideController extends BaseController {
   private userHomeService = new UserHomeService();
   private userRegisteredMealPlansService = new UserRegisteredMealPlansService();
+  private mealPlansProgressService = new MealPlansProgressService();
 
   setRoutes(): void {
     this.router.get("/todays-intake", asyncHandler(this.getHomePageYourDailyIntake));
@@ -88,7 +88,7 @@ export class homeNutriGuideController extends BaseController {
   updateProgress = async (req: IUserRequest, res: Response) => {
     const urwId: string = req.params.id;
     const dayNumber: number = Number(req.params.day);
-    await this.userRegisteredMealPlansService.updateForUser({
+    await this.mealPlansProgressService.updateForUser({
       urwId, dayNumber
     }, req.body, req.jwtPayload.id);
     return JsonResponse.success(

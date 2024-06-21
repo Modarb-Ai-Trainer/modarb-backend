@@ -6,12 +6,19 @@ import { CrudService } from "@lib/services/crud.service";
 import { calcAge } from "@lib/utils/age";
 import { ExerciseService } from "../../exercises/services/exercises.service";
 import { UserRegisteredWorkoutsService } from "../../user-registered-workouts/services/user-registered-workouts.service";
+import { UserService } from "../../users/services/users.service";
+import { Types } from "mongoose";
 
 export class WorkoutService extends CrudService(Workout) {
   private exerciseService = new ExerciseService();
   private userRegisteredWorkoutsService = new UserRegisteredWorkoutsService();
+  private usersService = new UserService()
 
-  public async createModelWorkout(user: UserDocument) {
+  public async createModelWorkout(userOrId: UserDocument | string) {
+    const user: UserDocument = typeof userOrId === 'string' ?
+                              await this.usersService.findOneOrFail({_id: new Types.ObjectId(userOrId)}) :
+                              userOrId;
+
     const params: IFWParams = {
       home_or_gym: user.preferences.workout_place === WorkoutPlace.GYM ? 1 : 0,
       level: user.fitness_level,
