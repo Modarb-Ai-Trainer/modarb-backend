@@ -1,3 +1,7 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:5c0b48dacfac50e9a6b2846ef0f936609e17fc5f673d9651c5f3dc27fc672141
-size 83
+{
+    "cSpell.words": [
+        "IJSON",
+        "Routable",
+        "tlds"
+    ]
+}
