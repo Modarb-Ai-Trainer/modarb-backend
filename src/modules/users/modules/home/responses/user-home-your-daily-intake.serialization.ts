@@ -17,6 +17,10 @@ export class UserHomeYourDailyIntakeSerialization {
 
   @Expose()
   @SwaggerResponseProperty('number')
+  caloriesIntake: number
+
+  @Expose()
+  @SwaggerResponseProperty('number')
   carbsGoal: number;
   
   @Expose()
