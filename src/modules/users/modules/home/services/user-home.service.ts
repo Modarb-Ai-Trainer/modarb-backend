@@ -112,6 +112,7 @@ export class UserHomeService {
 
     const caloriesBurned = todaysExercises.reduce((acc, curr) => acc + this.exercisesService.calculateCalories(curr), 0);
     const caloriesLeft = caloriesGoal - caloriesBurned;
+    const caloriesIntake = todaysMeals.reduce((acc, curr) => acc + curr.calories, 0);
 
     const carbsGoal = goalToCarbsMap[user.preferences?.fitness_goal] || 50;
     const carbsConsumed = todaysMeals.reduce((acc, curr) => acc + curr.carbs, 0);
@@ -126,6 +127,7 @@ export class UserHomeService {
       caloriesGoal,
       caloriesLeft,
       caloriesBurned,
+      caloriesIntake,
       carbsGoal,
       carbsConsumed,
       proteinGoal,
