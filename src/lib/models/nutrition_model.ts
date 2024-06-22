@@ -39,8 +39,8 @@ export class NutritionModel {
       throw new Error("Failed to fetch data from the server");
     }
 
-    return response.json().then((data) => {
-      return data.result as INutritionPredictionItem[][];
+    return response.text().then((data) => {
+      return JSON.parse(data) as INutritionPredictionItem[][];
     });
   }
 }
