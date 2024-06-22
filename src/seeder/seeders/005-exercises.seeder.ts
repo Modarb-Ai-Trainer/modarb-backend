@@ -60,10 +60,10 @@ export default seederWrapper(Exercise, async () => {
         secondary: (await Muscle.findOne({ name: e.target }).exec())._id,
       },
       equipments: [(await Equipment.findOne({ name: e.equipment }).exec())._id],
-      coverImage: "https://placehold.co/600x400",
+      coverImage: e.gif_url,
       media: {
         type: 'image',
-        url: "https://placehold.co/600x400",
+        url: e.gif_url,
       },
       isDeleted: false,
     } satisfies IExercise;

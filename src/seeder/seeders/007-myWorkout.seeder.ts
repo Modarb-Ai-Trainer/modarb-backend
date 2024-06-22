@@ -11,6 +11,7 @@ export default seederWrapper(UserRegisteredWorkout, async () => {
       fitness_level: user.fitness_level,
       fitness_goal: user.preferences.fitness_goal,
     }).lean();
+    if (workouts.length === 0) return;
     let index = Math.floor(Math.random() * workouts.length);
     const userRegisteredWorkout = new UserRegisteredWorkout({
       user: user._id,

@@ -28,7 +28,7 @@ export default seederWrapper(Workout, async () => {
       name: `Workout - ${i}`,
       description: `Workout - ${i} description`,
       type: 'Equipment Diversity',
-      image: `https://placehold.co/300x400`,
+      image: `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvEFvhT6PV5u-yCaY5lJRtySenHFAJquCb7BHcmuMwW5hSVVoWYH0DU2eCXoKn6yMYqH0&usqp=CAU`,
       fitness_level: [FitnessLevel.BEGINNER, FitnessLevel.INTERMEDIATE, FitnessLevel.ADVANCED][i % 3],
       fitness_goal: [FitnessGoal.LOSE_WEIGHT, FitnessGoal.GAIN_MUSCLE, FitnessGoal.GET_FITTER][i % 3],
       place: [Place.GYM, Place.HOME][i % 2],

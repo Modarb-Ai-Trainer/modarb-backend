@@ -16,8 +16,18 @@ import { loadMealsDataset } from "./helpers/load-meals-dataset";
 const loadDatasets = async () => {
   const exercisesDataset = await loadExercisesDataset();
   const mealsDataset = loadMealsDataset();
-  const musclesDataset = Array.from(new Set(exercisesDataset.map((exercise) => exercise.target)));
-  const equipmentsDataset = Array.from(new Set(exercisesDataset.map((exercise) => exercise.equipment)));
+  let musclesDataset = exercisesDataset.map((exercise) => ({ name: exercise.target, image: exercise.target_url }));
+  musclesDataset = musclesDataset.filter((value, index, self) =>
+    index === self.findIndex((t) => (
+      t.name === value.name
+    ))
+  )
+  let equipmentsDataset = exercisesDataset.map((exercise) => ({ name: exercise.equipment, image: exercise.equipment_url }));
+  equipmentsDataset = equipmentsDataset.filter((value, index, self) =>
+    index === self.findIndex((t) => (
+      t.name === value.name
+    ))
+  )
   const ingredientsArrays = mealsDataset.map(m => m.RecipeIngredientParts);
   const ingredientsNames = Array.from(new Set(ingredientsArrays.flat()))
 

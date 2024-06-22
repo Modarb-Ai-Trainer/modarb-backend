@@ -70,7 +70,7 @@ export class WorkoutService extends CrudService(Workout) {
       description: `This AI-generated workout plan, created on ${todayDate} at ${currentTime}.${milliseconds}, is tailored for your ${user.fitness_level.toLowerCase()} fitness level and ${user.preferences.fitness_goal.toLowerCase()} goal. It is designed to be performed ${user.preferences.workout_place === WorkoutPlace.GYM ? "at the gym" : "at home"} using your preferred equipment.`,
       type: "Equipment Diversity",
       created_by: user._id,
-      image: "https://placehold.co/300x400",
+      image: `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvEFvhT6PV5u-yCaY5lJRtySenHFAJquCb7BHcmuMwW5hSVVoWYH0DU2eCXoKn6yMYqH0&usqp=CAU`,
       fitness_level: user.fitness_level,
       fitness_goal: user.preferences.fitness_goal,
       place: place,
@@ -83,7 +83,7 @@ export class WorkoutService extends CrudService(Workout) {
         days: week.map((day, j) => ({
           day_number: j + 1,
           total_number_exercises: day.length,
-          day_type: "full_body", // #TODO: Change this
+          day_type: "full body", // #TODO: Change this
           exercises: day.map((e) => exercises.find((ex) => ex.name === e.name)?._id),
         })),
       })),

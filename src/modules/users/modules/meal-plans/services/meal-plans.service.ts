@@ -54,7 +54,7 @@ export class MealPlansService extends CrudService(MealPlan) {
 
         const mealPlan = await this.create({
             aiGenerated: true,
-            image: "https://placehold.co/300x400",
+            image: `https://t4.ftcdn.net/jpg/01/81/12/37/360_F_181123726_invADRiRZle7YWLYfkEHz0mUfWH60kVZ.jpg`,
             description: `This AI-generated meal plan is designed specifically for you, considering your personal fitness goal of ${user.preferences.fitness_goal}. 
             Created on ${todayDate} at ${currentTime}.${milliseconds}, this plan is tailored to provide a balanced and nutritious diet that supports your workout frequency of ${user.preferences.workout_frequency} times per week.
             Whether you prefer working out on ${user.preferences.preferred_days.join(", ")}, at ${user.preferences.workout_place}, or using ${user.preferences.preferred_equipment.join(", ")}, this meal plan will help you achieve your health and fitness goals. Enjoy a variety of delicious and nutritious meals selected just for you.`,
