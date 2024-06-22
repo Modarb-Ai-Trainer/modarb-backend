@@ -1,3 +1,4 @@
+import { ExerciseType } from "@common/enums/exercise-type.enum";
 import { FitnessGoal } from "@common/enums/fitness-goal.enum";
 import { FitnessLevel } from "@common/enums/fitness-level.enum";
 import { Gender } from "@common/enums/gender.enum";
@@ -52,8 +53,9 @@ export class FitnessModel {
       throw new Error("Failed to fetch data from the server");
     }
 
-    return response.json().then((data) => {
-      return data.result;
+    return response.text().then((data) => {
+      data = data.replace('NaN', ExerciseType.DURATION.toString()).replace('\n', '')
+      return JSON.parse(data)
     });
   }
 }
