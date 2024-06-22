@@ -3,6 +3,8 @@ import { CrudService } from "@lib/services/crud.service";
 import { IUpdateUserRegisteredWorkouts } from "../validations/update-user-registered-workouts.validation";
 import { HttpError } from "@lib/error-handling/http-error";
 import { WorkoutService } from "../../workouts/services/workouts.service";
+import { EventsManager } from "@lib/events/events-manager";
+import { ExercisesDoneEvent } from "../../exercises/events/exercises-done.event";
 
 export class WorkoutsProgressService extends CrudService(UserRegisteredWorkout, {
   defaultFilter: {
@@ -38,6 +40,8 @@ export class WorkoutsProgressService extends CrudService(UserRegisteredWorkout, 
     if(weekIndex === workout.weeks.length - 1) {
       await this.workoutsService.createModelWorkout(userId)
     }
+
+    EventsManager.emit(ExercisesDoneEvent.name, new ExercisesDoneEvent(userId, day.exercises.map(e => e.toString())));
     
     // save changes
     workout.markModified('weeks');
