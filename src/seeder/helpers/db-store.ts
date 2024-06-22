@@ -4,8 +4,8 @@ import { IMealJson } from './load-meals-dataset';
 export const dbStore: {
   dbConnected: boolean;
   excerisesDataset: IExerciseCSV[];
-  musclesDataset: IExerciseCSV['target'][];
-  equipmentsDataset: IExerciseCSV['equipment'][];
+  musclesDataset: ({ name: IExerciseCSV['target'], image: IExerciseCSV["target_url"] })[];
+  equipmentsDataset: ({ name: IExerciseCSV['equipment'], image: IExerciseCSV["equipment_url"] })[];
   mealsDataset: IMealJson[];
   ingredientsNames: string[];
 } = {

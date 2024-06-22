@@ -23,6 +23,9 @@ export interface IExerciseCSV {
     sets: number;
     instructions: string;
     benefits: string;
+    target_url: string;
+    equipment_url: string;
+    gif_url: string;
 }
 
 

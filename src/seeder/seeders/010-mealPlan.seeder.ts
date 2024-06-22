@@ -32,7 +32,7 @@ export default seederWrapper(MealPlan, async () => {
     }
 
     let o = {
-      image: `https://placehold.co/300x400`,
+      image: `https://t4.ftcdn.net/jpg/01/81/12/37/360_F_181123726_invADRiRZle7YWLYfkEHz0mUfWH60kVZ.jpg`,
       description: 'This is a description of the meal plan.',
       duration: 7,
       level: [FitnessLevel.BEGINNER, FitnessLevel.INTERMEDIATE, FitnessLevel.ADVANCED][i % 3],
