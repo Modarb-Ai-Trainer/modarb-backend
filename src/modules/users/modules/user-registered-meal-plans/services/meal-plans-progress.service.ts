@@ -2,6 +2,8 @@ import { UserRegisteredMealPlan } from "@common/models/user-registered-meal-plan
 import { CrudService } from "@lib/services/crud.service";
 import { HttpError } from "@lib/error-handling/http-error";
 import { MealPlansService } from "../../meal-plans/services/meal-plans.service";
+import { EventsManager } from "@lib/events/events-manager";
+import { MealsDoneEvent } from "../../meals/events/meals-done.event";
 
 export class MealPlansProgressService extends CrudService(UserRegisteredMealPlan) {
   private mealPlansService = new MealPlansService()
@@ -32,6 +34,8 @@ export class MealPlansProgressService extends CrudService(UserRegisteredMealPlan
     if (lastDay.day_number === mealPlanProps.dayNumber) {
       this.mealPlansService.createModelMealPlan(userId)
     }
+
+    EventsManager.emit(MealsDoneEvent.name, new MealsDoneEvent(userId, day.meals.map(e => e.toString())));
 
     return updatedMealPlan;
   }

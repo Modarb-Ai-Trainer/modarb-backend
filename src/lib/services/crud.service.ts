@@ -9,7 +9,7 @@ export const CrudService = <ModelDoc extends Document>(
   }
 ) => {
   return class CrudServiceClass {
-    protected model: Model<ModelDoc> = model;
+    public model: Model<ModelDoc> = model;
 
     async create(data: AnyKeys<ModelDoc>): Promise<ModelDoc> {
       return this.model.create(data);

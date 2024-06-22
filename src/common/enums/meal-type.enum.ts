@@ -4,4 +4,5 @@ export enum MealType {
   SNACKS = "snacks",
   DRINKS_BEVERAGES = 'drinks beverages',
   LUNCH = "lunch",
+  CUSTOM = "custom",
 }
