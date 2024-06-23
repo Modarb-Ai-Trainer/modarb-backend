@@ -6,6 +6,7 @@ export interface IUserRegisteredMealPlan {
   user: string;
   isActive: boolean;
   meal_plan: string;
+  createdAt?: Date;
   days: {
     day_number: number;
     meals: string[];
@@ -17,6 +18,7 @@ const userRegisteredMealPlanSchema = new Schema({
   user: { type: mongoose.Types.ObjectId, ref: "users" },
   isActive: { type: Boolean, default: true },
   meal_plan: { type: mongoose.Types.ObjectId, ref: "mealPlans" },
+  createdAt: { type: Date, default: Date.now, required: false },
   days: [
     {
       day_number: { type: Number, required: true, },

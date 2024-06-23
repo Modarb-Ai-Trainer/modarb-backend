@@ -17,6 +17,7 @@ import { UserNutriHomeDailyGoalsSerialization } from "../responses/user-nutri-ho
 import { GetMyMealPlanSerialization } from "@common/serializers/user-registered-meal-planPopulate.serialization";
 import { UserRegisteredMealPlansService } from "../../user-registered-meal-plans/services/user-registered-meal-plans.service";
 import { MealPlansProgressService } from "../../user-registered-meal-plans/services/meal-plans-progress.service";
+import moment from "moment";
 
 
 @Controller("/user/nutri-guide")
@@ -42,9 +43,10 @@ export class homeNutriGuideController extends BaseController {
   @SwaggerDescription("Get today's meals for the user.")
   getTodayMeals = async (req: IUserRequest, res: Response): Promise<Response> => {
     try {
-      const data = await this.userRegisteredMealPlansService.findOneOrFail(
+      let data = await this.userRegisteredMealPlansService.findOneOrFail(
         {
-          user: req.jwtPayload.id, isActive: true},
+          user: req.jwtPayload.id, isActive: true
+        },
         {
           populateArray: [
             { path: "meal_plan", select: "-days" },
@@ -55,8 +57,35 @@ export class homeNutriGuideController extends BaseController {
           ],
         }
       );
-      
 
+      const today = moment().startOf("day");
+      const planStartDay = moment(data.createdAt).startOf("day");
+      const daysSinceStart = today.diff(planStartDay, "days");
+      const daysToLoop = daysSinceStart > data.days.length - 1 ? data.days.length : daysSinceStart;
+      console.log("daysSinceStart", daysSinceStart);
+
+      for await (const i of Array.from({ length: daysToLoop }, (_, i) => i)){
+        if (data.days[i].is_eaten === false) {
+          await this.mealPlansProgressService.updateForUser({
+            urwId: data._id,
+            dayNumber: data.days[i].day_number
+          }, req.body, req.jwtPayload.id);
+        }
+      }
+      data = await this.userRegisteredMealPlansService.findOneOrFail(
+        {
+          user: req.jwtPayload.id, isActive: true
+        },
+        {
+          populateArray: [
+            { path: "meal_plan", select: "-days" },
+            {
+              path: "days.meals",
+              populate: { path: "ingredients" }
+            }
+          ],
+        }
+      );
       const dayToEat = data.days.find(day => day.is_eaten === false);
 
       if (dayToEat) {
