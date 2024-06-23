@@ -18,6 +18,7 @@ export interface IMealPlan {
   }[];
   aiGenerated: boolean;
   isDeleted: boolean;
+  createdAt?: Date;
 }
 
 const mealPlanSchema = new Schema({
@@ -26,6 +27,7 @@ const mealPlanSchema = new Schema({
   duration: { type: Number, required: true },
   level: { type: String, enum: FitnessLevel, required: true },
   your_journey: { type: String, required: false },
+  createdAt: { type: Date, default: Date.now, required: false },
   key_features: [{
     title: { type: String, required: false },
     description: { type: String, required: false },
