@@ -18,7 +18,8 @@ New to the project? Check out our **[Getting Started Guide](GETTING_STARTED.md)*
 ## 📚 Documentation
 
 - **[Getting Started Guide](GETTING_STARTED.md)** - Complete setup and installation instructions
-- **API Documentation** - Available at `/api-docs` when the server is running
+- **API Documentation** - Available at `/api/v1/docs` when the server is running
+- **Health Check** - Available at `/api/v1/health` to verify the server is running
 
 ## 🔗 Related Projects
 

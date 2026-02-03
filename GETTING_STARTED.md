@@ -196,7 +196,8 @@ The following npm scripts are available:
 
 Once the server is running, you can access the API documentation:
 
-- **Swagger UI**: Navigate to `http://localhost:7860/api-docs` (or your configured port)
+- **Swagger UI**: Navigate to `http://localhost:7860/api/v1/docs` (or your configured port)
+- **Health Check**: Navigate to `http://localhost:7860/api/v1/health` to verify the server is running
 
 The Swagger documentation provides:
 - Available endpoints
@@ -301,10 +302,11 @@ If you encounter issues not covered here:
 
 Now that your server is running:
 
-1. ✅ Explore the API documentation at `/api-docs`
-2. ✅ Set up the [Models Server](https://github.com/MoWafy001/modarb-models-server)
-3. ✅ Review the codebase structure in `src/`
-4. ✅ Start building your frontend or mobile app!
+1. ✅ Explore the API documentation at `/api/v1/docs`
+2. ✅ Test the health endpoint at `/api/v1/health`
+3. ✅ Set up the [Models Server](https://github.com/MoWafy001/modarb-models-server)
+4. ✅ Review the codebase structure in `src/`
+5. ✅ Start building your frontend or mobile app!
 
 ---
 
